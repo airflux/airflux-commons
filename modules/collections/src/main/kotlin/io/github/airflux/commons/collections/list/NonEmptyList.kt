@@ -16,11 +16,13 @@
 
 package io.github.airflux.commons.collections.list
 
-public fun <T> nonEmptyListOf(head: T, vararg tail: T): NonEmptyList<T> = NonEmptyList(head, tail.toList())
+public typealias Nel<T> = NonEmptyList<T>
 
-public fun <T> nonEmptyListOf(head: T, tail: List<T>): NonEmptyList<T> = NonEmptyList(head, tail.toList())
+public fun <T> nonEmptyListOf(head: T, vararg tail: T): Nel<T> = NonEmptyList(head, tail.toList())
 
-public fun <T> List<T>.nonEmptyListOrNull(): NonEmptyList<T>? = NonEmptyList.valueOf(this)
+public fun <T> nonEmptyListOf(head: T, tail: List<T>): Nel<T> = NonEmptyList(head, tail.toList())
+
+public fun <T> List<T>.nonEmptyListOrNull(): Nel<T>? = NonEmptyList.valueOf(this)
 
 @JvmInline
 public value class NonEmptyList<out T> private constructor(private val items: List<T>) : List<T> by items {

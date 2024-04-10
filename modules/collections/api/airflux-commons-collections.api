@@ -61,8 +61,8 @@ public final class io/github/airflux/commons/collections/list/NonEmptyList$Compa
 }
 
 public final class io/github/airflux/commons/collections/list/NonEmptyListKt {
-	public static final fun nonEmptyList (Ljava/util/List;)Ljava/util/List;
 	public static final fun nonEmptyListOf (Ljava/lang/Object;Ljava/util/List;)Ljava/util/List;
 	public static final fun nonEmptyListOf (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/util/List;
+	public static final fun nonEmptyListOrNull (Ljava/util/List;)Ljava/util/List;
 }
 
