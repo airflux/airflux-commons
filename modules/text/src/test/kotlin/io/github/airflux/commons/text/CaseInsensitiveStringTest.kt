@@ -16,7 +16,6 @@
 
 package io.github.airflux.commons.text
 
-import io.github.airflux.commons.text.caseInsensitive
 import io.github.airflux.commons.kotest.assertions.shouldComplyWithContractOfEquality
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
