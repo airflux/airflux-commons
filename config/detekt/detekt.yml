@@ -703,7 +703,7 @@ style:
     active: true
   OptionalUnit:
     active: false
-  OptionalWhenBraces:
+  BracesOnWhenStatements:
     active: true
   PreferToOverPairSyntax:
     active: true

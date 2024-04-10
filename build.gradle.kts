@@ -18,6 +18,7 @@ allprojects {
 }
 
 dependencies {
+    kover(project(":airflux-commons-kotest-assertions"))
     kover(project(":airflux-commons-text"))
 }
 

@@ -16,7 +16,7 @@
 
 package io.github.airflux.text
 
-import io.github.airflux.shouldComplyWithContractOfEquality
+import io.github.airflux.kotest.assertions.shouldComplyWithContractOfEquality
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
@@ -206,8 +206,8 @@ internal class CaseInsensitiveStringTest : FreeSpec() {
                 ) { value ->
                     value.caseInsensitive()
                         .shouldComplyWithContractOfEquality(
-                            symmetric = value.caseInsensitive(),
-                            transitive = value.caseInsensitive()
+                            b = value.caseInsensitive(),
+                            c = value.caseInsensitive()
                         )
                 }
             }
