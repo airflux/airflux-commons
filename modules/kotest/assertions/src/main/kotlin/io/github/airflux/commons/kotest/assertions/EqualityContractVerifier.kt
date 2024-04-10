@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.kotest.assertions
+package io.github.airflux.commons.kotest.assertions
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.withClue

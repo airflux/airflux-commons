@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package io.github.airflux.text
+package io.github.airflux.commons.text
 
-import io.github.airflux.kotest.assertions.shouldComplyWithContractOfEquality
+import io.github.airflux.commons.text.caseInsensitive
+import io.github.airflux.commons.kotest.assertions.shouldComplyWithContractOfEquality
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe

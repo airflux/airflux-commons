@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.text
+package io.github.airflux.commons.text
 
 public fun String.caseInsensitive(): CaseInsensitiveString = CaseInsensitiveString(this)
 
