@@ -1,5 +1,5 @@
-public final class io/github/airflux/text/CaseInsensitiveString {
-	public static final field Companion Lio/github/airflux/text/CaseInsensitiveString$Companion;
+public final class io/github/airflux/commons/text/CaseInsensitiveString {
+	public static final field Companion Lio/github/airflux/commons/text/CaseInsensitiveString$Companion;
 	public fun <init> (Ljava/lang/String;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getGet ()Ljava/lang/String;
@@ -7,10 +7,10 @@ public final class io/github/airflux/text/CaseInsensitiveString {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/text/CaseInsensitiveString$Companion {
+public final class io/github/airflux/commons/text/CaseInsensitiveString$Companion {
 }
 
-public final class io/github/airflux/text/CaseInsensitiveStringKt {
-	public static final fun caseInsensitive (Ljava/lang/String;)Lio/github/airflux/text/CaseInsensitiveString;
+public final class io/github/airflux/commons/text/CaseInsensitiveStringKt {
+	public static final fun caseInsensitive (Ljava/lang/String;)Lio/github/airflux/commons/text/CaseInsensitiveString;
 }
 

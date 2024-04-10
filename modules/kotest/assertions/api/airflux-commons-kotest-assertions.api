@@ -1,4 +1,4 @@
-public final class io/github/airflux/kotest/assertions/EqualityContractVerifierKt {
+public final class io/github/airflux/commons/kotest/assertions/EqualityContractVerifierKt {
 	public static final fun shouldComplyWithContractOfEquality (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/util/Collection;)V
 	public static synthetic fun shouldComplyWithContractOfEquality$default (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/util/Collection;ILjava/lang/Object;)V
 }
