@@ -77,7 +77,7 @@ internal class NonEmptyListTest : FreeSpec() {
             }
 
             "when a new element is added to the instance of the type" - {
-                val values = NonEmptyList(FIRST) + SECOND
+                val values = nonEmptyListOf(FIRST) + SECOND
 
                 "then the new instance of the type should contain the original elements and the passed element in the order in which they were passed" {
                     values shouldContainExactly listOf(FIRST, SECOND)
@@ -85,7 +85,7 @@ internal class NonEmptyListTest : FreeSpec() {
             }
 
             "when a list of elements is added to the instance of the type" - {
-                val values = NonEmptyList(FIRST) + listOf(SECOND, THIRD)
+                val values = nonEmptyListOf(FIRST) + listOf(SECOND, THIRD)
 
                 "then the new instance of the type should contain elements from the original instance and the passed elements in the order in which they were passed" {
                     values shouldContainExactly listOf(FIRST, SECOND, THIRD)
@@ -93,8 +93,7 @@ internal class NonEmptyListTest : FreeSpec() {
             }
 
             "when another instance of the type is added to the instance of the type" - {
-                val values =
-                    NonEmptyList(FIRST) + NonEmptyList(SECOND, THIRD)
+                val values = nonEmptyListOf(FIRST) + nonEmptyListOf(SECOND, THIRD)
 
                 "then the new instance of the type should contain elements from both instances in the order in which they were in the originals" {
                     values shouldContainExactly listOf(FIRST, SECOND, THIRD)
@@ -102,7 +101,7 @@ internal class NonEmptyListTest : FreeSpec() {
             }
 
             "when the `map` function calling" - {
-                val values = NonEmptyList(FIRST, SECOND).map { it + 1 }
+                val values = nonEmptyListOf(FIRST, SECOND).map { it + 1 }
 
                 "then this functions should return the list of transformed values" {
                     values shouldContainExactly listOf(FIRST + 1, SECOND + 1)
@@ -110,7 +109,7 @@ internal class NonEmptyListTest : FreeSpec() {
             }
 
             "when the `flatMap` function calling" - {
-                val values = NonEmptyList(FIRST, SECOND).flatMap { NonEmptyList(it, it + 1) }
+                val values = nonEmptyListOf(FIRST, SECOND).flatMap { nonEmptyListOf(it, it + 1) }
 
                 "then this functions should return the list of transformed values" {
                     values shouldContainExactly listOf(FIRST, FIRST + 1, SECOND, SECOND + 1)
