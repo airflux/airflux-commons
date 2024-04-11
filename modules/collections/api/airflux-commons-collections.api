@@ -1,3 +1,7 @@
+public final class io/github/airflux/commons/collections/extensions/ExtensionsKt {
+	public static final fun mapToSet (Ljava/lang/Iterable;Lkotlin/jvm/functions/Function1;)Ljava/util/Set;
+}
+
 public final class io/github/airflux/commons/collections/list/NonEmptyList : java/util/List, kotlin/jvm/internal/markers/KMappedMarker {
 	public static final field Companion Lio/github/airflux/commons/collections/list/NonEmptyList$Companion;
 	public fun add (ILjava/lang/Object;)V
