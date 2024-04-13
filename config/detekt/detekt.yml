@@ -33,11 +33,11 @@ processors:
 console-reports:
   active: true
   exclude:
-#    - 'ProjectStatisticsReport'
-#    - 'ComplexityReport'
+    #    - 'ProjectStatisticsReport'
+    #    - 'ComplexityReport'
     - 'NotificationReport'
     - 'FindingsReport'
-#    - 'FileBasedFindingsReport'
+    #    - 'FileBasedFindingsReport'
     - 'LiteFindingsReport'
 
 output-reports:
@@ -705,6 +705,8 @@ style:
     active: false
   BracesOnWhenStatements:
     active: true
+    singleLine: never
+    multiLine: necessary
   PreferToOverPairSyntax:
     active: true
   ProtectedMemberInFinalClass:
