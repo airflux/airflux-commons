@@ -37,10 +37,11 @@ internal class MutableSetProxyTest : FreeSpec() {
                 }
 
                 "when the set is not empty" - {
-                    val set = createSet(FIRST_VALUE)
+                    val items = listOf(FIRST_VALUE, SECOND_VALUE, THIRD_VALUE)
+                    val set = createSet(items)
 
                     "then this property should return count elements in the set" {
-                        set.size shouldBe 1
+                        set.size shouldBe items.size
                     }
                 }
             }
@@ -493,8 +494,10 @@ internal class MutableSetProxyTest : FreeSpec() {
         private const val SECOND_VALUE = "key-2"
         private const val THIRD_VALUE = "key-3"
 
-        private fun createSet(vararg items: String): MutableSet<String> =
-            AbstractCaseInsensitiveMutableMap.MutableSetProxy(
+        private fun createSet(vararg items: String): MutableSet<String> = createSet(items.toList())
+
+        private fun createSet(items: List<String>): MutableSet<String> =
+            MutableSetProxy(
                 target = mutableSetOf<String>().apply { addAll(items) },
                 convertToExternal = { this },
                 convertToInternal = { this }

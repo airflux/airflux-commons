@@ -16,7 +16,6 @@
 
 package io.github.airflux.commons.collections.map
 
-import io.github.airflux.commons.collections.extensions.mapToSet
 import io.github.airflux.commons.text.CaseInsensitiveString
 import io.github.airflux.commons.text.caseInsensitive
 
@@ -87,67 +86,5 @@ public abstract class AbstractCaseInsensitiveMutableMap<T>(
         }
 
         override fun toString(): String = "$key=$value"
-    }
-
-    internal class MutableSetProxy<INTERNAL, EXTERNAL>(
-        private val target: MutableSet<INTERNAL>,
-        private val convertToExternal: INTERNAL.() -> EXTERNAL,
-        private val convertToInternal: EXTERNAL.() -> INTERNAL
-    ) : MutableSet<EXTERNAL> {
-
-        override val size: Int
-            get() = target.size
-
-        override fun isEmpty(): Boolean = target.isEmpty()
-
-        override fun iterator(): MutableIterator<EXTERNAL> = object : MutableIterator<EXTERNAL> {
-            private val iterator = target.iterator()
-
-            override fun hasNext(): Boolean = iterator.hasNext()
-
-            override fun next(): EXTERNAL = iterator.next().convertToExternal()
-
-            override fun remove() = iterator.remove()
-        }
-
-        override fun contains(element: EXTERNAL): Boolean = target.contains(element.convertToInternal())
-
-        override fun containsAll(elements: Collection<EXTERNAL>): Boolean =
-            target.containsAll(elements.convertToInternal())
-
-        override fun add(element: EXTERNAL): Boolean = target.add(element.convertToInternal())
-
-        override fun addAll(elements: Collection<EXTERNAL>): Boolean = target.addAll(elements.convertToInternal())
-
-        override fun remove(element: EXTERNAL): Boolean = target.remove(element.convertToInternal())
-
-        override fun removeAll(elements: Collection<EXTERNAL>): Boolean = target.removeAll(elements.convertToInternal())
-
-        override fun retainAll(elements: Collection<EXTERNAL>): Boolean = target.retainAll(elements.convertToInternal())
-
-        override fun clear() {
-            target.clear()
-        }
-
-        override fun hashCode(): Int = target.hashCode()
-
-        override fun equals(other: Any?): Boolean =
-            if (this === other)
-                EQUAL
-            else if (other is Set<*>) {
-                val items = target.convertToExternal()
-                items.containsAll(other) && other.containsAll(items)
-            } else
-                NOT_EQUAL
-
-        override fun toString(): String = target.convertToExternal().toString()
-
-        private companion object {
-            private const val EQUAL = true
-            private const val NOT_EQUAL = false
-        }
-
-        private fun Collection<EXTERNAL>.convertToInternal(): Set<INTERNAL> = mapToSet { it.convertToInternal() }
-        private fun Collection<INTERNAL>.convertToExternal(): Set<EXTERNAL> = mapToSet { it.convertToExternal() }
     }
 }
