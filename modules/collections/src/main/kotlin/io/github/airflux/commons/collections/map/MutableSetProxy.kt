@@ -52,14 +52,16 @@ internal class MutableSetProxy<INTERNAL : Any, EXTERNAL : Any>(
 
     override fun hashCode(): Int = target.hashCode()
 
-    override fun equals(other: Any?): Boolean =
-        if (this === other)
-            EQUAL
-        else if (other is Set<*>) {
+    override fun equals(other: Any?): Boolean = when {
+        this === other -> EQUAL
+
+        other is Set<*> -> {
             val items = target.convertToExternal()
             items.containsAll(other) && other.containsAll(items)
-        } else
-            NOT_EQUAL
+        }
+
+        else -> NOT_EQUAL
+    }
 
     override fun toString(): String = target.convertToExternal().toString()
 
