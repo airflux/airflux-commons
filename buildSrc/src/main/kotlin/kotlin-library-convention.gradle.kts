@@ -32,6 +32,14 @@ publishing {
     }
 }
 
+tasks.withType<Sign>().configureEach {
+    onlyIf("this is release build") {
+        val signingKey: String? = System.getenv("GPG_PRIVATE_KEY")
+        val signingKeyPassphrase: String? = System.getenv("GPG_PRIVATE_PASSWORD")
+        signingKey != null && signingKey != "" && signingKeyPassphrase != null && signingKeyPassphrase != ""
+    }
+}
+
 signing {
     sign(publishing.publications[mavenPublicationName])
 }
