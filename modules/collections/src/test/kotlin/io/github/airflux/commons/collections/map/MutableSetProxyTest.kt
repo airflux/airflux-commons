@@ -443,8 +443,8 @@ internal class MutableSetProxyTest : FreeSpec() {
             }
 
             "when instances were initialized with the same values" - {
-                val left = createSet(SECOND_VALUE)
-                val right = createSet(SECOND_VALUE)
+                val left = createSet(FIRST_VALUE)
+                val right = createSet(FIRST_VALUE)
 
                 "then the instances should be equal" {
                     left shouldBe right
@@ -468,19 +468,37 @@ internal class MutableSetProxyTest : FreeSpec() {
                 }
             }
 
-            "should comply with equals() and hashCode() contract" {
-                createSet(FIRST_VALUE, SECOND_VALUE)
-                    .shouldComplyWithContractOfEquality(
-                        b = createSet(FIRST_VALUE, SECOND_VALUE),
-                        c = createSet(FIRST_VALUE, SECOND_VALUE),
-                        notEquals = listOf(
-                            createSet(FIRST_VALUE),
-                            createSet(SECOND_VALUE),
-                            createSet(THIRD_VALUE),
-                            createSet(SECOND_VALUE, THIRD_VALUE),
-                            createSet(FIRST_VALUE, THIRD_VALUE),
+            "should comply with equals() and hashCode() contract" - {
+
+                "comparing an instance of `MutableSetProxy` type with an instance of `MutableSetProxy` type" {
+                    createSet(FIRST_VALUE, SECOND_VALUE)
+                        .shouldComplyWithContractOfEquality(
+                            b = createSet(FIRST_VALUE, SECOND_VALUE),
+                            c = createSet(FIRST_VALUE, SECOND_VALUE),
+                            notEquals = listOf(
+                                createSet(FIRST_VALUE),
+                                createSet(SECOND_VALUE),
+                                createSet(THIRD_VALUE),
+                                createSet(SECOND_VALUE, THIRD_VALUE),
+                                createSet(FIRST_VALUE, THIRD_VALUE),
+                            )
                         )
-                    )
+                }
+
+                "comparing an instance of `Set` type with an instance of `MutableSetProxy` type" {
+                    setOf(FIRST_VALUE, SECOND_VALUE)
+                        .shouldComplyWithContractOfEquality(
+                            b = createSet(FIRST_VALUE, SECOND_VALUE),
+                            c = createSet(FIRST_VALUE, SECOND_VALUE),
+                            notEquals = listOf(
+                                setOf(FIRST_VALUE),
+                                setOf(SECOND_VALUE),
+                                setOf(THIRD_VALUE),
+                                setOf(SECOND_VALUE, THIRD_VALUE),
+                                setOf(FIRST_VALUE, THIRD_VALUE)
+                            )
+                        )
+                }
             }
 
             "the `toString` function should return the string representation" {
@@ -490,17 +508,18 @@ internal class MutableSetProxyTest : FreeSpec() {
     }
 
     companion object {
-        private const val FIRST_VALUE = "key-1"
-        private const val SECOND_VALUE = "key-2"
-        private const val THIRD_VALUE = "key-3"
+        private const val FIRST_VALUE = "1024"
+        private const val SECOND_VALUE = "2048"
+        private const val THIRD_VALUE = "3072"
 
         private fun createSet(vararg items: String): MutableSet<String> = createSet(items.toList())
 
         private fun createSet(items: List<String>): MutableSet<String> =
             MutableSetProxy(
-                target = mutableSetOf<String>().apply { addAll(items) },
-                convertToExternal = { this },
-                convertToInternal = { this }
+                target = mutableSetOf<Int>()
+                    .apply { addAll(items.map { it.toInt() }) },
+                convertToExternal = { this.toString() },
+                convertToInternal = { this.toInt() }
             )
     }
 }

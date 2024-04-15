@@ -50,26 +50,31 @@ internal class MutableSetProxy<INTERNAL : Any, EXTERNAL : Any>(
         target.clear()
     }
 
-    override fun hashCode(): Int = target.hashCode()
+    override fun hashCode(): Int = target.convertToExternal().hashCode()
 
-    override fun equals(other: Any?): Boolean = when {
-        this === other -> EQUAL
-
-        other is Set<*> -> {
-            val items = target.convertToExternal()
-            items.containsAll(other) && other.containsAll(items)
-        }
-
-        else -> NOT_EQUAL
-    }
+    override fun equals(other: Any?): Boolean = if (this === other)
+        EQUAL
+    else if (other is MutableSetProxy<*, *>)
+        target.match(other)
+    else if (other is Set<*>)
+        target.match(other)
+    else
+        NOT_EQUAL
 
     override fun toString(): String = target.convertToExternal().toString()
+
+    private fun Collection<EXTERNAL>.convertToInternal(): Set<INTERNAL> = mapToSet { it.convertToInternal() }
+    private fun Collection<INTERNAL>.convertToExternal(): Set<EXTERNAL> = mapToSet { it.convertToExternal() }
+    private fun Set<INTERNAL>.match(other: Set<*>): Boolean {
+        if (this.size != other.size) return NOT_EQUAL
+        for (item in this) {
+            if (item.convertToExternal() !in other) return NOT_EQUAL
+        }
+        return EQUAL
+    }
 
     private companion object {
         private const val EQUAL = true
         private const val NOT_EQUAL = false
     }
-
-    private fun Collection<EXTERNAL>.convertToInternal(): Set<INTERNAL> = mapToSet { it.convertToInternal() }
-    private fun Collection<INTERNAL>.convertToExternal(): Set<EXTERNAL> = mapToSet { it.convertToExternal() }
 }
