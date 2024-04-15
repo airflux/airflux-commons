@@ -19,6 +19,7 @@ package io.github.airflux.commons.kotest.assertions
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.withClue
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 
 @Suppress("ReplaceCallWithBinaryOperator")
 public fun <T : Any> T.shouldComplyWithContractOfEquality(b: T, c: T, notEquals: Collection<Any> = emptyList()) {
@@ -30,11 +31,13 @@ public fun <T : Any> T.shouldComplyWithContractOfEquality(b: T, c: T, notEquals:
         a.shouldComplyWithNullComparisonContract()
 
         notEquals.forEach { other ->
-            withClue("$a should not equal $other") {
-                a.equals(other) shouldBe false
-            }
-            withClue("$other should equal $a") {
-                other.equals(a) shouldBe false
+            withClue("checking the reflexive property") {
+                withClue("`A` ($a) should not equal `B` ($other)") {
+                    a.equals(other) shouldBe false
+                }
+                withClue("`B` ($other) should not equal `A` ($a)") {
+                    other.equals(a) shouldNotBe true
+                }
             }
         }
     }
