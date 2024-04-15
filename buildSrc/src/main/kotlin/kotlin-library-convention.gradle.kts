@@ -32,7 +32,7 @@ publishing {
     }
 }
 
-tasks.withType<Sign>() {
+tasks.withType<Sign>().configureEach {
     onlyIf("this is release build") { isReleaseBuild() }
 }
 
