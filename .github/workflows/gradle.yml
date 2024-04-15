@@ -47,6 +47,10 @@ jobs:
 
     - name: Build with Gradle
       env:
+        REPOSITORY_SNAPSHOTS_URL: ${{ secrets.REPOSITORY_SNAPSHOTS_URL }}
+        REPOSITORY_RELEASES_URL: ${{ secrets.REPOSITORY_RELEASES_URL }}
+        REPOSITORY_USERNAME: ${{ secrets.REPOSITORY_USERNAME }}
+        REPOSITORY_PASSWORD: ${{ secrets.REPOSITORY_PASSWORD }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: ./gradlew build koverXmlReport sonar publish --stacktrace
