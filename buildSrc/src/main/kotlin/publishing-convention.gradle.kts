@@ -6,6 +6,8 @@ plugins {
 configure<SigningExtension> {
     val signingKey: String? = System.getenv("GPG_PRIVATE_KEY")
     val signingKeyPassphrase: String? = System.getenv("GPG_PRIVATE_PASSWORD")
-    isRequired = signingKey != null && signingKey.isBlank().not()
+    setRequired {
+        !signingKey.isNullOrBlank()
+    }
     useInMemoryPgpKeys(signingKey, signingKeyPassphrase)
 }
