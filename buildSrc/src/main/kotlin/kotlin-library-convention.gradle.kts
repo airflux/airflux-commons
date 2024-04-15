@@ -32,10 +32,6 @@ publishing {
     }
 }
 
-tasks.withType<Sign>().configureEach {
-    onlyIf("this is release build") { isReleaseBuild() }
-}
-
 signing {
     sign(publishing.publications[mavenPublicationName])
 }
