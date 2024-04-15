@@ -29,3 +29,20 @@ dependencies {
   implementation 'com.github.airflux:airflux-commons-text:Tag'
 }
 ```
+
+## Airflux Commons Collections
+This is a library of collections.
+ - NonEmptyList
+ - CaseInsensitiveMutableHashMap
+
+### Installation
+
+```groovy
+repositories {
+  maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+  implementation 'com.github.airflux:airflux-commons-collections:Tag'
+}
+```
