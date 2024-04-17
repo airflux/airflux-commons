@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.commons.types.assertions
+package io.github.airflux.commons.types
 
 import io.kotest.assertions.Actual
 import io.kotest.assertions.Expected

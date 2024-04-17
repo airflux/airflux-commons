@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package io.github.airflux.commons.types.assertions
+package io.github.airflux.commons.types.result
 
-import io.github.airflux.commons.types.result.Result
-import io.github.airflux.commons.types.result.isFailure
-import io.github.airflux.commons.types.result.isSuccess
+import io.github.airflux.commons.types.failure
 import io.kotest.matchers.shouldBe
 
 public fun <T, E> Result<T, E>.getValue(): T = this.shouldBeSuccess().value

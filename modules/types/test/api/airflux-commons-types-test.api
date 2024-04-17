@@ -1,4 +1,4 @@
-public final class io/github/airflux/commons/types/assertions/ResultAssertionsKt {
+public final class io/github/airflux/commons/types/result/ResultAssertionsKt {
 	public static final fun getValue (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;
 	public static final fun shouldBeFailure (Lio/github/airflux/commons/types/result/Result;Ljava/lang/Object;)V
 	public static final fun shouldBeFailure (Lio/github/airflux/commons/types/result/Result;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)V
