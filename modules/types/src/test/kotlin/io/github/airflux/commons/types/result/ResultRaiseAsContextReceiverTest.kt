@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.airflux.commons.types
+package io.github.airflux.commons.types.result
 
 import io.github.airflux.commons.types.assertions.shouldBeFailure
 import io.github.airflux.commons.types.assertions.shouldBeSuccess
@@ -42,7 +42,7 @@ internal class ResultRaiseAsContextReceiverTest : FreeSpec() {
         }
     }
 
-    context (Result.Raise<Errors.UserNotFound>)
+    context (io.github.airflux.commons.types.result.Result.Raise<Errors.UserNotFound>)
     private fun getUser(id: Int): User =
         if (id == USER_ID)
             User(USER_ID, USER_NAME)

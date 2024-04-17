@@ -13,89 +13,89 @@ public final class io/github/airflux/commons/types/RaiseKt {
 	public static final fun failureOrRethrow (Ljava/util/concurrent/CancellationException;Lio/github/airflux/commons/types/BasicRaise;)Ljava/lang/Object;
 }
 
-public abstract class io/github/airflux/commons/types/Result {
-	public static final field Companion Lio/github/airflux/commons/types/Result$Companion;
+public abstract class io/github/airflux/commons/types/result/Result {
+	public static final field Companion Lio/github/airflux/commons/types/result/Result$Companion;
 }
 
-public final class io/github/airflux/commons/types/Result$Companion {
-	public final fun getAsEmptyList ()Lio/github/airflux/commons/types/Result$Success;
-	public final fun getAsFalse ()Lio/github/airflux/commons/types/Result$Success;
-	public final fun getAsNull ()Lio/github/airflux/commons/types/Result$Success;
-	public final fun getAsTrue ()Lio/github/airflux/commons/types/Result$Success;
-	public final fun getAsUnit ()Lio/github/airflux/commons/types/Result$Success;
-	public final fun of (Z)Lio/github/airflux/commons/types/Result$Success;
+public final class io/github/airflux/commons/types/result/Result$Companion {
+	public final fun getAsEmptyList ()Lio/github/airflux/commons/types/result/Result$Success;
+	public final fun getAsFalse ()Lio/github/airflux/commons/types/result/Result$Success;
+	public final fun getAsNull ()Lio/github/airflux/commons/types/result/Result$Success;
+	public final fun getAsTrue ()Lio/github/airflux/commons/types/result/Result$Success;
+	public final fun getAsUnit ()Lio/github/airflux/commons/types/result/Result$Success;
+	public final fun of (Z)Lio/github/airflux/commons/types/result/Result$Success;
 }
 
-public final class io/github/airflux/commons/types/Result$Failure : io/github/airflux/commons/types/Result {
+public final class io/github/airflux/commons/types/result/Result$Failure : io/github/airflux/commons/types/result/Result {
 	public fun <init> (Ljava/lang/Object;)V
 	public final fun component1 ()Ljava/lang/Object;
-	public final fun copy (Ljava/lang/Object;)Lio/github/airflux/commons/types/Result$Failure;
-	public static synthetic fun copy$default (Lio/github/airflux/commons/types/Result$Failure;Ljava/lang/Object;ILjava/lang/Object;)Lio/github/airflux/commons/types/Result$Failure;
+	public final fun copy (Ljava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Failure;
+	public static synthetic fun copy$default (Lio/github/airflux/commons/types/result/Result$Failure;Ljava/lang/Object;ILjava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Failure;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCause ()Ljava/lang/Object;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract interface class io/github/airflux/commons/types/Result$Raise : io/github/airflux/commons/types/BasicRaise {
-	public abstract fun bind (Lio/github/airflux/commons/types/Result;)Ljava/lang/Object;
-	public fun component1 (Lio/github/airflux/commons/types/Result;)Ljava/lang/Object;
-	public abstract fun raise (Lio/github/airflux/commons/types/Result;)V
+public abstract interface class io/github/airflux/commons/types/result/Result$Raise : io/github/airflux/commons/types/BasicRaise {
+	public abstract fun bind (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;
+	public fun component1 (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;
+	public abstract fun raise (Lio/github/airflux/commons/types/result/Result;)V
 	public abstract fun raise (Ljava/lang/Object;)Ljava/lang/Void;
 }
 
-public final class io/github/airflux/commons/types/Result$Success : io/github/airflux/commons/types/Result {
+public final class io/github/airflux/commons/types/result/Result$Success : io/github/airflux/commons/types/result/Result {
 	public fun <init> (Ljava/lang/Object;)V
 	public final fun component1 ()Ljava/lang/Object;
-	public final fun copy (Ljava/lang/Object;)Lio/github/airflux/commons/types/Result$Success;
-	public static synthetic fun copy$default (Lio/github/airflux/commons/types/Result$Success;Ljava/lang/Object;ILjava/lang/Object;)Lio/github/airflux/commons/types/Result$Success;
+	public final fun copy (Ljava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Success;
+	public static synthetic fun copy$default (Lio/github/airflux/commons/types/result/Result$Success;Ljava/lang/Object;ILjava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Success;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getValue ()Ljava/lang/Object;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/commons/types/ResultDSLKt {
-	public static final fun Result (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/Result;
-	public static final fun ResultWith (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/Result;
+public final class io/github/airflux/commons/types/result/ResultDSLKt {
+	public static final fun Result (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun ResultWith (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
 }
 
-public final class io/github/airflux/commons/types/ResultKt {
-	public static final fun andThen (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/Result;
-	public static final fun asFailure (Ljava/lang/Object;)Lio/github/airflux/commons/types/Result$Failure;
-	public static final fun asSuccess (Ljava/lang/Object;)Lio/github/airflux/commons/types/Result$Success;
-	public static final fun doTry (Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/Result;
-	public static final fun failure (Ljava/lang/Object;)Lio/github/airflux/commons/types/Result$Failure;
-	public static final fun failureIfNullValue (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/Result;
-	public static final fun flatMap (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/Result;
-	public static final fun fold (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public static final fun forEach (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)V
-	public static final fun getOrElse (Lio/github/airflux/commons/types/Result;Ljava/lang/Object;)Ljava/lang/Object;
-	public static final fun getOrElse (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public static final fun getOrForward (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public static final fun getOrNull (Lio/github/airflux/commons/types/Result;)Ljava/lang/Object;
-	public static final fun isFailure (Lio/github/airflux/commons/types/Result;)Z
-	public static final fun isFailure (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)Z
-	public static final fun isSuccess (Lio/github/airflux/commons/types/Result;)Z
-	public static final fun isSuccess (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)Z
-	public static final fun map (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/Result;
-	public static final fun mapFailure (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/Result;
-	public static final fun merge (Lio/github/airflux/commons/types/Result;)Ljava/lang/Object;
-	public static final fun onFailure (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/Result;
-	public static final fun onSuccess (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/Result;
-	public static final fun orElse (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/Result;
-	public static final fun orThrow (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public static final fun recover (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/Result;
-	public static final fun recoverWith (Lio/github/airflux/commons/types/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/Result;
-	public static final fun sequence (Ljava/lang/Iterable;)Lio/github/airflux/commons/types/Result;
-	public static final fun success (Ljava/lang/Object;)Lio/github/airflux/commons/types/Result$Success;
-	public static final fun traverse (Ljava/lang/Iterable;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/Result;
+public final class io/github/airflux/commons/types/result/ResultKt {
+	public static final fun andThen (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun asFailure (Ljava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Failure;
+	public static final fun asSuccess (Ljava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Success;
+	public static final fun doTry (Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun failure (Ljava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Failure;
+	public static final fun failureIfNullValue (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun flatMap (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun fold (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun forEach (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)V
+	public static final fun getOrElse (Lio/github/airflux/commons/types/result/Result;Ljava/lang/Object;)Ljava/lang/Object;
+	public static final fun getOrElse (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun getOrForward (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun getOrNull (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;
+	public static final fun isFailure (Lio/github/airflux/commons/types/result/Result;)Z
+	public static final fun isFailure (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Z
+	public static final fun isSuccess (Lio/github/airflux/commons/types/result/Result;)Z
+	public static final fun isSuccess (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Z
+	public static final fun map (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun mapFailure (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun merge (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;
+	public static final fun onFailure (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun onSuccess (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun orElse (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun orThrow (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun recover (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun recoverWith (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun sequence (Ljava/lang/Iterable;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun success (Ljava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Success;
+	public static final fun traverse (Ljava/lang/Iterable;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
 }
 
-public final class io/github/airflux/commons/types/ResultRaise : io/github/airflux/commons/types/Result$Raise {
+public final class io/github/airflux/commons/types/result/ResultRaise : io/github/airflux/commons/types/result/Result$Raise {
 	public fun <init> ()V
-	public fun bind (Lio/github/airflux/commons/types/Result;)Ljava/lang/Object;
-	public fun raise (Lio/github/airflux/commons/types/Result;)V
+	public fun bind (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;
+	public fun raise (Lio/github/airflux/commons/types/result/Result;)V
 	public fun raise (Ljava/lang/Object;)Ljava/lang/Void;
 }
 

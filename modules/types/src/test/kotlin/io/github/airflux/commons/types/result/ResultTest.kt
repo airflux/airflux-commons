@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.airflux.commons.types
+package io.github.airflux.commons.types.result
 
 import io.github.airflux.commons.types.assertions.shouldBeFailure
 import io.github.airflux.commons.types.assertions.shouldBeSuccess

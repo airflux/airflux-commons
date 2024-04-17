@@ -16,9 +16,9 @@
 
 package io.github.airflux.commons.types.assertions
 
-import io.github.airflux.commons.types.Result
-import io.github.airflux.commons.types.isFailure
-import io.github.airflux.commons.types.isSuccess
+import io.github.airflux.commons.types.result.Result
+import io.github.airflux.commons.types.result.isFailure
+import io.github.airflux.commons.types.result.isSuccess
 import io.kotest.matchers.shouldBe
 
 public fun <T, E> Result<T, E>.getValue(): T = this.shouldBeSuccess().value

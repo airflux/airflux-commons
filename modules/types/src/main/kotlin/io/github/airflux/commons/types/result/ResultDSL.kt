@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package io.github.airflux.commons.types
+package io.github.airflux.commons.types.result
 
+import io.github.airflux.commons.types.RaiseException
+import io.github.airflux.commons.types.failureOrRethrow
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract

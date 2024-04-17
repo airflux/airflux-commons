@@ -16,8 +16,10 @@
 
 @file:Suppress("TooManyFunctions")
 
-package io.github.airflux.commons.types
+package io.github.airflux.commons.types.result
 
+import io.github.airflux.commons.types.BasicRaise
+import io.github.airflux.commons.types.identity
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
