@@ -20,13 +20,15 @@ This is a library of utilities for text.
 
 ### Installation
 
-```groovy
+```kotlin
 repositories {
-  maven { url 'https://jitpack.io' }
+    maven {
+        url = URI("https://jitpack.io")
+    }
 }
 
 dependencies {
-  implementation 'com.github.airflux:airflux-commons-text:Tag'
+  implementation("com.github.airflux:airflux-commons-text:Tag")
 }
 ```
 
@@ -37,12 +39,32 @@ This is a library of collections.
 
 ### Installation
 
-```groovy
+```kotlin
 repositories {
-  maven { url 'https://jitpack.io' }
+    maven {
+        url = URI("https://jitpack.io")
+    }
 }
 
 dependencies {
-  implementation 'com.github.airflux:airflux-commons-collections:Tag'
+  implementation("com.github.airflux:airflux-commons-collections:Tag")
+}
+```
+
+## Airflux Commons Types
+This is a library of types.
+- Result<T, E>
+
+### Installation
+
+```kotlin
+repositories {
+    maven {
+        url = URI("https://jitpack.io")
+    }
+}
+
+dependencies {
+    implementation("com.github.airflux:airflux-commons-types:Tag")
 }
 ```
