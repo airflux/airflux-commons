@@ -8,3 +8,9 @@ project(":airflux-commons-kotest-assertions").projectDir = file("./modules/kotes
 
 include(":airflux-commons-collections")
 project(":airflux-commons-collections").projectDir = file("./modules/collections")
+
+include(":airflux-commons-types")
+project(":airflux-commons-types").projectDir = file("./modules/types")
+
+include(":airflux-commons-types-test")
+project(":airflux-commons-types-test").projectDir = file("./modules/types/test")
