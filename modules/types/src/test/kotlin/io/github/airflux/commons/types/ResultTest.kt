@@ -687,7 +687,7 @@ internal class ResultTest : FreeSpec() {
             }
 
             "when a block throws an exception" - {
-                val exception = IllegalStateException()
+                val exception = InternalException()
                 val result: Result<String, Throwable> = doTry { throw exception }
 
                 "then this function should return the `Result#Failure` type with the exception" {
