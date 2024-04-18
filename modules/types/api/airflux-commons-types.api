@@ -69,6 +69,7 @@ public final class io/github/airflux/commons/types/result/ResultKt {
 	public static final fun asSuccess (Ljava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Success;
 	public static final fun failure (Ljava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Failure;
 	public static final fun filterNotNull (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun filterOrElse (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/result/Result;
 	public static final fun flatMap (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
 	public static final fun fold (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public static final fun forEach (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)V

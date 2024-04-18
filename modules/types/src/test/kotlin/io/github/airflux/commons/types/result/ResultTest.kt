@@ -678,6 +678,53 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
             }
+
+            "the `filterOrElse` function" - {
+
+                "when a variable has the `Result#Success` type" - {
+                    val original: Result<String, Errors> = ORIGINAL_VALUE.success()
+
+                    "when predicate return the true value" - {
+                        val predicate: (String) -> Boolean = { true }
+
+                        "then this function should return the `Result#Success` type with the value" {
+                            val result = original.filterOrElse(predicate) { Errors.Blank }
+                            result shouldBeSuccess ORIGINAL_VALUE
+                        }
+                    }
+
+                    "when predicate return the false value" - {
+                        val predicate: (String) -> Boolean = { false }
+
+                        "then this function should return the `Result#Success` type with the value" {
+                            val result = original.filterOrElse(predicate) { Errors.Blank }
+                            result shouldBeFailure Errors.Blank
+                        }
+                    }
+                }
+
+                "when a variable has the `Result#Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+
+                    "when predicate return the true value" - {
+                        val predicate: (String) -> Boolean = { true }
+
+                        "then this function should return original value" {
+                            val result = original.filterOrElse(predicate) { Errors.Blank }
+                            result.shouldBeSameInstanceAs(original)
+                        }
+                    }
+
+                    "when predicate return the false value" - {
+                        val predicate: (String) -> Boolean = { false }
+
+                        "then this function should return original value" {
+                            val result = original.filterOrElse(predicate) { Errors.Blank }
+                            result.shouldBeSameInstanceAs(original)
+                        }
+                    }
+                }
+            }
         }
 
         "The `success` function should return the `Result#Success` type with the passed value" {

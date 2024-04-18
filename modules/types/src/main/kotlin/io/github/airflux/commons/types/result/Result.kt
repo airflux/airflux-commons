@@ -295,7 +295,7 @@ public inline fun <T, R, E> Iterable<T>.traverse(transform: (T) -> Result<R, E>)
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T, E> Result<T?, E>.filterNotNull(failureBuilder: () -> E): Result<T, E> {
+public inline fun <T : Any, E : Any> Result<T?, E>.filterNotNull(failureBuilder: () -> E): Result<T, E> {
     contract {
         callsInPlace(failureBuilder, AT_MOST_ONCE)
     }
@@ -306,4 +306,14 @@ public inline fun <T, E> Result<T?, E>.filterNotNull(failureBuilder: () -> E): R
         this as Result<T, E>
     } else
         failureBuilder().failure()
+}
+
+@OptIn(ExperimentalContracts::class)
+public inline fun <T, E> Result<T, E>.filterOrElse(predicate: (T) -> Boolean, default: () -> E): Result<T, E> {
+    contract {
+        callsInPlace(predicate, AT_MOST_ONCE)
+        callsInPlace(default, AT_MOST_ONCE)
+    }
+
+    return if (isFailure() || predicate(this.value)) this else default().failure()
 }
