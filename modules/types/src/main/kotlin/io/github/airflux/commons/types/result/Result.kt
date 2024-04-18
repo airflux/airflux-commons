@@ -295,7 +295,7 @@ public inline fun <T, R, E> Iterable<T>.traverse(transform: (T) -> Result<R, E>)
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T, E> Result<T?, E>.failureIfNullValue(failureBuilder: () -> E): Result<T, E> {
+public inline fun <T, E> Result<T?, E>.filterNotNull(failureBuilder: () -> E): Result<T, E> {
     contract {
         callsInPlace(failureBuilder, AT_MOST_ONCE)
     }

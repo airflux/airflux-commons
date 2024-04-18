@@ -646,7 +646,7 @@ internal class ResultTest : FreeSpec() {
                 }
             }
 
-            "the `failureIfNullValue` function" - {
+            "the `filterNotNull` function" - {
 
                 "when a variable has the `Result#Success` type" - {
 
@@ -654,7 +654,7 @@ internal class ResultTest : FreeSpec() {
                         val original: Result<String?, Errors> = ORIGINAL_VALUE.success()
 
                         "then this function should return the `Result#Success` type with the value" {
-                            val result = original.failureIfNullValue { Errors.Blank }
+                            val result = original.filterNotNull { Errors.Blank }
                             result shouldBeSuccess ORIGINAL_VALUE
                         }
                     }
@@ -663,7 +663,7 @@ internal class ResultTest : FreeSpec() {
                         val original: Result<String?, Errors> = Result.asNull
 
                         "then this function should return the `Result#Failure` type with the failure" {
-                            val result = original.failureIfNullValue { Errors.Blank }
+                            val result = original.filterNotNull { Errors.Blank }
                             result shouldBeFailure Errors.Blank
                         }
                     }
@@ -673,7 +673,7 @@ internal class ResultTest : FreeSpec() {
                     val original: Result<String, Errors> = Errors.Empty.failure()
 
                     "then this function should return an original value" {
-                        val result = original.failureIfNullValue { Errors.Blank }
+                        val result = original.filterNotNull { Errors.Blank }
                         result.shouldBeSameInstanceAs(original)
                     }
                 }
