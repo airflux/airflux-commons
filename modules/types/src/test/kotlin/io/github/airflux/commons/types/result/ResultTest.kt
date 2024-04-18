@@ -359,6 +359,27 @@ internal class ResultTest : FreeSpec() {
                 }
             }
 
+            "the `getFailureOrNull` function" - {
+
+                "when a variable has the `Result#Success` type" - {
+                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+
+                    "then this function should return the null value" {
+                        val result = original.getFailureOrNull()
+                        result.shouldBeNull()
+                    }
+                }
+
+                "when a variable has the `Result#Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+
+                    "then this function should return a failure" {
+                        val result = original.getFailureOrNull()
+                        result shouldBe Errors.Empty
+                    }
+                }
+            }
+
             "the `recover` function" - {
 
                 "when a variable has the `Result#Success` type" - {

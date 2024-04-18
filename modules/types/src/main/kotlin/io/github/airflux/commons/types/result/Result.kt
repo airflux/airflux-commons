@@ -248,6 +248,16 @@ public inline infix fun <T, E> Result<T, E>.orThrow(exceptionBuilder: (E) -> Thr
 }
 
 @OptIn(ExperimentalContracts::class)
+public fun <T, E> Result<T, E>.getFailureOrNull(): E? {
+    contract {
+        returns(null) implies (this@getFailureOrNull is Result.Success<T>)
+        returnsNotNull() implies (this@getFailureOrNull is Result.Failure<E>)
+    }
+
+    return if (isFailure()) cause else null
+}
+
+@OptIn(ExperimentalContracts::class)
 public inline infix fun <T, E> Result<T, E>.forEach(block: (T) -> Unit) {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
