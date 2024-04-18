@@ -40,7 +40,7 @@ internal class ResultRaiseAsContextReceiverTest : FreeSpec() {
         }
     }
 
-    context (io.github.airflux.commons.types.result.Result.Raise<Errors.UserNotFound>)
+    context (Result.Raise<Errors.UserNotFound>)
     private fun getUser(id: Int): User =
         if (id == USER_ID)
             User(USER_ID, USER_NAME)
