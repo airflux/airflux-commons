@@ -25,11 +25,6 @@ import io.kotest.matchers.types.shouldBeSameInstanceAs
 
 internal class ResultTest : FreeSpec() {
 
-    companion object {
-        private const val ORIGINAL_VALUE = "10"
-        private const val ALTERNATIVE_VALUE = "20"
-    }
-
     init {
 
         "The `Result` type properties" - {
@@ -673,33 +668,16 @@ internal class ResultTest : FreeSpec() {
             val result: Result<String, Errors.Empty> = Errors.Empty.failure()
             result shouldBeFailure Errors.Empty
         }
-
-        "The `doTry` function" - {
-
-            "when a block does not throw an exception" - {
-                val result: Result<String, Throwable> = doTry { ORIGINAL_VALUE }
-
-                "then this function should return the `Result#Success` type with the value" {
-                    result shouldBeSuccess ORIGINAL_VALUE
-                }
-            }
-
-            "when a block throws an exception" - {
-                val exception = InternalException()
-                val result: Result<String, Throwable> = doTry { throw exception }
-
-                "then this function should return the `Result#Failure` type with the exception" {
-                    result shouldBeFailure exception
-                }
-            }
-        }
     }
-
-    internal class InternalException : RuntimeException()
 
     internal sealed interface Errors {
         data object Empty : Errors
         data object Blank : Errors
+    }
+
+    companion object {
+        private const val ORIGINAL_VALUE = "10"
+        private const val ALTERNATIVE_VALUE = "20"
     }
 
     private fun <T, E> createResult(value: Result<T, E>): Result<T, E> = value

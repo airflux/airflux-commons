@@ -39,28 +39,10 @@ public inline fun <T, E> ResultWith(block: Result.Raise<E>.() -> Result<T, E>): 
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
 
-    val raise = ResultRaise<E>()
+    val raise = Result.Raise<E>()
     return try {
         block(raise)
     } catch (expected: RaiseException) {
         expected.failureOrRethrow(raise)
-    }
-}
-
-@PublishedApi
-internal class ResultRaise<E> : Result.Raise<E> {
-
-    override fun <T> Result<T, E>.bind(): T = if (isSuccess()) value else raise(this)
-
-    override fun raise(cause: E): Nothing {
-        raise(Result.Failure(cause))
-    }
-
-    override fun <T> Result<T, E>.raise() {
-        if (isSuccess()) Unit else raise(this)
-    }
-
-    private fun raise(failure: Result.Failure<E>): Nothing {
-        throw RaiseException(failure, this)
     }
 }

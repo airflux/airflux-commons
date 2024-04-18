@@ -37,11 +37,14 @@ public final class io/github/airflux/commons/types/result/Result$Failure : io/gi
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract interface class io/github/airflux/commons/types/result/Result$Raise : io/github/airflux/commons/types/BasicRaise {
-	public abstract fun bind (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;
-	public fun component1 (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;
-	public abstract fun raise (Lio/github/airflux/commons/types/result/Result;)V
-	public abstract fun raise (Ljava/lang/Object;)Ljava/lang/Void;
+public final class io/github/airflux/commons/types/result/Result$Raise : io/github/airflux/commons/types/BasicRaise {
+	public fun <init> ()V
+	public final fun bind (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;
+	public final fun component1 (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;
+	public final fun ensure (ZLkotlin/jvm/functions/Function0;)V
+	public final fun ensureNotNull (Ljava/lang/Object;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+	public final fun raise (Lio/github/airflux/commons/types/result/Result;)V
+	public final fun raise (Ljava/lang/Object;)Ljava/lang/Void;
 }
 
 public final class io/github/airflux/commons/types/result/Result$Success : io/github/airflux/commons/types/result/Result {
@@ -64,7 +67,6 @@ public final class io/github/airflux/commons/types/result/ResultKt {
 	public static final fun andThen (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
 	public static final fun asFailure (Ljava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Failure;
 	public static final fun asSuccess (Ljava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Success;
-	public static final fun doTry (Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/result/Result;
 	public static final fun failure (Ljava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Failure;
 	public static final fun failureIfNullValue (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/result/Result;
 	public static final fun flatMap (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
@@ -90,12 +92,5 @@ public final class io/github/airflux/commons/types/result/ResultKt {
 	public static final fun sequence (Ljava/lang/Iterable;)Lio/github/airflux/commons/types/result/Result;
 	public static final fun success (Ljava/lang/Object;)Lio/github/airflux/commons/types/result/Result$Success;
 	public static final fun traverse (Ljava/lang/Iterable;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
-}
-
-public final class io/github/airflux/commons/types/result/ResultRaise : io/github/airflux/commons/types/result/Result$Raise {
-	public fun <init> ()V
-	public fun bind (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;
-	public fun raise (Lio/github/airflux/commons/types/result/Result;)V
-	public fun raise (Ljava/lang/Object;)Ljava/lang/Void;
 }
 

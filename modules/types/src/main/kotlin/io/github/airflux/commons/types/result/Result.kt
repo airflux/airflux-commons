@@ -19,17 +19,13 @@
 package io.github.airflux.commons.types.result
 
 import io.github.airflux.commons.types.BasicRaise
+import io.github.airflux.commons.types.RaiseException
 import io.github.airflux.commons.types.identity
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
+import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 import kotlin.experimental.ExperimentalTypeInference
-
-public inline fun <T> doTry(block: () -> T): Result<T, Throwable> = try {
-    block().success()
-} catch (expected: Throwable) {
-    expected.failure()
-}
 
 @JvmName("asSuccess")
 public fun <T> T.success(): Result.Success<T> = success(this)
@@ -47,11 +43,40 @@ public sealed class Result<out T, out E> {
 
     public data class Failure<out E>(public val cause: E) : Result<Nothing, E>()
 
-    public interface Raise<E> : BasicRaise {
-        public fun <T> Result<T, E>.bind(): T
+    @Suppress("MemberNameEqualsClassName")
+    public class Raise<E> : BasicRaise {
+
         public operator fun <T> Result<T, E>.component1(): T = bind()
-        public fun raise(cause: E): Nothing
-        public fun <T> Result<T, E>.raise()
+
+        public fun <T> Result<T, E>.bind(): T = if (isSuccess()) value else raise(this)
+
+        public fun <T> Result<T, E>.raise(): Unit = if (isSuccess()) Unit else raise(this)
+
+        @OptIn(ExperimentalContracts::class)
+        public inline fun ensure(condition: Boolean, raise: () -> E) {
+            contract {
+                callsInPlace(raise, AT_MOST_ONCE)
+                returns() implies condition
+            }
+            return if (condition) Unit else raise(raise())
+        }
+
+        @OptIn(ExperimentalContracts::class)
+        public inline fun <T : Any> ensureNotNull(value: T?, raise: () -> E): T {
+            contract {
+                callsInPlace(raise, AT_MOST_ONCE)
+                returns() implies (value != null)
+            }
+            return value ?: raise(raise())
+        }
+
+        public fun raise(cause: E): Nothing {
+            raise(Failure(cause))
+        }
+
+        private fun raise(failure: Failure<E>): Nothing {
+            throw RaiseException(failure, this)
+        }
     }
 
     public companion object {
@@ -82,7 +107,7 @@ public fun <T, E> Result<T, E>.isSuccess(): Boolean {
 @OptIn(ExperimentalContracts::class)
 public inline fun <T, E> Result<T, E>.isSuccess(predicate: (T) -> Boolean): Boolean {
     contract {
-        callsInPlace(predicate, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(predicate, AT_MOST_ONCE)
     }
     return this is Result.Success<T> && predicate(value)
 }
@@ -99,7 +124,7 @@ public fun <T, E> Result<T, E>.isFailure(): Boolean {
 @OptIn(ExperimentalContracts::class)
 public inline fun <T, E> Result<T, E>.isFailure(predicate: (E) -> Boolean): Boolean {
     contract {
-        callsInPlace(predicate, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(predicate, AT_MOST_ONCE)
     }
     return this is Result.Failure<E> && predicate(cause)
 }
@@ -107,8 +132,8 @@ public inline fun <T, E> Result<T, E>.isFailure(predicate: (E) -> Boolean): Bool
 @OptIn(ExperimentalContracts::class)
 public inline fun <T, R, E> Result<T, E>.fold(onSuccess: (T) -> R, onFailure: (E) -> R): R {
     contract {
-        callsInPlace(onFailure, InvocationKind.AT_MOST_ONCE)
-        callsInPlace(onSuccess, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(onFailure, AT_MOST_ONCE)
+        callsInPlace(onSuccess, AT_MOST_ONCE)
     }
 
     return if (isSuccess()) onSuccess(value) else onFailure(cause)
@@ -117,7 +142,7 @@ public inline fun <T, R, E> Result<T, E>.fold(onSuccess: (T) -> R, onFailure: (E
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T, R, E> Result<T, E>.map(transform: (T) -> R): Result<R, E> {
     contract {
-        callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(transform, AT_MOST_ONCE)
     }
     return flatMap { value -> transform(value).success() }
 }
@@ -125,7 +150,7 @@ public inline infix fun <T, R, E> Result<T, E>.map(transform: (T) -> R): Result<
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T, R, E> Result<T, E>.flatMap(transform: (T) -> Result<R, E>): Result<R, E> {
     contract {
-        callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(transform, AT_MOST_ONCE)
     }
     return if (isSuccess()) transform(value) else this
 }
@@ -133,7 +158,7 @@ public inline infix fun <T, R, E> Result<T, E>.flatMap(transform: (T) -> Result<
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T, R, E> Result<T, E>.andThen(block: (T) -> Result<R, E>): Result<R, E> {
     contract {
-        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(block, AT_MOST_ONCE)
     }
     return if (isSuccess()) block(value) else this
 }
@@ -141,7 +166,7 @@ public inline infix fun <T, R, E> Result<T, E>.andThen(block: (T) -> Result<R, E
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T, E, R> Result<T, E>.mapFailure(transform: (E) -> R): Result<T, R> {
     contract {
-        callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(transform, AT_MOST_ONCE)
     }
     return if (isSuccess()) this else transform(cause).failure()
 }
@@ -149,7 +174,7 @@ public inline infix fun <T, E, R> Result<T, E>.mapFailure(transform: (E) -> R): 
 @OptIn(ExperimentalContracts::class)
 public inline fun <T, E> Result<T, E>.onSuccess(block: (T) -> Unit): Result<T, E> {
     contract {
-        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(block, AT_MOST_ONCE)
     }
     return also { if (it.isSuccess()) block(it.value) }
 }
@@ -157,7 +182,7 @@ public inline fun <T, E> Result<T, E>.onSuccess(block: (T) -> Unit): Result<T, E
 @OptIn(ExperimentalContracts::class)
 public inline fun <T, E> Result<T, E>.onFailure(block: (E) -> Unit): Result<T, E> {
     contract {
-        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(block, AT_MOST_ONCE)
     }
     return also { if (it.isFailure()) block(it.cause) }
 }
@@ -165,7 +190,7 @@ public inline fun <T, E> Result<T, E>.onFailure(block: (E) -> Unit): Result<T, E
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T, E> Result<T, E>.recover(block: (E) -> T): Result<T, E> {
     contract {
-        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(block, AT_MOST_ONCE)
     }
     return if (isSuccess()) this else block(cause).success()
 }
@@ -173,7 +198,7 @@ public inline infix fun <T, E> Result<T, E>.recover(block: (E) -> T): Result<T, 
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T, E> Result<T, E>.recoverWith(block: (E) -> Result<T, E>): Result<T, E> {
     contract {
-        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(block, AT_MOST_ONCE)
     }
     return if (isSuccess()) this else block(cause)
 }
@@ -181,7 +206,7 @@ public inline infix fun <T, E> Result<T, E>.recoverWith(block: (E) -> Result<T, 
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T, E> Result<T, E>.getOrForward(block: (Result.Failure<E>) -> Nothing): T {
     contract {
-        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(block, AT_MOST_ONCE)
     }
     return if (isSuccess()) value else block(this)
 }
@@ -201,7 +226,7 @@ public infix fun <T, E> Result<T, E>.getOrElse(default: T): T = if (isSuccess())
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T, E> Result<T, E>.getOrElse(default: (E) -> T): T {
     contract {
-        callsInPlace(default, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(default, AT_MOST_ONCE)
     }
     return if (isSuccess()) value else default(cause)
 }
@@ -209,7 +234,7 @@ public inline infix fun <T, E> Result<T, E>.getOrElse(default: (E) -> T): T {
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T, E> Result<T, E>.orElse(default: () -> Result<T, E>): Result<T, E> {
     contract {
-        callsInPlace(default, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(default, AT_MOST_ONCE)
     }
     return if (isSuccess()) this else default()
 }
@@ -217,7 +242,7 @@ public inline infix fun <T, E> Result<T, E>.orElse(default: () -> Result<T, E>):
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T, E> Result<T, E>.orThrow(exceptionBuilder: (E) -> Throwable): T {
     contract {
-        callsInPlace(exceptionBuilder, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(exceptionBuilder, AT_MOST_ONCE)
     }
     return if (isSuccess()) value else throw exceptionBuilder(cause)
 }
@@ -225,7 +250,7 @@ public inline infix fun <T, E> Result<T, E>.orThrow(exceptionBuilder: (E) -> Thr
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T, E> Result<T, E>.forEach(block: (T) -> Unit) {
     contract {
-        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(block, AT_MOST_ONCE)
     }
     return if (isSuccess()) block(value) else Unit
 }
@@ -262,7 +287,7 @@ public inline fun <T, R, E> Iterable<T>.traverse(transform: (T) -> Result<R, E>)
 @OptIn(ExperimentalContracts::class)
 public inline fun <T, E> Result<T?, E>.failureIfNullValue(failureBuilder: () -> E): Result<T, E> {
     contract {
-        callsInPlace(failureBuilder, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(failureBuilder, AT_MOST_ONCE)
     }
     return if (this.isFailure())
         this
