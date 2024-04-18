@@ -28,13 +28,13 @@ internal class ResultDSLTest : FreeSpec() {
                 "when using one level of DSL" - {
 
                     "when every function returns a successful" - {
-                        fun first(): io.github.airflux.commons.types.result.Result<Int, Error> = FIRST_VALUE.success()
-                        fun second(): io.github.airflux.commons.types.result.Result<Int, Error> = SECOND_VALUE.success()
+                        fun first(): Result<Int, Error> = FIRST_VALUE.success()
+                        fun second(): Result<Int, Error> = SECOND_VALUE.success()
 
                         "when the execution result of a block is successful" - {
 
                             "then should return a successful value" {
-                                val result: io.github.airflux.commons.types.result.Result<Int, Error> = Result {
+                                val result: Result<Int, Error> = Result {
                                     val (a) = first()
                                     val (b) = second()
                                     a + b
@@ -60,9 +60,9 @@ internal class ResultDSLTest : FreeSpec() {
                     }
 
                     "when some function returns a failure" - {
-                        fun first(): io.github.airflux.commons.types.result.Result<Int, Error> = FIRST_VALUE.success()
-                        fun second(): io.github.airflux.commons.types.result.Result<Int, Error> = Error.First.failure()
-                        fun third(): io.github.airflux.commons.types.result.Result<Int, Error> = Error.Second.failure()
+                        fun first(): Result<Int, Error> = FIRST_VALUE.success()
+                        fun second(): Result<Int, Error> = Error.First.failure()
+                        fun third(): Result<Int, Error> = Error.Second.failure()
 
                         "then should return a first returned failure" {
                             val result = Result {
@@ -80,9 +80,9 @@ internal class ResultDSLTest : FreeSpec() {
                 "when using a few levels of DSL" - {
 
                     "when every function returns a successful" - {
-                        fun first(): io.github.airflux.commons.types.result.Result<Int, Error> = FIRST_VALUE.success()
-                        fun second(): io.github.airflux.commons.types.result.Result<Int, Error> = SECOND_VALUE.success()
-                        fun third(): io.github.airflux.commons.types.result.Result<String, Error> = "3".success()
+                        fun first(): Result<Int, Error> = FIRST_VALUE.success()
+                        fun second(): Result<Int, Error> = SECOND_VALUE.success()
+                        fun third(): Result<String, Error> = "3".success()
 
                         "then should return a successful value" {
                             val result = Result {
@@ -100,9 +100,9 @@ internal class ResultDSLTest : FreeSpec() {
                     }
 
                     "when some function at an internal nesting level returns an error" - {
-                        fun first(): io.github.airflux.commons.types.result.Result<Int, Error> = FIRST_VALUE.success()
-                        fun second(): io.github.airflux.commons.types.result.Result<Int, Error> = SECOND_VALUE.success()
-                        fun third(): io.github.airflux.commons.types.result.Result<String, Error> = Error.First.failure()
+                        fun first(): Result<Int, Error> = FIRST_VALUE.success()
+                        fun second(): Result<Int, Error> = SECOND_VALUE.success()
+                        fun third(): Result<String, Error> = Error.First.failure()
 
                         "then should return failure of an internal nesting level" {
                             val result = Result {
@@ -120,9 +120,9 @@ internal class ResultDSLTest : FreeSpec() {
                     }
 
                     "when every function at all nesting levels returns an error" - {
-                        fun first(): io.github.airflux.commons.types.result.Result<Int, Error> = FIRST_VALUE.success()
-                        fun second(): io.github.airflux.commons.types.result.Result<Int, Error> = Error.First.failure()
-                        fun third(): io.github.airflux.commons.types.result.Result<String, Error> = Error.Second.failure()
+                        fun first(): Result<Int, Error> = FIRST_VALUE.success()
+                        fun second(): Result<Int, Error> = Error.First.failure()
+                        fun third(): Result<String, Error> = Error.Second.failure()
 
                         "then should return failure of a top-level" {
                             val result = Result {
@@ -141,10 +141,10 @@ internal class ResultDSLTest : FreeSpec() {
                 }
 
                 "when a function returns a successful" - {
-                    fun first(): io.github.airflux.commons.types.result.Result<Int, Error> = FIRST_VALUE.success()
+                    fun first(): Result<Int, Error> = FIRST_VALUE.success()
 
                     "then calling the `raise` function should have no effect" {
-                        val result: io.github.airflux.commons.types.result.Result<Int, Error> = Result {
+                        val result: Result<Int, Error> = Result {
                             first().raise()
                             SECOND_VALUE
                         }
@@ -154,10 +154,10 @@ internal class ResultDSLTest : FreeSpec() {
                 }
 
                 "when a function returns an error" - {
-                    fun first(): io.github.airflux.commons.types.result.Result<Int, Error> = Error.First.failure()
+                    fun first(): Result<Int, Error> = Error.First.failure()
 
                     "then calling the `raise` function should return an error" {
-                        val result: io.github.airflux.commons.types.result.Result<Int, Error> = Result {
+                        val result: Result<Int, Error> = Result {
                             first().raise()
                             SECOND_VALUE
                         }
