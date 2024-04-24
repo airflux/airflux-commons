@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  JAVA_DISTRIBUTION: 'temurin'
+  MAX_JAVA_VERSION: 17
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      JAVA_VERSION: 17
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK ${{ env.MAX_JAVA_VERSION }}
+        uses: actions/setup-java@v4.2.1
+        with:
+          java-version: ${{ env.MAX_JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - name: Cache Gradle
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: |
+            ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Check api
+        run: ./gradlew apiCheck --no-daemon
+
+      - name: Detekt
+        run: ./gradlew detekt --no-daemon
+
+      - name: Generate kover coverage report
+        run: ./gradlew koverXmlReport --no-daemon
+
+      - name: Sonar
+        run: ./gradlew sonar --no-daemon
+
+  build:
+    strategy:
+      max-parallel: 1
+      fail-fast: true
+      matrix:
+        version: [ 1.8, 17 ]
+        target: [
+          { arch: x64, os: ubuntu-latest },
+        ]
+    runs-on: ${{ matrix.target.os }}
+    needs: check
+    env:
+      JAVA_VERSION: ${{ matrix.version }}
+    name: Build with JDK ${{ matrix.version }} ${{ matrix.target.arch }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK ${{ env.MAX_JAVA_VERSION }}
+        uses: actions/setup-java@v4.2.1
+        with:
+          java-version: ${{ env.MAX_JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          architecture: ${{ matrix.target.arch }}
+
+      - name: Restore Gradle Cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: |
+            ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build
+        continue-on-error: false
+        run: ./gradlew build -x detekt --no-daemon
+
+      - name: Publish
+        env:
+          REPOSITORY_SNAPSHOTS_URL: ${{ secrets.REPOSITORY_SNAPSHOTS_URL }}
+          REPOSITORY_RELEASES_URL: ${{ secrets.REPOSITORY_RELEASES_URL }}
+          REPOSITORY_USERNAME: ${{ secrets.REPOSITORY_USERNAME }}
+          REPOSITORY_PASSWORD: ${{ secrets.REPOSITORY_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        continue-on-error: false
+        run: ./gradlew publish -x detekt --no-daemon
