@@ -7,16 +7,22 @@ on:
 env:
   JAVA_DISTRIBUTION: 'temurin'
   MAX_JAVA_VERSION: 17
+  GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+  GPG_PRIVATE_PASSWORD: ${{ secrets.GPG_PRIVATE_PASSWORD }}
 
 jobs:
   check:
     runs-on: ubuntu-latest
     env:
       JAVA_VERSION: 17
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Setup JDK ${{ env.MAX_JAVA_VERSION }}
         uses: actions/setup-java@v4.2.1
@@ -35,8 +41,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
       - name: Check api
         run: ./gradlew apiCheck --no-daemon
@@ -64,6 +70,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
       - name: Setup JDK ${{ env.MAX_JAVA_VERSION }}
         uses: actions/setup-java@v4.2.1
         with:
@@ -80,8 +89,8 @@ jobs:
           key: |
             ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
       - name: Build
         continue-on-error: false
