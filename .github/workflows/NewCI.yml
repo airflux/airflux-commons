@@ -15,6 +15,8 @@ jobs:
       JAVA_VERSION: 17
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup JDK ${{ env.MAX_JAVA_VERSION }}
         uses: actions/setup-java@v4.2.1
