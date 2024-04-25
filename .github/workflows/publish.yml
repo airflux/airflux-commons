@@ -1,0 +1,54 @@
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+      target-jdk-version:
+        required: true
+        type: number
+      target-arch:
+        required: true
+        type: string
+
+jobs:
+  publish:
+    name: Publish with JDK ${{ inputs.target-jdk-version }} ${{ inputs.target-arch }}
+    runs-on: ${{ inputs.os }}
+
+    steps:
+      - name: Setup JDK ${{ vars.JDK_VERSION }} ${{ vars.JDK_DISTRIBUTION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ vars.JDK_VERSION }}
+          distribution: ${{ vars.JDK_DISTRIBUTION }}
+          architecture: ${{ inputs.target-arch }}
+
+      - name: Restore Gradle Cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: |
+            ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/*.versions.toml') }}
+
+      - name: Restore Workspace
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ github.workspace }}
+          key: |
+            build-${{github.sha}}-jdk${{ inputs.target-jdk-version }}-${{ inputs.target-arch }}
+          fail-on-cache-miss: true
+
+      - name: Publish
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PRIVATE_PASSWORD: ${{ secrets.GPG_PRIVATE_PASSWORD }}
+          REPOSITORY_SNAPSHOTS_URL: ${{ secrets.REPOSITORY_SNAPSHOTS_URL }}
+          REPOSITORY_RELEASES_URL: ${{ secrets.REPOSITORY_RELEASES_URL }}
+          REPOSITORY_USERNAME: ${{ secrets.REPOSITORY_USERNAME }}
+          REPOSITORY_PASSWORD: ${{ secrets.REPOSITORY_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: false
+        run: ./gradlew publish -x detekt --no-daemon

@@ -1,0 +1,52 @@
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+      target-jdk-version:
+        required: true
+        type: number
+      target-arch:
+        required: true
+        type: string
+
+jobs:
+  build:
+    name: Build with JDK ${{ inputs.target-jdk-version }} ${{ inputs.target-arch }}
+    runs-on: ${{ inputs.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v3
+
+      - name: Setup JDK ${{ vars.JDK_VERSION }} ${{ vars.JDK_DISTRIBUTION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ vars.JDK_VERSION }}
+          distribution: ${{ vars.JDK_DISTRIBUTION }}
+          architecture: ${{ inputs.target-arch }}
+
+      - name: Restore Gradle Cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: |
+            ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/*.versions.toml') }}
+
+      - name: Build
+        env:
+          JAVA_VERSION: ${{ inputs.target-jdk-version }}
+        continue-on-error: false
+        run: ./gradlew build -x detekt --no-daemon
+
+      - name: Save workspace
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ github.workspace }}
+          key: |
+            build-${{github.sha}}-jdk${{ inputs.target-jdk-version }}-${{ inputs.target-arch }}

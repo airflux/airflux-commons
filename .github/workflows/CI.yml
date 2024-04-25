@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  # Triggers the workflow on push event but only for the "main" branch
+  push:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      JAVA_VERSION: ${{ vars.JDK_VERSION }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v3
+
+      - name: Setup JDK ${{ vars.JDK_VERSION }} ${{ vars.JDK_DISTRIBUTION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ vars.JDK_VERSION }}
+          distribution: ${{ vars.JDK_DISTRIBUTION }}
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: |
+            ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/*.versions.toml') }}
+
+      - name: Check API
+        run: ./gradlew apiCheck --no-daemon
+
+      - name: Check code style
+        run: ./gradlew detekt --no-daemon
+
+      - name: Test and generate kover coverage report
+        run: ./gradlew test koverXmlReport --no-daemon
+
+      - name: Sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew sonar --no-daemon
+
+  build:
+    needs: check
+    strategy:
+      max-parallel: 1
+      fail-fast: true
+      matrix:
+        version: [ 1.8 ]
+        target: [
+          { arch: x64, os: ubuntu-latest },
+        ]
+    uses: ./.github/workflows/build.yml
+    with:
+      target-jdk-version: ${{ matrix.version }}
+      target-arch: ${{ matrix.target.arch }}
+      os: ${{ matrix.target.os }}
+
+  publish:
+    needs: build
+    strategy:
+      max-parallel: 1
+      fail-fast: true
+      matrix:
+        version: [ 1.8 ]
+        target: [
+          { arch: x64, os: ubuntu-latest },
+        ]
+    uses: ./.github/workflows/publish.yml
+    with:
+      target-jdk-version: ${{ matrix.version }}
+      target-arch: ${{ matrix.target.arch }}
+      os: ${{ matrix.target.os }}
+    secrets: inherit
