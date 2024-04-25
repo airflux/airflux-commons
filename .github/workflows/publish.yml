@@ -43,6 +43,7 @@ jobs:
 
       - name: Publish
         env:
+          JAVA_VERSION: ${{ inputs.target-jdk-version }}
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PRIVATE_PASSWORD: ${{ secrets.GPG_PRIVATE_PASSWORD }}
           REPOSITORY_SNAPSHOTS_URL: ${{ secrets.REPOSITORY_SNAPSHOTS_URL }}
