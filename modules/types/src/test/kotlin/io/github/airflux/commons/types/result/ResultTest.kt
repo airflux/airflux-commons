@@ -27,69 +27,20 @@ internal class ResultTest : FreeSpec() {
 
     init {
 
-        "The `Result` type properties" - {
-
-            "the `asNull` property should return the `Result#Success` type with the `null` value" {
-                val result: Result<String?, String> = Result.asNull
-                result shouldBeSuccess null
-            }
-
-            "the `asTrue` property should return the `Result#Success` type with the `true` value" {
-                val result: Result<Boolean, String> = Result.asTrue
-                result shouldBeSuccess true
-            }
-
-            "the `asFalse` property should return the `Result#Success` type with the `false` value" {
-                val result: Result<Boolean, String> = Result.asFalse
-                result shouldBeSuccess false
-            }
-
-            "the `asUnit` property should return the `Result#Success` type with the `Unit` value" {
-                val result: Result<Unit, String> = Result.asUnit
-                result shouldBeSuccess Unit
-            }
-
-            "the `asEmptyList` property should return the `Result#Success` type with the `empty list` value" {
-                val result: Result<List<String>, String> = Result.asEmptyList
-                result shouldBeSuccess emptyList()
-            }
-        }
-
         "The `Result` type functions" - {
-
-            "the `of` function" - {
-
-                "when a parameter has the `true` value" - {
-                    val param = true
-
-                    "then this function should return the `Result#Success` type with the `true` value" {
-                        val result: Result<Boolean, String> = Result.of(param)
-                        result shouldBeSuccess true
-                    }
-                }
-
-                "when a parameter has the `false` value" - {
-                    val param = false
-
-                    "then this function should return the `Result#Success` type with the `true` value" {
-                        val result: Result<Boolean, String> = Result.of(param)
-                        result shouldBeSuccess false
-                    }
-                }
-            }
 
             "the `isSuccess` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return the true value" {
                         original.isSuccess() shouldBe true
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return the false value" {
                         original.isSuccess() shouldBe false
@@ -99,8 +50,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `isSuccess` function with predicate" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "when the predicate return the true value" - {
                         val predicate: (String) -> Boolean = { it == ORIGINAL_VALUE }
@@ -119,8 +70,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
                     val predicate: (String) -> Boolean = { throw IllegalStateException() }
 
                     "then the predicate is not invoked and should return the false value" {
@@ -131,16 +82,16 @@ internal class ResultTest : FreeSpec() {
 
             "the `isFailure` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return the false value" {
                         original.isFailure() shouldBe false
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return the true value" {
                         original.isFailure() shouldBe true
@@ -150,8 +101,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `isFailure` function with predicate" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
                     val predicate: (Errors) -> Boolean = { throw IllegalStateException() }
 
                     "then the predicate is not invoked and should return the false value" {
@@ -159,8 +110,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "when the predicate return the true value" - {
                         val predicate: (Errors) -> Boolean = { it == Errors.Empty }
@@ -182,8 +133,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `fold` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.fold(onFailure = { ALTERNATIVE_VALUE }, onSuccess = { it })
@@ -191,8 +142,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return the null value" {
                         val result = original.fold(onFailure = { ALTERNATIVE_VALUE }, onSuccess = { it })
@@ -203,8 +154,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `map` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return a result of applying the transform function to the value" {
                         val result = original.map { it.toInt() }
@@ -212,8 +163,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return an original do not apply the transform function to a value" {
                         val result = original.map { it.toInt() }
@@ -224,21 +175,21 @@ internal class ResultTest : FreeSpec() {
 
             "the `flatMap` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return a result of applying the transform function to the value" {
-                        val result = original.flatMap { result -> result.toInt().success() }
+                        val result = original.flatMap { result -> Success(result.toInt()) }
                         result shouldBeSuccess ORIGINAL_VALUE.toInt()
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return an original do not apply the transform function to a value" {
                         val result = original.flatMap { success ->
-                            success.toInt().success()
+                            Success(success.toInt())
                         }
 
                         result shouldBe original
@@ -248,21 +199,21 @@ internal class ResultTest : FreeSpec() {
 
             "the `andThen` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return a result of invoke the [block]" {
-                        val result = original.andThen { result -> result.toInt().success() }
+                        val result = original.andThen { result -> Success(result.toInt()) }
                         result shouldBeSuccess ORIGINAL_VALUE.toInt()
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return an original do not invoke the [block]" {
                         val result = original.andThen { success ->
-                            success.toInt().success()
+                            Success(success.toInt())
                         }
 
                         result shouldBe original
@@ -272,8 +223,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `mapFailure` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return an original do not apply the transform function to a failure" {
                         val result = original.mapFailure { Errors.Blank }
@@ -281,8 +232,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return a result of applying the transform function to a failure" {
                         val result = original.mapFailure { Errors.Blank }
@@ -293,8 +244,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `onSuccess` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then a code block should execute" {
                         shouldThrow<IllegalStateException> {
@@ -303,8 +254,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then should not anything do" {
                         shouldNotThrow<IllegalStateException> {
@@ -316,8 +267,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `onFailure` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then should not anything do" {
                         shouldNotThrow<IllegalStateException> {
@@ -326,8 +277,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then a code block should execute" {
                         shouldThrow<IllegalStateException> {
@@ -339,8 +290,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `getOrForward` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getOrForward { throw IllegalStateException() }
@@ -348,8 +299,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then should thrown exception" {
                         shouldThrow<IllegalStateException> {
@@ -361,8 +312,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `getFailureOrNull` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return the null value" {
                         val result = original.getFailureOrNull()
@@ -370,8 +321,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return a failure" {
                         val result = original.getFailureOrNull()
@@ -382,8 +333,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `recover` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return an original value" {
                         val result = original.recover { ALTERNATIVE_VALUE }
@@ -391,8 +342,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return the result of invoking the recovery function" {
                         val result = original.recover { ALTERNATIVE_VALUE }
@@ -403,20 +354,20 @@ internal class ResultTest : FreeSpec() {
 
             "the `recoverWith` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return an original value" {
-                        val result = original.recoverWith { ALTERNATIVE_VALUE.success() }
+                        val result = original.recoverWith { Success(ALTERNATIVE_VALUE) }
                         result shouldBeSameInstanceAs original
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return the result of invoking the recovery function" {
-                        val result = original.recoverWith { ALTERNATIVE_VALUE.success() }
+                        val result = original.recoverWith { Success(ALTERNATIVE_VALUE) }
                         result shouldBeSuccess ALTERNATIVE_VALUE
                     }
                 }
@@ -424,8 +375,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `getOrNull` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getOrNull()
@@ -433,8 +384,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return the null value" {
                         val result = original.getOrNull()
@@ -445,8 +396,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `getOrElse` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getOrElse(ALTERNATIVE_VALUE)
@@ -454,8 +405,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return the defaultValue value" {
                         val result = original.getOrElse(ALTERNATIVE_VALUE)
@@ -466,8 +417,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `getOrElse` function with a predicate" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getOrElse { ALTERNATIVE_VALUE }
@@ -475,8 +426,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return a value from a handler" {
                         val result = original.getOrElse { ALTERNATIVE_VALUE }
@@ -487,21 +438,21 @@ internal class ResultTest : FreeSpec() {
 
             "the `orElse` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
-                        val elseResult: Result<String, Errors> = createResult(ALTERNATIVE_VALUE.success())
+                        val elseResult: Result<String, Errors> = createResult(Success(ALTERNATIVE_VALUE))
                         val result = original.orElse { elseResult }
                         result shouldBe original
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return the defaultValue value" {
-                        val elseResult: Result<String, Errors> = createResult(ALTERNATIVE_VALUE.success())
+                        val elseResult: Result<String, Errors> = createResult(Success(ALTERNATIVE_VALUE))
                         val result = original.orElse { elseResult }
                         result shouldBe elseResult
                     }
@@ -510,8 +461,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `orThrow` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.orThrow { throw IllegalStateException() }
@@ -519,8 +470,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return an exception" {
                         shouldThrow<IllegalStateException> {
@@ -532,8 +483,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `forEach` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "then should thrown exception" {
                         shouldThrow<IllegalStateException> {
@@ -542,8 +493,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then should not thrown exception" {
                         shouldNotThrow<IllegalStateException> {
@@ -555,8 +506,8 @@ internal class ResultTest : FreeSpec() {
 
             "the `merge` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, String> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, String> = createResult(Success(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.merge()
@@ -564,8 +515,8 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, String> = createResult(ALTERNATIVE_VALUE.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, String> = createResult(Failure(ALTERNATIVE_VALUE))
 
                     "then this function should return the alternative value" {
                         val result = original.merge()
@@ -582,14 +533,14 @@ internal class ResultTest : FreeSpec() {
                     "then this function should return the value of the asEmptyList property" {
                         val result = original.sequence()
                         result.shouldBeSuccess()
-                        result shouldBeSameInstanceAs Result.asEmptyList
+                        result shouldBeSameInstanceAs Success.asEmptyList
                     }
                 }
 
-                "when a collection has items only the `Result#Success` type" - {
+                "when a collection has items only the `Success` type" - {
                     val original: List<Result<String, Errors>> = listOf(
-                        createResult(ORIGINAL_VALUE.success()),
-                        createResult(ALTERNATIVE_VALUE.success())
+                        createResult(Success(ORIGINAL_VALUE)),
+                        createResult(Success(ALTERNATIVE_VALUE))
                     )
 
                     "then this function should return a list with all values" {
@@ -599,10 +550,10 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a collection has a item of the `Result#Failure` type" - {
+                "when a collection has a item of the `Failure` type" - {
                     val original: List<Result<String, Errors>> = listOf(
-                        createResult(ORIGINAL_VALUE.success()),
-                        createResult(Errors.Empty.failure())
+                        createResult(Success(ORIGINAL_VALUE)),
+                        createResult(Failure(Errors.Empty))
                     )
 
                     "then this function should return the failure value" {
@@ -616,18 +567,18 @@ internal class ResultTest : FreeSpec() {
 
                 "when a collection is empty" - {
                     val original: List<String> = listOf()
-                    val transform: (String) -> Result<Int, Errors> = { it.toInt().success() }
+                    val transform: (String) -> Result<Int, Errors> = { Success(it.toInt()) }
 
                     "then this function should return the value of the asEmptyList property" {
                         val result: Result<List<Int>, Errors> = original.traverse(transform)
                         result.shouldBeSuccess()
-                        result shouldBeSameInstanceAs Result.asEmptyList
+                        result shouldBeSameInstanceAs Success.asEmptyList
                     }
                 }
 
-                "when a transform function returns items only the `Result#Success` type" - {
+                "when a transform function returns items only the `Success` type" - {
                     val original: List<String> = listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
-                    val transform: (String) -> Result<Int, Errors> = { it.toInt().success() }
+                    val transform: (String) -> Result<Int, Errors> = { Success(it.toInt()) }
 
                     "then this function should return a list with all transformed values" {
                         val result: Result<List<Int>, Errors> = original.traverse(transform)
@@ -636,11 +587,11 @@ internal class ResultTest : FreeSpec() {
                     }
                 }
 
-                "when a transform function returns any item of the `Result#Failure` type" - {
+                "when a transform function returns any item of the `Failure` type" - {
                     val original: List<String> = listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
                     val transform: (String) -> Result<Int, Errors> = {
                         val res = it.toInt()
-                        if (res > 10) Errors.Empty.failure() else res.success()
+                        if (res > 10) Failure(Errors.Empty) else Success(res)
                     }
 
                     "then this function should return the failure value" {
@@ -652,29 +603,29 @@ internal class ResultTest : FreeSpec() {
 
             "the `filterNotNull` function" - {
 
-                "when a variable has the `Result#Success` type" - {
+                "when a variable has the `Success` type" - {
 
                     "when a value is not null" - {
-                        val original: Result<String?, Errors> = createResult(ORIGINAL_VALUE.success())
+                        val original: Result<String?, Errors> = createResult(Success(ORIGINAL_VALUE))
 
-                        "then this function should return the `Result#Success` type with the value" {
+                        "then this function should return the `Success` type with the value" {
                             val result = original.filterNotNull { Errors.Blank }
                             result shouldBeSuccess ORIGINAL_VALUE
                         }
                     }
 
                     "when a value is null" - {
-                        val original: Result<String?, Errors> = createResult(Result.asNull)
+                        val original: Result<String?, Errors> = createResult(Success.asNull)
 
-                        "then this function should return the `Result#Failure` type with the failure" {
+                        "then this function should return the `Failure` type with the failure" {
                             val result = original.filterNotNull { Errors.Blank }
                             result shouldBeFailure Errors.Blank
                         }
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "then this function should return an original value" {
                         val result = original.filterNotNull { Errors.Blank }
@@ -685,13 +636,13 @@ internal class ResultTest : FreeSpec() {
 
             "the `filterOrElse` function" - {
 
-                "when a variable has the `Result#Success` type" - {
-                    val original: Result<String, Errors> = createResult(ORIGINAL_VALUE.success())
+                "when a variable has the `Success` type" - {
+                    val original: Result<String, Errors> = createResult(Success(ORIGINAL_VALUE))
 
                     "when predicate return the true value" - {
                         val predicate: (String) -> Boolean = { true }
 
-                        "then this function should return the `Result#Success` type with the value" {
+                        "then this function should return the `Success` type with the value" {
                             val result = original.filterOrElse(predicate) { Errors.Blank }
                             result shouldBeSuccess ORIGINAL_VALUE
                         }
@@ -700,15 +651,15 @@ internal class ResultTest : FreeSpec() {
                     "when predicate return the false value" - {
                         val predicate: (String) -> Boolean = { false }
 
-                        "then this function should return the `Result#Success` type with the value" {
+                        "then this function should return the `Success` type with the value" {
                             val result = original.filterOrElse(predicate) { Errors.Blank }
                             result shouldBeFailure Errors.Blank
                         }
                     }
                 }
 
-                "when a variable has the `Result#Failure` type" - {
-                    val original: Result<String, Errors> = createResult(Errors.Empty.failure())
+                "when a variable has the `Failure` type" - {
+                    val original: Result<String, Errors> = createResult(Failure(Errors.Empty))
 
                     "when predicate return the true value" - {
                         val predicate: (String) -> Boolean = { true }
@@ -731,13 +682,13 @@ internal class ResultTest : FreeSpec() {
             }
         }
 
-        "The `success` function should return the `Result#Success` type with the passed value" {
-            val result: Result<String, Errors.Empty> = createResult(ORIGINAL_VALUE.success())
+        "The `asSuccess` function should return the `Success` type with the passed value" {
+            val result: Result<String, Errors.Empty> = createResult(ORIGINAL_VALUE.asSuccess())
             result shouldBeSuccess ORIGINAL_VALUE
         }
 
-        "The `failure` function should return the `Result#Failure` type with the passed value" {
-            val result: Result<String, Errors.Empty> = createResult(Errors.Empty.failure())
+        "The `asFailure` function should return the `Failure` type with the passed value" {
+            val result: Result<String, Errors.Empty> = createResult(Errors.Empty.asFailure())
             result shouldBeFailure Errors.Empty
         }
     }

@@ -31,7 +31,7 @@ internal class ResultRaiseTest : FreeSpec() {
 
                 "when the result is successful" - {
                     val raise = Result.Raise<Error>()
-                    val result: Result<Int, Error> = FIRST_VALUE.success()
+                    val result: Result<Int, Error> = FIRST_VALUE.asSuccess()
 
                     "then should return the value" {
                         with(raise) {
@@ -43,7 +43,7 @@ internal class ResultRaiseTest : FreeSpec() {
 
                 "when the result is failure" - {
                     val raise = Result.Raise<Error>()
-                    val result: Result<Int, Error> = Error.First.failure()
+                    val result: Result<Int, Error> = Error.First.asFailure()
 
                     "then should raise an exception" {
                         val exception = shouldThrow<RaiseException> {
@@ -63,7 +63,7 @@ internal class ResultRaiseTest : FreeSpec() {
 
                 "when the result is successful" - {
                     val raise = Result.Raise<Error>()
-                    val result: Result<Int, Error> = FIRST_VALUE.success()
+                    val result: Result<Int, Error> = FIRST_VALUE.asSuccess()
 
                     "then should return the value" {
                         with(raise) {
@@ -75,7 +75,7 @@ internal class ResultRaiseTest : FreeSpec() {
 
                 "when the result is failure" - {
                     val raise = Result.Raise<Error>()
-                    val result: Result<Int, Error> = Error.First.failure()
+                    val result: Result<Int, Error> = Error.First.asFailure()
 
                     "then should raise an exception" {
                         val exception = shouldThrow<RaiseException> {
@@ -94,7 +94,7 @@ internal class ResultRaiseTest : FreeSpec() {
 
                 "when the result is successful" - {
                     val raise = Result.Raise<Error>()
-                    val result: Result<Int, Error> = FIRST_VALUE.success()
+                    val result: Result<Int, Error> = FIRST_VALUE.asSuccess()
 
                     "then should not raise an exception" {
                         with(raise) {
@@ -105,7 +105,7 @@ internal class ResultRaiseTest : FreeSpec() {
 
                 "when the result is failure" - {
                     val raise = Result.Raise<Error>()
-                    val result: Result<Int, Error> = Error.First.failure()
+                    val result: Result<Int, Error> = Error.First.asFailure()
 
                     "then should raise an exception" {
                         val exception = shouldThrow<RaiseException> {

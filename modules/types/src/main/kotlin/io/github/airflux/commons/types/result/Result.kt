@@ -27,21 +27,7 @@ import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 import kotlin.experimental.ExperimentalTypeInference
 
-@JvmName("asSuccess")
-public fun <T> T.success(): Result.Success<T> = success(this)
-
-@JvmName("asFailure")
-public fun <E> E.failure(): Result.Failure<E> = failure(this)
-
-public fun <T> success(value: T): Result.Success<T> = Result.Success(value)
-
-public fun <E> failure(cause: E): Result.Failure<E> = Result.Failure(cause)
-
-public sealed class Result<out T, out E> {
-
-    public data class Success<out T>(public val value: T) : Result<T, Nothing>()
-
-    public data class Failure<out E>(public val cause: E) : Result<Nothing, E>()
+public sealed interface Result<out T, out E> {
 
     @Suppress("MemberNameEqualsClassName")
     public class Raise<E> : BasicRaise {
@@ -79,6 +65,11 @@ public sealed class Result<out T, out E> {
         }
     }
 
+    public companion object
+}
+
+public data class Success<out T>(public val value: T) : Result<T, Nothing> {
+
     public companion object {
 
         public val asNull: Success<Nothing?> = Success(null)
@@ -95,13 +86,23 @@ public sealed class Result<out T, out E> {
     }
 }
 
+public data class Failure<out E>(public val cause: E) : Result<Nothing, E>
+
+public fun <T> T.asSuccess(): Success<T> = success(this)
+
+public fun <E> E.asFailure(): Failure<E> = failure(this)
+
+public fun <T> success(value: T): Success<T> = Success(value)
+
+public fun <E> failure(cause: E): Failure<E> = Failure(cause)
+
 @OptIn(ExperimentalContracts::class)
 public fun <T, E> Result<T, E>.isSuccess(): Boolean {
     contract {
-        returns(true) implies (this@isSuccess is Result.Success<T>)
-        returns(false) implies (this@isSuccess is Result.Failure<E>)
+        returns(true) implies (this@isSuccess is Success<T>)
+        returns(false) implies (this@isSuccess is Failure<E>)
     }
-    return this is Result.Success<T>
+    return this is Success<T>
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -109,16 +110,16 @@ public inline fun <T, E> Result<T, E>.isSuccess(predicate: (T) -> Boolean): Bool
     contract {
         callsInPlace(predicate, AT_MOST_ONCE)
     }
-    return this is Result.Success<T> && predicate(value)
+    return this is Success<T> && predicate(value)
 }
 
 @OptIn(ExperimentalContracts::class)
 public fun <T, E> Result<T, E>.isFailure(): Boolean {
     contract {
-        returns(false) implies (this@isFailure is Result.Success<T>)
-        returns(true) implies (this@isFailure is Result.Failure<E>)
+        returns(false) implies (this@isFailure is Success<T>)
+        returns(true) implies (this@isFailure is Failure<E>)
     }
-    return this is Result.Failure<E>
+    return this is Failure<E>
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -126,7 +127,7 @@ public inline fun <T, E> Result<T, E>.isFailure(predicate: (E) -> Boolean): Bool
     contract {
         callsInPlace(predicate, AT_MOST_ONCE)
     }
-    return this is Result.Failure<E> && predicate(cause)
+    return this is Failure<E> && predicate(cause)
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -144,7 +145,7 @@ public inline infix fun <T, R, E> Result<T, E>.map(transform: (T) -> R): Result<
     contract {
         callsInPlace(transform, AT_MOST_ONCE)
     }
-    return flatMap { value -> transform(value).success() }
+    return flatMap { value -> transform(value).asSuccess() }
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -168,7 +169,7 @@ public inline infix fun <T, E, R> Result<T, E>.mapFailure(transform: (E) -> R): 
     contract {
         callsInPlace(transform, AT_MOST_ONCE)
     }
-    return if (isSuccess()) this else transform(cause).failure()
+    return if (isSuccess()) this else transform(cause).asFailure()
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -192,7 +193,7 @@ public inline infix fun <T, E> Result<T, E>.recover(block: (E) -> T): Result<T, 
     contract {
         callsInPlace(block, AT_MOST_ONCE)
     }
-    return if (isSuccess()) this else block(cause).success()
+    return if (isSuccess()) this else block(cause).asSuccess()
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -204,7 +205,7 @@ public inline infix fun <T, E> Result<T, E>.recoverWith(block: (E) -> Result<T, 
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, E> Result<T, E>.getOrForward(block: (Result.Failure<E>) -> Nothing): T {
+public inline infix fun <T, E> Result<T, E>.getOrForward(block: (Failure<E>) -> Nothing): T {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
     }
@@ -214,8 +215,8 @@ public inline infix fun <T, E> Result<T, E>.getOrForward(block: (Result.Failure<
 @OptIn(ExperimentalContracts::class)
 public fun <T, E> Result<T, E>.getOrNull(): T? {
     contract {
-        returns(null) implies (this@getOrNull is Result.Failure<E>)
-        returnsNotNull() implies (this@getOrNull is Result.Success<T>)
+        returns(null) implies (this@getOrNull is Failure<E>)
+        returnsNotNull() implies (this@getOrNull is Success<T>)
     }
 
     return if (isSuccess()) value else null
@@ -250,8 +251,8 @@ public inline infix fun <T, E> Result<T, E>.orThrow(exceptionBuilder: (E) -> Thr
 @OptIn(ExperimentalContracts::class)
 public fun <T, E> Result<T, E>.getFailureOrNull(): E? {
     contract {
-        returns(null) implies (this@getFailureOrNull is Result.Success<T>)
-        returnsNotNull() implies (this@getFailureOrNull is Result.Failure<E>)
+        returns(null) implies (this@getFailureOrNull is Success<T>)
+        returnsNotNull() implies (this@getFailureOrNull is Failure<E>)
     }
 
     return if (isFailure()) cause else null
@@ -275,7 +276,7 @@ public fun <T, E> Iterable<Result<T, E>>.sequence(): Result<List<T>, E> {
             if (item.isSuccess()) add(item.value) else return item
         }
     }
-    return if (items.isNotEmpty()) items.success() else Result.asEmptyList
+    return if (items.isNotEmpty()) items.asSuccess() else Success.asEmptyList
 }
 
 @OptIn(ExperimentalTypeInference::class, ExperimentalContracts::class)
@@ -291,7 +292,7 @@ public inline fun <T, R, E> Iterable<T>.traverse(transform: (T) -> Result<R, E>)
             if (item.isSuccess()) add(item.value) else return item
         }
     }
-    return if (items.isNotEmpty()) items.success() else Result.asEmptyList
+    return if (items.isNotEmpty()) items.asSuccess() else Success.asEmptyList
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -305,7 +306,7 @@ public inline fun <T : Any, E : Any> Result<T?, E>.filterNotNull(failureBuilder:
         @Suppress("UNCHECKED_CAST")
         this as Result<T, E>
     } else
-        failureBuilder().failure()
+        failureBuilder().asFailure()
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -315,5 +316,5 @@ public inline fun <T, E> Result<T, E>.filterOrElse(predicate: (T) -> Boolean, de
         callsInPlace(default, AT_MOST_ONCE)
     }
 
-    return if (isFailure() || predicate(this.value)) this else default().failure()
+    return if (isFailure() || predicate(this.value)) this else default().asFailure()
 }

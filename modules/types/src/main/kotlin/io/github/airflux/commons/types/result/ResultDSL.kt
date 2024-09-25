@@ -29,7 +29,7 @@ public inline fun <T, E> Result(block: Result.Raise<E>.() -> T): Result<T, E> {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
 
-    return ResultWith { block().success() }
+    return ResultWith { block().asSuccess() }
 }
 
 @Suppress("FunctionNaming")

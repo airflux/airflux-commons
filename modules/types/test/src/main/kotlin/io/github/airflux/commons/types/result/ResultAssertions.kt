@@ -21,15 +21,15 @@ import io.kotest.matchers.shouldBe
 
 public fun <T, E> Result<T, E>.getValue(): T = this.shouldBeSuccess().value
 
-public fun <T, E> Result<T, E>.shouldBeSuccess(message: (E) -> String = { it.toString() }): Result.Success<T> {
+public fun <T, E> Result<T, E>.shouldBeSuccess(message: (E) -> String = { it.toString() }): Success<T> {
     if (this.isFailure())
         failure(
-            expectedType = Result.Success::class.qualifiedName!!,
+            expectedType = Success::class.qualifiedName!!,
             actualType = this::class.qualifiedName!!,
             message = message(this.cause)
         )
 
-    return this as Result.Success<T>
+    return this as Success<T>
 }
 
 public infix fun <T> Result<T, *>.shouldBeSuccess(expected: T) {
@@ -40,15 +40,15 @@ public fun <T, E> Result<T, E>.shouldBeSuccess(expected: T, message: (E) -> Stri
     this.shouldBeSuccess(message).value shouldBe expected
 }
 
-public fun <T, E> Result<T, E>.shouldBeFailure(message: (T) -> String = { it.toString() }): Result.Failure<E> {
+public fun <T, E> Result<T, E>.shouldBeFailure(message: (T) -> String = { it.toString() }): Failure<E> {
     if (this.isSuccess())
         failure(
-            expectedType = Result.Failure::class.qualifiedName!!,
+            expectedType = Failure::class.qualifiedName!!,
             actualType = this::class.simpleName!!,
             message = message(this.value)
         )
 
-    return this as Result.Failure<E>
+    return this as Failure<E>
 }
 
 public infix fun <E> Result<*, E>.shouldBeFailure(expected: E) {
