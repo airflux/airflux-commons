@@ -545,8 +545,8 @@ internal class ResultTest : FreeSpec() {
 
                     "then this function should return a list with all values" {
                         val result = original.sequence()
-                        val success = result.shouldBeSuccess()
-                        success.value shouldContainExactly listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
+                        result.shouldBeSuccess()
+                        result.value shouldContainExactly listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
                     }
                 }
 
@@ -582,8 +582,8 @@ internal class ResultTest : FreeSpec() {
 
                     "then this function should return a list with all transformed values" {
                         val result: Result<List<Int>, Errors> = original.traverse(transform)
-                        val success = result.shouldBeSuccess()
-                        success.value shouldContainExactly listOf(ORIGINAL_VALUE.toInt(), ALTERNATIVE_VALUE.toInt())
+                        result.shouldBeSuccess()
+                        result.value shouldContainExactly listOf(ORIGINAL_VALUE.toInt(), ALTERNATIVE_VALUE.toInt())
                     }
                 }
 

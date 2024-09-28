@@ -1,12 +1,11 @@
-public final class io/github/airflux/commons/types/result/ResultAssertionsKt {
-	public static final fun getValue (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;
+public final class io/github/airflux/commons/types/result/ResultMatchersKt {
+	public static final fun beFailure ()Lio/kotest/matchers/Matcher;
+	public static final fun beFailure (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;
+	public static final fun beSuccess ()Lio/kotest/matchers/Matcher;
+	public static final fun beSuccess (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;
+	public static final fun shouldBeFailure (Lio/github/airflux/commons/types/result/Result;)V
 	public static final fun shouldBeFailure (Lio/github/airflux/commons/types/result/Result;Ljava/lang/Object;)V
-	public static final fun shouldBeFailure (Lio/github/airflux/commons/types/result/Result;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)V
-	public static final fun shouldBeFailure (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Failure;
-	public static synthetic fun shouldBeFailure$default (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/commons/types/result/Failure;
+	public static final fun shouldBeSuccess (Lio/github/airflux/commons/types/result/Result;)V
 	public static final fun shouldBeSuccess (Lio/github/airflux/commons/types/result/Result;Ljava/lang/Object;)V
-	public static final fun shouldBeSuccess (Lio/github/airflux/commons/types/result/Result;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)V
-	public static final fun shouldBeSuccess (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Success;
-	public static synthetic fun shouldBeSuccess$default (Lio/github/airflux/commons/types/result/Result;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/commons/types/result/Success;
 }
 
