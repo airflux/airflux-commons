@@ -12,5 +12,5 @@ project(":airflux-commons-collections").projectDir = file("./modules/collections
 include(":airflux-commons-types")
 project(":airflux-commons-types").projectDir = file("./modules/types")
 
-include(":airflux-commons-types-test")
-project(":airflux-commons-types-test").projectDir = file("./modules/types/test")
+include(":airflux-commons-types-kotest-matchers")
+project(":airflux-commons-types-kotest-matchers").projectDir = file("./modules/types/kotest")

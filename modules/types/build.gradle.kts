@@ -16,7 +16,7 @@ dependencies {
     implementation(kotlin("stdlib"))
 
     testImplementation(libs.bundles.kotest)
-    testImplementation(project(":airflux-commons-types-test"))
+    testImplementation(project(":airflux-commons-types-kotest-matchers"))
 }
 
 tasks {

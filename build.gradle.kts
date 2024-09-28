@@ -22,7 +22,7 @@ dependencies {
     kover(project(":airflux-commons-kotest-assertions"))
     kover(project(":airflux-commons-text"))
     kover(project(":airflux-commons-types"))
-    kover(project(":airflux-commons-types-test"))
+    kover(project(":airflux-commons-types-kotest-matchers"))
 }
 
 sonar {
