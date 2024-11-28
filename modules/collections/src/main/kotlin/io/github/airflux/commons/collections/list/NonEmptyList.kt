@@ -60,6 +60,7 @@ public value class NonEmptyList<out T> private constructor(private val items: Li
                 .flatMap { transform(it) }
                 .toNelOrNull()!!
 
+        @JvmStatic
         private fun <T> merge(head: T, tail: List<T>) = buildList {
             add(head)
             addAll(tail)
