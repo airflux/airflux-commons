@@ -16,6 +16,10 @@
 
 package io.github.airflux.commons.collections.list
 
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
+
 public typealias Nel<T> = NonEmptyList<T>
 
 public fun <T> nonEmptyListOf(head: T, vararg tail: T): Nel<T> = nonEmptyListOf(head, tail.toList())
@@ -48,17 +52,27 @@ public value class NonEmptyList<out T> private constructor(private val items: Li
         public fun <T> plus(origin: NonEmptyList<T>, other: NonEmptyList<T>): NonEmptyList<T> =
             NonEmptyList(origin.items + other.items)
 
+        @OptIn(ExperimentalContracts::class)
         @JvmStatic
-        public inline fun <T, R> map(origin: NonEmptyList<T>, transform: (T) -> R): NonEmptyList<R> =
-            (origin as List<T>)
+        public inline fun <T, R> map(origin: NonEmptyList<T>, transform: (T) -> R): NonEmptyList<R> {
+            contract {
+                callsInPlace(transform, InvocationKind.AT_LEAST_ONCE)
+            }
+            return (origin as List<T>)
                 .map(transform)
                 .toNelOrNull()!!
+        }
 
+        @OptIn(ExperimentalContracts::class)
         @JvmStatic
-        public inline fun <T, R> flatMap(origin: NonEmptyList<T>, transform: (T) -> NonEmptyList<R>): NonEmptyList<R> =
-            (origin as List<T>)
+        public inline fun <T, R> flatMap(origin: NonEmptyList<T>, transform: (T) -> NonEmptyList<R>): NonEmptyList<R> {
+            contract {
+                callsInPlace(transform, InvocationKind.AT_LEAST_ONCE)
+            }
+            return (origin as List<T>)
                 .flatMap { transform(it) }
                 .toNelOrNull()!!
+        }
 
         @JvmStatic
         private fun <T> merge(head: T, tail: List<T>) = buildList {
@@ -71,6 +85,19 @@ public value class NonEmptyList<out T> private constructor(private val items: Li
 public operator fun <T> NonEmptyList<T>.plus(item: T): NonEmptyList<T> = NonEmptyList.plus(this, item)
 public operator fun <T> NonEmptyList<T>.plus(items: Iterable<T>): NonEmptyList<T> = NonEmptyList.plus(this, items)
 public operator fun <T> NonEmptyList<T>.plus(other: NonEmptyList<T>): NonEmptyList<T> = NonEmptyList.plus(this, other)
-public inline fun <T, R> NonEmptyList<T>.map(transform: (T) -> R): NonEmptyList<R> = NonEmptyList.map(this, transform)
-public inline fun <T, R> NonEmptyList<T>.flatMap(transform: (T) -> NonEmptyList<R>): NonEmptyList<R> =
-    NonEmptyList.flatMap(this, transform)
+
+@OptIn(ExperimentalContracts::class)
+public inline fun <T, R> NonEmptyList<T>.map(transform: (T) -> R): NonEmptyList<R> {
+    contract {
+        callsInPlace(transform, InvocationKind.AT_LEAST_ONCE)
+    }
+    return NonEmptyList.map(this, transform)
+}
+
+@OptIn(ExperimentalContracts::class)
+public inline fun <T, R> NonEmptyList<T>.flatMap(transform: (T) -> NonEmptyList<R>): NonEmptyList<R> {
+    contract {
+        callsInPlace(transform, InvocationKind.AT_LEAST_ONCE)
+    }
+    return NonEmptyList.flatMap(this, transform)
+}
