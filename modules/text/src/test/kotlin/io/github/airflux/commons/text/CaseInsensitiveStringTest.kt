@@ -188,8 +188,18 @@ internal class CaseInsensitiveStringTest : FreeSpec() {
             "when a CaseInsensitiveString instance is compared to an instance of another type" - {
                 val value = NON_EMPTY_LOWERCASE_VALUE.caseInsensitive()
 
-                "then the equals method should return false" {
-                    value.equals(NON_EMPTY_VALUE) shouldBe false
+                "when another type is the String" - {
+
+                    "then the equals method should return false" {
+                        value.equals(NON_EMPTY_LOWERCASE_VALUE) shouldBe true
+                    }
+                }
+
+                "when another type is not the String" - {
+
+                    "then the equals method should return false" {
+                        value.equals(ANOTHER_VALUE) shouldBe false
+                    }
                 }
             }
 
@@ -220,5 +230,6 @@ internal class CaseInsensitiveStringTest : FreeSpec() {
         private val NON_EMPTY_UPPERCASE_VALUE = NON_EMPTY_VALUE.uppercase()
         private const val EMPTY_VALUE = ""
         private const val BLANK_VALUE = "  "
+        private const val ANOTHER_VALUE = true
     }
 }

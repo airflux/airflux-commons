@@ -26,6 +26,8 @@ public class CaseInsensitiveString(public val get: String) {
             EQUAL
         else if (other is CaseInsensitiveString)
             this.get.equals(other.get, ignoreCase = true)
+        else if (other is String)
+            this.get.equals(other, ignoreCase = true)
         else
             NOT_EQUAL
 
