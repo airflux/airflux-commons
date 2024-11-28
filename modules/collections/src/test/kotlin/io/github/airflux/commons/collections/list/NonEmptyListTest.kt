@@ -18,6 +18,7 @@ package io.github.airflux.commons.collections.list
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 
@@ -39,7 +40,7 @@ internal class NonEmptyListTest : FreeSpec() {
                 val values = nonEmptyListOf(FIRST, SECOND)
 
                 "then the new instance of the type should only contain the passed elements in the order in which they were passed" {
-                    values shouldContainExactly listOf(FIRST, SECOND)
+                    values shouldContainInOrder listOf(FIRST, SECOND)
                 }
             }
 
@@ -55,7 +56,7 @@ internal class NonEmptyListTest : FreeSpec() {
                 val values = nonEmptyListOf(FIRST, listOf(SECOND, THIRD))
 
                 "then the new instance of the type should all contain the passed elements in the order in which they were passed" {
-                    values shouldContainExactly listOf(FIRST, SECOND, THIRD)
+                    values shouldContainInOrder listOf(FIRST, SECOND, THIRD)
                 }
             }
 
@@ -72,7 +73,7 @@ internal class NonEmptyListTest : FreeSpec() {
 
                 "then the new instance of the type should contain all the elements from the list in the order in which they were passed" {
                     values.shouldNotBeNull()
-                    values shouldContainExactly listOf(FIRST, SECOND, THIRD)
+                    values shouldContainInOrder listOf(FIRST, SECOND, THIRD)
                 }
             }
 
@@ -80,7 +81,7 @@ internal class NonEmptyListTest : FreeSpec() {
                 val values = nonEmptyListOf(FIRST) + SECOND
 
                 "then the new instance of the type should contain the original elements and the passed element in the order in which they were passed" {
-                    values shouldContainExactly listOf(FIRST, SECOND)
+                    values shouldContainInOrder listOf(FIRST, SECOND)
                 }
             }
 
@@ -88,7 +89,7 @@ internal class NonEmptyListTest : FreeSpec() {
                 val values = nonEmptyListOf(FIRST) + listOf(SECOND, THIRD)
 
                 "then the new instance of the type should contain elements from the original instance and the passed elements in the order in which they were passed" {
-                    values shouldContainExactly listOf(FIRST, SECOND, THIRD)
+                    values shouldContainInOrder listOf(FIRST, SECOND, THIRD)
                 }
             }
 
@@ -96,7 +97,7 @@ internal class NonEmptyListTest : FreeSpec() {
                 val values = nonEmptyListOf(FIRST) + nonEmptyListOf(SECOND, THIRD)
 
                 "then the new instance of the type should contain elements from both instances in the order in which they were in the originals" {
-                    values shouldContainExactly listOf(FIRST, SECOND, THIRD)
+                    values shouldContainInOrder listOf(FIRST, SECOND, THIRD)
                 }
             }
 
