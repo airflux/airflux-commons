@@ -21,15 +21,12 @@ public fun String.caseInsensitive(): CaseInsensitiveString = CaseInsensitiveStri
 public class CaseInsensitiveString(public val get: String) {
     private val hashCode = get.lowercase().hashCode()
 
-    override fun equals(other: Any?): Boolean =
-        if (this === other)
-            EQUAL
-        else if (other is CaseInsensitiveString)
-            this.get.equals(other.get, ignoreCase = true)
-        else if (other is String)
-            this.get.equals(other, ignoreCase = true)
-        else
-            NOT_EQUAL
+    override fun equals(other: Any?): Boolean = when {
+        this === other -> EQUAL
+        other is CaseInsensitiveString -> this.get.equals(other.get, ignoreCase = true)
+        other is String -> this.get.equals(other, ignoreCase = true)
+        else -> NOT_EQUAL
+    }
 
     override fun hashCode(): Int = hashCode
 
