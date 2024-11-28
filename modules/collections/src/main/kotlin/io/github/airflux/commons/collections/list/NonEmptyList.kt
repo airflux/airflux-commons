@@ -18,42 +18,58 @@ package io.github.airflux.commons.collections.list
 
 public typealias Nel<T> = NonEmptyList<T>
 
-public fun <T> nonEmptyListOf(head: T, vararg tail: T): Nel<T> = NonEmptyList(head, tail.toList())
+public fun <T> nonEmptyListOf(head: T, vararg tail: T): Nel<T> = nonEmptyListOf(head, tail.toList())
 
-public fun <T> nonEmptyListOf(head: T, tail: List<T>): Nel<T> = NonEmptyList(head, tail.toList())
+public fun <T> nonEmptyListOf(head: T, tail: List<T>): Nel<T> = NonEmptyList.valueOf(head, tail)
 
-public fun <T> List<T>.nonEmptyListOrNull(): Nel<T>? = NonEmptyList.valueOf(this)
+public fun <T> List<T>.toNelOrNull(): Nel<T>? = NonEmptyList.valueOf(this)
 
 @JvmInline
 public value class NonEmptyList<out T> private constructor(private val items: List<T>) : List<T> by items {
 
-    public constructor(head: T, vararg tail: T) : this(head, tail.toList())
-
-    public constructor(head: T, tail: List<T>) :
-        this(
-            buildList {
-                add(head)
-                addAll(tail)
-            }
-        )
-
-    public operator fun plus(item: @UnsafeVariance T): NonEmptyList<T> = NonEmptyList(items + item)
-
-    public operator fun plus(items: Iterable<@UnsafeVariance T>): NonEmptyList<T> = NonEmptyList(this.items + items)
-
-    public operator fun plus(other: NonEmptyList<@UnsafeVariance T>): NonEmptyList<T> =
-        NonEmptyList(this.items + other.items)
-
-    public infix fun <R> map(transform: (T) -> R): NonEmptyList<R> = NonEmptyList(items.map(transform))
-
-    public infix fun <R> flatMap(transform: (T) -> NonEmptyList<R>): NonEmptyList<R> =
-        NonEmptyList(items.flatMap { transform(it).items })
-
     public companion object {
+
+        @JvmStatic
+        public fun <T> valueOf(head: T, tail: List<T>): NonEmptyList<T> = NonEmptyList(merge(head, tail))
 
         @JvmStatic
         public fun <T> valueOf(list: List<T>): NonEmptyList<T>? =
             list.takeIf { it.isNotEmpty() }
                 ?.let { NonEmptyList(it) }
+
+        @JvmStatic
+        public fun <T> plus(origin: NonEmptyList<T>, item: T): NonEmptyList<T> = NonEmptyList(origin.items + item)
+
+        @JvmStatic
+        public fun <T> plus(origin: NonEmptyList<T>, items: Iterable<T>): NonEmptyList<T> =
+            NonEmptyList(origin.items + items)
+
+        @JvmStatic
+        public fun <T> plus(origin: NonEmptyList<T>, other: NonEmptyList<T>): NonEmptyList<T> =
+            NonEmptyList(origin.items + other.items)
+
+        @JvmStatic
+        public inline fun <T, R> map(origin: NonEmptyList<T>, transform: (T) -> R): NonEmptyList<R> =
+            (origin as List<T>)
+                .map(transform)
+                .toNelOrNull()!!
+
+        @JvmStatic
+        public inline fun <T, R> flatMap(origin: NonEmptyList<T>, transform: (T) -> NonEmptyList<R>): NonEmptyList<R> =
+            (origin as List<T>)
+                .flatMap { transform(it) }
+                .toNelOrNull()!!
+
+        private fun <T> merge(head: T, tail: List<T>) = buildList {
+            add(head)
+            addAll(tail)
+        }
     }
 }
+
+public operator fun <T> NonEmptyList<T>.plus(item: T): NonEmptyList<T> = NonEmptyList.plus(this, item)
+public operator fun <T> NonEmptyList<T>.plus(items: Iterable<T>): NonEmptyList<T> = NonEmptyList.plus(this, items)
+public operator fun <T> NonEmptyList<T>.plus(other: NonEmptyList<T>): NonEmptyList<T> = NonEmptyList.plus(this, other)
+public inline fun <T, R> NonEmptyList<T>.map(transform: (T) -> R): NonEmptyList<R> = NonEmptyList.map(this, transform)
+public inline fun <T, R> NonEmptyList<T>.flatMap(transform: (T) -> NonEmptyList<R>): NonEmptyList<R> =
+    NonEmptyList.flatMap(this, transform)

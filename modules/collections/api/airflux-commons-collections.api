@@ -10,8 +10,6 @@ public final class io/github/airflux/commons/collections/list/NonEmptyList : jav
 	public fun addAll (Ljava/util/Collection;)Z
 	public static final synthetic fun box-impl (Ljava/util/List;)Lio/github/airflux/commons/collections/list/NonEmptyList;
 	public fun clear ()V
-	public static fun constructor-impl (Ljava/lang/Object;Ljava/util/List;)Ljava/util/List;
-	public static fun constructor-impl (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/util/List;
 	public fun contains (Ljava/lang/Object;)Z
 	public static fun contains-impl (Ljava/util/List;Ljava/lang/Object;)Z
 	public fun containsAll (Ljava/util/Collection;)Z
@@ -19,7 +17,7 @@ public final class io/github/airflux/commons/collections/list/NonEmptyList : jav
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl (Ljava/util/List;Ljava/lang/Object;)Z
 	public static final fun equals-impl0 (Ljava/util/List;Ljava/util/List;)Z
-	public static final fun flatMap-UzTWiJU (Ljava/util/List;Lkotlin/jvm/functions/Function1;)Ljava/util/List;
+	public static final fun flatMap-z-8PWvM (Ljava/util/List;Lkotlin/jvm/functions/Function1;)Ljava/util/List;
 	public fun get (I)Ljava/lang/Object;
 	public static fun get-impl (Ljava/util/List;I)Ljava/lang/Object;
 	public fun getSize ()I
@@ -38,10 +36,10 @@ public final class io/github/airflux/commons/collections/list/NonEmptyList : jav
 	public fun listIterator (I)Ljava/util/ListIterator;
 	public static fun listIterator-impl (Ljava/util/List;)Ljava/util/ListIterator;
 	public static fun listIterator-impl (Ljava/util/List;I)Ljava/util/ListIterator;
-	public static final fun map-UzTWiJU (Ljava/util/List;Lkotlin/jvm/functions/Function1;)Ljava/util/List;
-	public static final fun plus-SPBkiQI (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
-	public static final fun plus-UzTWiJU (Ljava/util/List;Ljava/lang/Iterable;)Ljava/util/List;
-	public static final fun plus-UzTWiJU (Ljava/util/List;Ljava/lang/Object;)Ljava/util/List;
+	public static final fun map-z-8PWvM (Ljava/util/List;Lkotlin/jvm/functions/Function1;)Ljava/util/List;
+	public static final fun plus-58KGBhE (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
+	public static final fun plus-z-8PWvM (Ljava/util/List;Ljava/lang/Iterable;)Ljava/util/List;
+	public static final fun plus-z-8PWvM (Ljava/util/List;Ljava/lang/Object;)Ljava/util/List;
 	public fun remove (I)Ljava/lang/Object;
 	public fun remove (Ljava/lang/Object;)Z
 	public fun removeAll (Ljava/util/Collection;)Z
@@ -58,16 +56,28 @@ public final class io/github/airflux/commons/collections/list/NonEmptyList : jav
 	public static fun toString-impl (Ljava/util/List;)Ljava/lang/String;
 	public final synthetic fun unbox-impl ()Ljava/util/List;
 	public static final fun valueOf--65dqkY (Ljava/util/List;)Ljava/util/List;
+	public static final fun valueOf-rWNQfXk (Ljava/lang/Object;Ljava/util/List;)Ljava/util/List;
 }
 
 public final class io/github/airflux/commons/collections/list/NonEmptyList$Companion {
+	public final fun flatMap-z-8PWvM (Ljava/util/List;Lkotlin/jvm/functions/Function1;)Ljava/util/List;
+	public final fun map-z-8PWvM (Ljava/util/List;Lkotlin/jvm/functions/Function1;)Ljava/util/List;
+	public final fun plus-58KGBhE (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
+	public final fun plus-z-8PWvM (Ljava/util/List;Ljava/lang/Iterable;)Ljava/util/List;
+	public final fun plus-z-8PWvM (Ljava/util/List;Ljava/lang/Object;)Ljava/util/List;
 	public final fun valueOf--65dqkY (Ljava/util/List;)Ljava/util/List;
+	public final fun valueOf-rWNQfXk (Ljava/lang/Object;Ljava/util/List;)Ljava/util/List;
 }
 
 public final class io/github/airflux/commons/collections/list/NonEmptyListKt {
+	public static final fun flatMap-8MW8Lq4 (Ljava/util/List;Lkotlin/jvm/functions/Function1;)Ljava/util/List;
+	public static final fun map-8MW8Lq4 (Ljava/util/List;Lkotlin/jvm/functions/Function1;)Ljava/util/List;
 	public static final fun nonEmptyListOf (Ljava/lang/Object;Ljava/util/List;)Ljava/util/List;
 	public static final fun nonEmptyListOf (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/util/List;
-	public static final fun nonEmptyListOrNull (Ljava/util/List;)Ljava/util/List;
+	public static final fun plus-8MW8Lq4 (Ljava/util/List;Ljava/lang/Iterable;)Ljava/util/List;
+	public static final fun plus-8MW8Lq4 (Ljava/util/List;Ljava/lang/Object;)Ljava/util/List;
+	public static final fun plus-dNto3vc (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
+	public static final fun toNelOrNull (Ljava/util/List;)Ljava/util/List;
 }
 
 public abstract class io/github/airflux/commons/collections/map/AbstractCaseInsensitiveMutableMap : java/util/Map, kotlin/jvm/internal/markers/KMutableMap {
