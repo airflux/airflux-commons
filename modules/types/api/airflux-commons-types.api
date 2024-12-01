@@ -44,8 +44,8 @@ public final class io/github/airflux/commons/types/result/Result$Raise : io/gith
 }
 
 public final class io/github/airflux/commons/types/result/ResultDSLKt {
-	public static final fun Result (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
-	public static final fun ResultWith (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun result (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun resultWith (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
 }
 
 public final class io/github/airflux/commons/types/result/ResultKt {

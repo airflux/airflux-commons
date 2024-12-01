@@ -23,7 +23,7 @@ internal class ResultRaiseAsContextReceiverTest : FreeSpec() {
         "The `Result` type in context" - {
 
             "when the `raise` function was not called" {
-                val result = Result {
+                val result = result {
                     getUser(USER_ID)
                 }
 
@@ -31,7 +31,7 @@ internal class ResultRaiseAsContextReceiverTest : FreeSpec() {
             }
 
             "when the `raise` function was called" {
-                val result = Result {
+                val result = result {
                     getUser(UNKNOWN_USER_ID)
                 }
 

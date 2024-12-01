@@ -24,17 +24,17 @@ import kotlin.contracts.contract
 
 @Suppress("FunctionNaming")
 @OptIn(ExperimentalContracts::class)
-public inline fun <T, E> Result(block: Result.Raise<E>.() -> T): Result<T, E> {
+public inline fun <T, E> result(block: Result.Raise<E>.() -> T): Result<T, E> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
 
-    return ResultWith { block().asSuccess() }
+    return resultWith { block().asSuccess() }
 }
 
 @Suppress("FunctionNaming")
 @OptIn(ExperimentalContracts::class)
-public inline fun <T, E> ResultWith(block: Result.Raise<E>.() -> Result<T, E>): Result<T, E> {
+public inline fun <T, E> resultWith(block: Result.Raise<E>.() -> Result<T, E>): Result<T, E> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }

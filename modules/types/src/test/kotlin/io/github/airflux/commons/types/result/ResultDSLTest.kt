@@ -23,7 +23,7 @@ internal class ResultDSLTest : FreeSpec() {
     init {
         "The DSL" - {
 
-            "the function `Result`" - {
+            "the function `result`" - {
 
                 "when using one level of DSL" - {
 
@@ -34,7 +34,7 @@ internal class ResultDSLTest : FreeSpec() {
                         "when the execution result of a block is successful" - {
 
                             "then should return a successful value" {
-                                val result: Result<Int, Error> = Result {
+                                val result: Result<Int, Error> = result {
                                     val (a) = first()
                                     val (b) = second()
                                     a + b
@@ -47,7 +47,7 @@ internal class ResultDSLTest : FreeSpec() {
                         "when in a block calling the `raise` method" - {
 
                             "then should return a failure value" {
-                                val result = Result {
+                                val result = result {
                                     val (a) = first()
                                     val (b) = second()
                                     if (b == SECOND_VALUE) raise(Error.First)
@@ -65,7 +65,7 @@ internal class ResultDSLTest : FreeSpec() {
                         fun third(): Result<Int, Error> = Error.Second.asFailure()
 
                         "then should return a first returned failure" {
-                            val result = Result {
+                            val result = result {
                                 val (a) = first()
                                 val (b) = second()
                                 val (c) = third()
@@ -85,10 +85,10 @@ internal class ResultDSLTest : FreeSpec() {
                         fun third(): Result<String, Error> = "3".asSuccess()
 
                         "then should return a successful value" {
-                            val result = Result {
+                            val result = result {
                                 val (a) = first()
                                 val (b) = second()
-                                val (d) = Result {
+                                val (d) = result {
                                     val (c) = third()
                                     c.toInt()
                                 }
@@ -105,10 +105,10 @@ internal class ResultDSLTest : FreeSpec() {
                         fun third(): Result<String, Error> = Error.First.asFailure()
 
                         "then should return failure of an internal nesting level" {
-                            val result = Result {
+                            val result = result {
                                 val (a) = first()
                                 val (b) = second()
-                                val (d) = Result {
+                                val (d) = result {
                                     val (c) = third()
                                     c.toInt()
                                 }
@@ -125,10 +125,10 @@ internal class ResultDSLTest : FreeSpec() {
                         fun third(): Result<String, Error> = Error.Second.asFailure()
 
                         "then should return failure of a top-level" {
-                            val result = Result {
+                            val result = result {
                                 val (a) = first()
                                 val (b) = second()
-                                val (d) = Result {
+                                val (d) = result {
                                     val (c) = third()
                                     c.toInt()
                                 }
@@ -144,7 +144,7 @@ internal class ResultDSLTest : FreeSpec() {
                     fun first(): Result<Int, Error> = FIRST_VALUE.asSuccess()
 
                     "then calling the `raise` function should have no effect" {
-                        val result: Result<Int, Error> = Result {
+                        val result: Result<Int, Error> = result {
                             first().raise()
                             SECOND_VALUE
                         }
@@ -157,7 +157,7 @@ internal class ResultDSLTest : FreeSpec() {
                     fun first(): Result<Int, Error> = Error.First.asFailure()
 
                     "then calling the `raise` function should return an error" {
-                        val result: Result<Int, Error> = Result {
+                        val result: Result<Int, Error> = result {
                             first().raise()
                             SECOND_VALUE
                         }

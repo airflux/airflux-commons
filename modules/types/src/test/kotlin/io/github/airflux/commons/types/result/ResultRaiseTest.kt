@@ -126,7 +126,7 @@ internal class ResultRaiseTest : FreeSpec() {
                     val condition = true
 
                     "then should return a successful value" {
-                        val result: Result<Unit, Error> = Result {
+                        val result: Result<Unit, Error> = result {
                             ensure(condition) { Error.First }
                         }
 
@@ -138,7 +138,7 @@ internal class ResultRaiseTest : FreeSpec() {
                     val condition = false
 
                     "then should return a failure value" {
-                        val result: Result<Unit, Error> = Result {
+                        val result: Result<Unit, Error> = result {
                             ensure(condition) { Error.First }
                         }
 
@@ -153,7 +153,7 @@ internal class ResultRaiseTest : FreeSpec() {
                     val value: Int? = createValue(FIRST_VALUE)
 
                     "then should return a successful value" {
-                        val result: Result<Int, Error> = Result {
+                        val result: Result<Int, Error> = result {
                             ensureNotNull(value) { Error.First }
                         }
 
@@ -165,7 +165,7 @@ internal class ResultRaiseTest : FreeSpec() {
                     val value: Int? = createValue(null)
 
                     "then should return a failure value" {
-                        val result: Result<Int, Error> = Result {
+                        val result: Result<Int, Error> = result {
                             ensureNotNull(value) { Error.First }
                         }
 
