@@ -1,4 +1,4 @@
-public abstract class io/github/airflux/commons/types/BasicRaise {
+public abstract class io/github/airflux/commons/types/AbstractRaise {
 	public fun <init> ()V
 	public final fun ensure (ZLkotlin/jvm/functions/Function0;)V
 	public final fun ensureNotNull (Ljava/lang/Object;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
@@ -14,7 +14,7 @@ public final class io/github/airflux/commons/types/NonFatalKt {
 }
 
 public final class io/github/airflux/commons/types/RaiseKt {
-	public static final fun failureOrRethrow (Ljava/util/concurrent/CancellationException;Lio/github/airflux/commons/types/BasicRaise;)Ljava/lang/Object;
+	public static final fun failureOrRethrow (Ljava/util/concurrent/CancellationException;Lio/github/airflux/commons/types/AbstractRaise;)Ljava/lang/Object;
 }
 
 public final class io/github/airflux/commons/types/result/Failure : io/github/airflux/commons/types/result/Result {
@@ -35,7 +35,7 @@ public abstract interface class io/github/airflux/commons/types/result/Result {
 public final class io/github/airflux/commons/types/result/Result$Companion {
 }
 
-public final class io/github/airflux/commons/types/result/Result$Raise : io/github/airflux/commons/types/BasicRaise {
+public final class io/github/airflux/commons/types/result/Result$Raise : io/github/airflux/commons/types/AbstractRaise {
 	public fun <init> ()V
 	public final fun bind (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;
 	public final fun component1 (Lio/github/airflux/commons/types/result/Result;)Ljava/lang/Object;

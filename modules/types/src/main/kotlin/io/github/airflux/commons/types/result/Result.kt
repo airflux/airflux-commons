@@ -18,7 +18,7 @@
 
 package io.github.airflux.commons.types.result
 
-import io.github.airflux.commons.types.BasicRaise
+import io.github.airflux.commons.types.AbstractRaise
 import io.github.airflux.commons.types.RaiseException
 import io.github.airflux.commons.types.identity
 import kotlin.contracts.ExperimentalContracts
@@ -30,7 +30,7 @@ import kotlin.experimental.ExperimentalTypeInference
 public sealed interface Result<out T, out E> {
 
     @Suppress("MemberNameEqualsClassName")
-    public class Raise<E> : BasicRaise<E>() {
+    public class Raise<E> : AbstractRaise<E>() {
 
         public operator fun <T> Result<T, E>.component1(): T = bind()
 

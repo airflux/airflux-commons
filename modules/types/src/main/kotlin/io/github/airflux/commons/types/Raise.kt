@@ -21,7 +21,7 @@ import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 import kotlin.coroutines.cancellation.CancellationException
 
-public abstract class BasicRaise<in E> {
+public abstract class AbstractRaise<in E> {
 
     public abstract fun raise(cause: E): Nothing
 
@@ -44,10 +44,10 @@ public abstract class BasicRaise<in E> {
     }
 }
 
-internal class RaiseException(val failure: Any, val raise: BasicRaise<*>) : CancellationException()
+internal class RaiseException(val failure: Any, val raise: AbstractRaise<*>) : CancellationException()
 
 @PublishedApi
-internal fun <T> CancellationException.failureOrRethrow(raise: BasicRaise<*>): T =
+internal fun <T> CancellationException.failureOrRethrow(raise: AbstractRaise<*>): T =
     if (this is RaiseException && this.raise === raise)
         @Suppress("UNCHECKED_CAST")
         failure as T
