@@ -77,7 +77,7 @@ public final class io/github/airflux/commons/collections/list/NonEmptyListKt {
 	public static final fun plus-8MW8Lq4 (Ljava/util/List;Ljava/lang/Iterable;)Ljava/util/List;
 	public static final fun plus-8MW8Lq4 (Ljava/util/List;Ljava/lang/Object;)Ljava/util/List;
 	public static final fun plus-dNto3vc (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
-	public static final fun toNelOrNull (Ljava/util/List;)Ljava/util/List;
+	public static final fun toNonEmptyListOrNull (Ljava/util/List;)Ljava/util/List;
 }
 
 public abstract class io/github/airflux/commons/collections/map/AbstractCaseInsensitiveMutableMap : java/util/Map, kotlin/jvm/internal/markers/KMutableMap {

@@ -61,7 +61,7 @@ internal class NonEmptyListTest : FreeSpec() {
             }
 
             "when an empty list is passed to create an instance of the type" - {
-                val values = emptyList<Int>().toNelOrNull()
+                val values = emptyList<Int>().toNonEmptyListOrNull()
 
                 "then should return the null value" {
                     values.shouldBeNull()
@@ -69,7 +69,7 @@ internal class NonEmptyListTest : FreeSpec() {
             }
 
             "when a non-empty list is passed to create an instance of the type" - {
-                val values = listOf(FIRST, SECOND, THIRD).toNelOrNull()
+                val values = listOf(FIRST, SECOND, THIRD).toNonEmptyListOrNull()
 
                 "then the new instance of the type should contain all the elements from the list in the order in which they were passed" {
                     values.shouldNotBeNull()

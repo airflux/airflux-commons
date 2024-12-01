@@ -20,13 +20,11 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-public typealias Nel<T> = NonEmptyList<T>
+public fun <T> nonEmptyListOf(head: T, vararg tail: T): NonEmptyList<T> = nonEmptyListOf(head, tail.toList())
 
-public fun <T> nonEmptyListOf(head: T, vararg tail: T): Nel<T> = nonEmptyListOf(head, tail.toList())
+public fun <T> nonEmptyListOf(head: T, tail: List<T>): NonEmptyList<T> = NonEmptyList.valueOf(head, tail)
 
-public fun <T> nonEmptyListOf(head: T, tail: List<T>): Nel<T> = NonEmptyList.valueOf(head, tail)
-
-public fun <T> List<T>.toNelOrNull(): Nel<T>? = NonEmptyList.valueOf(this)
+public fun <T> List<T>.toNonEmptyListOrNull(): NonEmptyList<T>? = NonEmptyList.valueOf(this)
 
 @JvmInline
 public value class NonEmptyList<out T> private constructor(private val items: List<T>) : List<T> by items {
@@ -60,7 +58,7 @@ public value class NonEmptyList<out T> private constructor(private val items: Li
             }
             return (origin as List<T>)
                 .map(transform)
-                .toNelOrNull()!!
+                .toNonEmptyListOrNull()!!
         }
 
         @OptIn(ExperimentalContracts::class)
@@ -71,7 +69,7 @@ public value class NonEmptyList<out T> private constructor(private val items: Li
             }
             return (origin as List<T>)
                 .flatMap { transform(it) }
-                .toNelOrNull()!!
+                .toNonEmptyListOrNull()!!
         }
 
         @JvmStatic
