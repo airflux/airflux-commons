@@ -16,7 +16,6 @@
 
 package io.github.airflux.commons.types.result
 
-import io.github.airflux.commons.types.RaiseException
 import io.github.airflux.commons.types.failureOrRethrow
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
@@ -42,7 +41,7 @@ public inline fun <T, E> resultWith(block: Result.Raise<E>.() -> Result<T, E>): 
     val raise = Result.Raise<E>()
     return try {
         block(raise)
-    } catch (expected: RaiseException) {
+    } catch (expected: Exception) {
         expected.failureOrRethrow(raise)
     }
 }

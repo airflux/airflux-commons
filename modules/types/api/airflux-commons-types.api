@@ -14,7 +14,7 @@ public final class io/github/airflux/commons/types/NonFatalKt {
 }
 
 public final class io/github/airflux/commons/types/RaiseKt {
-	public static final fun failureOrRethrow (Ljava/util/concurrent/CancellationException;Lio/github/airflux/commons/types/AbstractRaise;)Ljava/lang/Object;
+	public static final fun failureOrRethrow (Ljava/lang/Exception;Lio/github/airflux/commons/types/AbstractRaise;)Ljava/lang/Object;
 }
 
 public final class io/github/airflux/commons/types/result/Failure : io/github/airflux/commons/types/result/Result {

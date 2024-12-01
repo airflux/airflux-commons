@@ -47,7 +47,7 @@ public abstract class AbstractRaise<in E> {
 internal class RaiseException(val failure: Any, val raise: AbstractRaise<*>) : CancellationException()
 
 @PublishedApi
-internal fun <T> CancellationException.failureOrRethrow(raise: AbstractRaise<*>): T =
+internal fun <T> Exception.failureOrRethrow(raise: AbstractRaise<*>): T =
     if (this is RaiseException && this.raise === raise)
         @Suppress("UNCHECKED_CAST")
         failure as T
