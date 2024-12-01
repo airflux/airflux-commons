@@ -16,14 +16,38 @@
 
 package io.github.airflux.commons.types
 
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind.AT_MOST_ONCE
+import kotlin.contracts.contract
 import kotlin.coroutines.cancellation.CancellationException
 
-public interface BasicRaise
+public abstract class BasicRaise<in E> {
 
-internal class RaiseException(val failure: Any, val raise: BasicRaise) : CancellationException()
+    public abstract fun raise(cause: E): Nothing
+
+    @OptIn(ExperimentalContracts::class)
+    public inline fun ensure(condition: Boolean, raise: () -> E) {
+        contract {
+            callsInPlace(raise, AT_MOST_ONCE)
+            returns() implies condition
+        }
+        return if (condition) Unit else raise(raise())
+    }
+
+    @OptIn(ExperimentalContracts::class)
+    public inline fun <T : Any> ensureNotNull(value: T?, raise: () -> E): T {
+        contract {
+            callsInPlace(raise, AT_MOST_ONCE)
+            returns() implies (value != null)
+        }
+        return value ?: raise(raise())
+    }
+}
+
+internal class RaiseException(val failure: Any, val raise: BasicRaise<*>) : CancellationException()
 
 @PublishedApi
-internal fun <T> CancellationException.failureOrRethrow(raise: BasicRaise): T =
+internal fun <T> CancellationException.failureOrRethrow(raise: BasicRaise<*>): T =
     if (this is RaiseException && this.raise === raise)
         @Suppress("UNCHECKED_CAST")
         failure as T
