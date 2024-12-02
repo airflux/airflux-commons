@@ -59,7 +59,7 @@ public value class NonEmptyList<out T> private constructor(private val items: Li
             return buildList<R>(origin.size) {
                 for (item in origin)
                     add(transform(item))
-            }.toNonEmptyListOrNull()!!
+            }.let { valueOf(it)!! }
         }
 
         @OptIn(ExperimentalContracts::class)
@@ -68,14 +68,14 @@ public value class NonEmptyList<out T> private constructor(private val items: Li
             contract {
                 callsInPlace(transform, InvocationKind.AT_LEAST_ONCE)
             }
-            return buildList<R>(origin.size) {
+            return buildList<R> {
                 for (item in origin)
                     addAll(transform(item))
-            }.toNonEmptyListOrNull()!!
+            }.let { valueOf(it)!! }
         }
 
         @JvmStatic
-        private fun <T> merge(head: T, tail: List<T>) = buildList {
+        private fun <T> merge(head: T, tail: List<T>) = buildList(tail.size + 1) {
             add(head)
             addAll(tail)
         }

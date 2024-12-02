@@ -18,7 +18,6 @@ package io.github.airflux.commons.collections.list
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 
@@ -29,91 +28,101 @@ internal class NonEmptyListTest : FreeSpec() {
         "The `NonEmptyList` type" - {
 
             "when only one element is passed to create an instance of the type" - {
-                val values = nonEmptyListOf(FIRST)
+                val actual = nonEmptyListOf(FIRST)
+                val expected = listOf(FIRST)
 
                 "then the new instance of the type should only contain the passed element" {
-                    values shouldContainExactly listOf(FIRST)
+                    actual shouldContainExactly expected
                 }
             }
 
             "when a few element is passed to create an instance of the type" - {
-                val values = nonEmptyListOf(FIRST, SECOND)
+                val actual = nonEmptyListOf(FIRST, SECOND)
+                val expected = listOf(FIRST, SECOND)
 
                 "then the new instance of the type should only contain the passed elements in the order in which they were passed" {
-                    values shouldContainInOrder listOf(FIRST, SECOND)
+                    actual shouldContainExactly expected
                 }
             }
 
             "when a head element and empty tail list are passed to create an instance of the type" - {
-                val values = nonEmptyListOf(FIRST, emptyList())
+                val actual = nonEmptyListOf(FIRST, emptyList())
+                val expected = listOf(FIRST)
 
                 "then the new instance of the type should only contain the passed head element" {
-                    values shouldContainExactly listOf(FIRST)
+                    actual shouldContainExactly expected
                 }
             }
 
             "when a head element and non-empty tail list are passed to create an instance of the type" - {
-                val values = nonEmptyListOf(FIRST, listOf(SECOND, THIRD))
+                val actual = nonEmptyListOf(FIRST, listOf(SECOND, THIRD))
+                val expected = listOf(FIRST, SECOND, THIRD)
 
                 "then the new instance of the type should all contain the passed elements in the order in which they were passed" {
-                    values shouldContainInOrder listOf(FIRST, SECOND, THIRD)
+                    actual shouldContainExactly expected
                 }
             }
 
             "when an empty list is passed to create an instance of the type" - {
-                val values = emptyList<Int>().toNonEmptyListOrNull()
+                val actual = emptyList<Int>().toNonEmptyListOrNull()
 
                 "then should return the null value" {
-                    values.shouldBeNull()
+                    actual.shouldBeNull()
                 }
             }
 
             "when a non-empty list is passed to create an instance of the type" - {
-                val values = listOf(FIRST, SECOND, THIRD).toNonEmptyListOrNull()
+                val actual = listOf(FIRST, SECOND, THIRD).toNonEmptyListOrNull()
+                val expected = listOf(FIRST, SECOND, THIRD)
 
                 "then the new instance of the type should contain all the elements from the list in the order in which they were passed" {
-                    values.shouldNotBeNull()
-                    values shouldContainInOrder listOf(FIRST, SECOND, THIRD)
+                    actual.shouldNotBeNull()
+                    actual shouldContainExactly expected
                 }
             }
 
             "when a new element is added to the instance of the type" - {
-                val values = nonEmptyListOf(FIRST) + SECOND
+                val actual = nonEmptyListOf(FIRST) + SECOND
+                val expected = listOf(FIRST, SECOND)
 
                 "then the new instance of the type should contain the original elements and the passed element in the order in which they were passed" {
-                    values shouldContainInOrder listOf(FIRST, SECOND)
+                    actual shouldContainExactly expected
                 }
             }
 
             "when a list of elements is added to the instance of the type" - {
-                val values = nonEmptyListOf(FIRST) + listOf(SECOND, THIRD)
+                val actual = nonEmptyListOf(FIRST) + listOf(SECOND, THIRD)
+                val expected = listOf(FIRST, SECOND, THIRD)
 
                 "then the new instance of the type should contain elements from the original instance and the passed elements in the order in which they were passed" {
-                    values shouldContainInOrder listOf(FIRST, SECOND, THIRD)
+                    actual shouldContainExactly expected
                 }
             }
 
             "when another instance of the type is added to the instance of the type" - {
-                val values = nonEmptyListOf(FIRST) + nonEmptyListOf(SECOND, THIRD)
+                val actual = nonEmptyListOf(FIRST) + nonEmptyListOf(SECOND, THIRD)
+                val expected = listOf(FIRST, SECOND, THIRD)
 
                 "then the new instance of the type should contain elements from both instances in the order in which they were in the originals" {
-                    values shouldContainInOrder listOf(FIRST, SECOND, THIRD)
+                    actual shouldContainExactly expected
                 }
             }
 
             "when the `map` function calling" - {
-                val values = nonEmptyListOf(FIRST, SECOND).map { it + 1 }
+                val actual = nonEmptyListOf(FIRST, SECOND).map { it + 1 }
+                val expected = listOf(FIRST + 1, SECOND + 1)
 
                 "then this functions should return the list of transformed values" {
-                    values shouldContainExactly listOf(FIRST + 1, SECOND + 1)
+                    actual shouldContainExactly expected
                 }
             }
 
             "when the `flatMap` function calling" - {
-                val values = nonEmptyListOf(FIRST, SECOND).flatMap { nonEmptyListOf(it, it + 1) }
+                val actual = nonEmptyListOf(FIRST, SECOND).flatMap { nonEmptyListOf(it, it + 1) }
+                val expected = listOf(FIRST, FIRST + 1, SECOND, SECOND + 1)
 
                 "then this functions should return the list of transformed values" {
-                    values shouldContainExactly listOf(FIRST, FIRST + 1, SECOND, SECOND + 1)
+                    actual shouldContainExactly expected
                 }
             }
         }
