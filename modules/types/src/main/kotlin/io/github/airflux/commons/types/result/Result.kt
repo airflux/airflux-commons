@@ -36,7 +36,9 @@ public sealed interface Result<out T, out E> {
 
         public fun <T> Result<T, E>.bind(): T = if (isSuccess()) value else raise(this)
 
-        public fun <T> Result<T, E>.raise(): Unit = if (isSuccess()) Unit else raise(this)
+        public fun <T> Result<T, E>.raise() {
+            if (isFailure()) raise(this)
+        }
 
         public override fun raise(cause: E): Nothing {
             raise(Failure(cause))
