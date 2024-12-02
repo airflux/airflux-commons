@@ -18,11 +18,3 @@ dependencies {
     testImplementation(libs.bundles.kotest)
     testImplementation(project(":airflux-commons-types-kotest-matchers"))
 }
-
-tasks {
-    compileTestKotlin.configure {
-        kotlinOptions {
-            freeCompilerArgs += listOf("-Xcontext-receivers")
-        }
-    }
-}

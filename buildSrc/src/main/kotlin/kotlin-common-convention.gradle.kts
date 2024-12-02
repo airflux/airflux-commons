@@ -25,6 +25,7 @@ tasks {
                         "-Xexplicit-api=strict"
                     )
                 )
+                extraWarnings.set(true)
             }
         }
 
