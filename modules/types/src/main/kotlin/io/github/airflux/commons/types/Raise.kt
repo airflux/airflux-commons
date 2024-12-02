@@ -29,9 +29,8 @@ public abstract class AbstractRaise<in E> {
     public inline fun ensure(condition: Boolean, raise: () -> E) {
         contract {
             callsInPlace(raise, AT_MOST_ONCE)
-            returns() implies condition
         }
-        return if (condition) Unit else raise(raise())
+        if (!condition) raise(raise())
     }
 
     @OptIn(ExperimentalContracts::class)
