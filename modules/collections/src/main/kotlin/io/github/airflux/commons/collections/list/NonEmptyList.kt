@@ -56,9 +56,10 @@ public value class NonEmptyList<out T> private constructor(private val items: Li
             contract {
                 callsInPlace(transform, InvocationKind.AT_LEAST_ONCE)
             }
-            return (origin as List<T>)
-                .map(transform)
-                .toNonEmptyListOrNull()!!
+            return buildList<R>(origin.size) {
+                for (item in origin)
+                    add(transform(item))
+            }.toNonEmptyListOrNull()!!
         }
 
         @OptIn(ExperimentalContracts::class)
@@ -67,9 +68,10 @@ public value class NonEmptyList<out T> private constructor(private val items: Li
             contract {
                 callsInPlace(transform, InvocationKind.AT_LEAST_ONCE)
             }
-            return (origin as List<T>)
-                .flatMap { transform(it) }
-                .toNonEmptyListOrNull()!!
+            return buildList<R>(origin.size) {
+                for (item in origin)
+                    addAll(transform(item))
+            }.toNonEmptyListOrNull()!!
         }
 
         @JvmStatic
