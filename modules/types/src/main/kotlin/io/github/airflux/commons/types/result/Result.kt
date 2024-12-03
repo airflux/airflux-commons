@@ -279,6 +279,24 @@ public inline fun <T, R, E> Iterable<T>.traverse(transform: (T) -> Result<R, E>)
     return if (items.isNotEmpty()) items.asSuccess() else Success.asEmptyList
 }
 
+@OptIn(ExperimentalTypeInference::class, ExperimentalContracts::class)
+public inline fun <T, R, E, M : MutableList<R>> Iterable<T>.traverseTo(
+    destination: M,
+    transform: (T) -> Result<R, E>
+): Result<M, E> {
+    contract {
+        callsInPlace(transform, InvocationKind.UNKNOWN)
+    }
+
+    return result {
+        for (item in this@traverseTo) {
+            val (value) = transform(item)
+            destination.add(value)
+        }
+        destination
+    }
+}
+
 @OptIn(ExperimentalContracts::class)
 public inline fun <T : Any, E : Any> Result<T?, E>.filterNotNull(failureBuilder: () -> E): Result<T, E> {
     contract {

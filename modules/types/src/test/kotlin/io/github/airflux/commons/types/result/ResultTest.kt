@@ -18,6 +18,7 @@ package io.github.airflux.commons.types.result
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -596,6 +597,44 @@ internal class ResultTest : FreeSpec() {
 
                     "then this function should return the failure value" {
                         val result: Result<List<Int>, Errors> = original.traverse(transform)
+                        result shouldBeFailure Errors.Empty
+                    }
+                }
+            }
+
+            "the `traverseTo` function for the list type" - {
+
+                "when a collection is empty" - {
+                    val original: List<String> = listOf()
+                    val transform: (String) -> Result<Int, Errors> = { Success(it.toInt()) }
+
+                    "then this function should return the empty list as the value" {
+                        val result: Result<List<Int>, Errors> = original.traverseTo(mutableListOf(), transform)
+                        result.shouldBeSuccess()
+                        result.value.shouldBeEmpty()
+                    }
+                }
+
+                "when a transform function returns items only the `Success` type" - {
+                    val original: List<String> = listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
+                    val transform: (String) -> Result<Int, Errors> = { Success(it.toInt()) }
+
+                    "then this function should return a list with all transformed values" {
+                        val result: Result<List<Int>, Errors> = original.traverseTo(mutableListOf(), transform)
+                        result.shouldBeSuccess()
+                        result.value shouldContainExactly listOf(ORIGINAL_VALUE.toInt(), ALTERNATIVE_VALUE.toInt())
+                    }
+                }
+
+                "when a transform function returns any item of the `Failure` type" - {
+                    val original: List<String> = listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
+                    val transform: (String) -> Result<Int, Errors> = {
+                        val res = it.toInt()
+                        if (res > 10) Failure(Errors.Empty) else Success(res)
+                    }
+
+                    "then this function should return the failure value" {
+                        val result: Result<List<Int>, Errors> = original.traverseTo(mutableListOf(), transform)
                         result shouldBeFailure Errors.Empty
                     }
                 }
