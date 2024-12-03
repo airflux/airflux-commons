@@ -273,7 +273,8 @@ public inline fun <T, R, E> Iterable<T>.traverse(transform: (T) -> Result<R, E>)
         val iter = this@traverse.iterator()
         while (iter.hasNext()) {
             val item = transform(iter.next())
-            if (item.isSuccess()) add(item.value) else return item
+            if (item.isFailure()) return item
+            add(item.value)
         }
     }
     return if (items.isNotEmpty()) items.asSuccess() else Success.asEmptyList
