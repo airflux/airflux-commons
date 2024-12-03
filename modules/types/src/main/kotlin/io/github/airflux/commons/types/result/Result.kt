@@ -288,13 +288,12 @@ public inline fun <T, R, E, M : MutableList<R>> Iterable<T>.traverseTo(
         callsInPlace(transform, InvocationKind.UNKNOWN)
     }
 
-    return result {
-        for (item in this@traverseTo) {
-            val (value) = transform(item)
-            destination.add(value)
-        }
-        destination
+    for (item in this@traverseTo) {
+        val result = transform(item)
+        if (result.isFailure()) return result
+        destination.add(result.value)
     }
+    return destination.asSuccess()
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -334,15 +333,14 @@ public inline fun <T, R, E, K, V, M : MutableMap<K, V>> Iterable<T>.traverseTo(
         callsInPlace(transform, InvocationKind.UNKNOWN)
     }
 
-    return result {
-        for (item in this@traverseTo) {
-            val (result) = transform(item)
-            val key = keySelector(result)
-            val value = valueTransform(result)
-            destination[key] = value
-        }
-        destination
+    for (item in this@traverseTo) {
+        val result = transform(item)
+        if (result.isFailure()) return result
+        val key = keySelector(result.value)
+        val value = valueTransform(result.value)
+        destination[key] = value
     }
+    return destination.asSuccess()
 }
 
 @OptIn(ExperimentalContracts::class)
