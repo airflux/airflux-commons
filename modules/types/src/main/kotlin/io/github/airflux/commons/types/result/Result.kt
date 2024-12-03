@@ -279,7 +279,7 @@ public inline fun <T, R, E> Iterable<T>.traverse(transform: (T) -> Result<R, E>)
     return if (items.isNotEmpty()) items.asSuccess() else Success.asEmptyList
 }
 
-@OptIn(ExperimentalTypeInference::class, ExperimentalContracts::class)
+@OptIn(ExperimentalContracts::class)
 public inline fun <T, R, E, M : MutableList<R>> Iterable<T>.traverseTo(
     destination: M,
     transform: (T) -> Result<R, E>
@@ -292,6 +292,54 @@ public inline fun <T, R, E, M : MutableList<R>> Iterable<T>.traverseTo(
         for (item in this@traverseTo) {
             val (value) = transform(item)
             destination.add(value)
+        }
+        destination
+    }
+}
+
+@OptIn(ExperimentalContracts::class)
+public inline fun <T, E, K, V, M : MutableMap<K, V>> Iterable<T>.traverseTo(
+    destination: M,
+    transform: (T) -> Result<Pair<K, V>, E>
+): Result<M, E> {
+    contract {
+        callsInPlace(transform, InvocationKind.UNKNOWN)
+    }
+    return traverseTo(destination, { it.first }, { it.second }, transform)
+}
+
+@OptIn(ExperimentalContracts::class)
+public inline fun <T, R, E, K, M : MutableMap<K, R>> Iterable<T>.traverseTo(
+    destination: M,
+    keySelector: (R) -> K,
+    transform: (T) -> Result<R, E>
+): Result<M, E> {
+    contract {
+        callsInPlace(keySelector, InvocationKind.UNKNOWN)
+        callsInPlace(transform, InvocationKind.UNKNOWN)
+    }
+    return traverseTo(destination, keySelector, ::identity, transform)
+}
+
+@OptIn(ExperimentalContracts::class)
+public inline fun <T, R, E, K, V, M : MutableMap<K, V>> Iterable<T>.traverseTo(
+    destination: M,
+    keySelector: (R) -> K,
+    valueTransform: (R) -> V,
+    transform: (T) -> Result<R, E>
+): Result<M, E> {
+    contract {
+        callsInPlace(keySelector, InvocationKind.UNKNOWN)
+        callsInPlace(valueTransform, InvocationKind.UNKNOWN)
+        callsInPlace(transform, InvocationKind.UNKNOWN)
+    }
+
+    return result {
+        for (item in this@traverseTo) {
+            val (result) = transform(item)
+            val key = keySelector(result)
+            val value = valueTransform(result)
+            destination[key] = value
         }
         destination
     }

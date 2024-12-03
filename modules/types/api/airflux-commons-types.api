@@ -80,6 +80,9 @@ public final class io/github/airflux/commons/types/result/ResultKt {
 	public static final fun success (Ljava/lang/Object;)Lio/github/airflux/commons/types/result/Success;
 	public static final fun traverse (Ljava/lang/Iterable;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
 	public static final fun traverseTo (Ljava/lang/Iterable;Ljava/util/List;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun traverseTo (Ljava/lang/Iterable;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun traverseTo (Ljava/lang/Iterable;Ljava/util/Map;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
+	public static final fun traverseTo (Ljava/lang/Iterable;Ljava/util/Map;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/result/Result;
 }
 
 public final class io/github/airflux/commons/types/result/Success : io/github/airflux/commons/types/result/Result {

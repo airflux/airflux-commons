@@ -20,10 +20,13 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.maps.shouldBeEmpty
+import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
+@Suppress("LargeClass")
 internal class ResultTest : FreeSpec() {
 
     init {
@@ -636,6 +639,168 @@ internal class ResultTest : FreeSpec() {
                     "then this function should return the failure value" {
                         val result: Result<List<Int>, Errors> = original.traverseTo(mutableListOf(), transform)
                         result shouldBeFailure Errors.Empty
+                    }
+                }
+            }
+
+            "the `traverseTo` function for the map type" - {
+
+                "when passed only the `transform` parameter" - {
+
+                    "when a collection is empty" - {
+                        val original: List<String> = listOf()
+                        val transform: (String) -> Result<Pair<String, Int>, Errors> = { Success(it to it.toInt()) }
+
+                        "then this function should return the empty list as the value" {
+                            val result: Result<Map<String, Int>, Errors> = original.traverseTo(
+                                destination = mutableMapOf(),
+                                transform = transform
+                            )
+                            result.shouldBeSuccess()
+                            result.value.shouldBeEmpty()
+                        }
+                    }
+
+                    "when a transform function returns items only the `Success` type" - {
+                        val original: List<String> = listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
+                        val transform: (String) -> Result<Pair<String, Int>, Errors> = { Success(it to it.toInt()) }
+
+                        "then this function should return a list with all transformed values" {
+                            val result: Result<Map<String, Int>, Errors> = original.traverseTo(
+                                destination = mutableMapOf(),
+                                transform = transform
+                            )
+                            result.shouldBeSuccess()
+                            result.value shouldContainExactly mapOf(
+                                ORIGINAL_VALUE to ORIGINAL_VALUE.toInt(),
+                                ALTERNATIVE_VALUE to ALTERNATIVE_VALUE.toInt()
+                            )
+                        }
+                    }
+
+                    "when a transform function returns any item of the `Failure` type" - {
+                        val original: List<String> = listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
+                        val transform: (String) -> Result<Pair<String, Int>, Errors> = {
+                            val res = it.toInt()
+                            if (res > 10) Failure(Errors.Empty) else Success(it to res)
+                        }
+
+                        "then this function should return the failure value" {
+                            val result: Result<Map<String, Int>, Errors> = original.traverseTo(
+                                destination = mutableMapOf(),
+                                transform = transform
+                            )
+                            result shouldBeFailure Errors.Empty
+                        }
+                    }
+                }
+
+                "when passed the `keySelector` and the `transform` parameters" - {
+
+                    "when a collection is empty" - {
+                        val original: List<String> = listOf()
+                        val transform: (String) -> Result<Pair<String, Int>, Errors> = { Success(it to it.toInt()) }
+
+                        "then this function should return the empty list as the value" {
+                            val result: Result<Map<String, Pair<String, Int>>, Errors> = original.traverseTo(
+                                destination = mutableMapOf(),
+                                keySelector = { it.first },
+                                transform = transform
+                            )
+                            result.shouldBeSuccess()
+                            result.value.shouldBeEmpty()
+                        }
+                    }
+
+                    "when a transform function returns items only the `Success` type" - {
+                        val original: List<String> = listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
+                        val transform: (String) -> Result<Pair<String, Int>, Errors> = { Success(it to it.toInt()) }
+
+                        "then this function should return a list with all transformed values" {
+                            val result: Result<Map<String, Pair<String, Int>>, Errors> = original.traverseTo(
+                                destination = mutableMapOf(),
+                                keySelector = { it.first },
+                                transform = transform
+                            )
+                            result.shouldBeSuccess()
+                            result.value shouldContainExactly mapOf(
+                                ORIGINAL_VALUE to (ORIGINAL_VALUE to ORIGINAL_VALUE.toInt()),
+                                ALTERNATIVE_VALUE to (ALTERNATIVE_VALUE to ALTERNATIVE_VALUE.toInt())
+                            )
+                        }
+                    }
+
+                    "when a transform function returns any item of the `Failure` type" - {
+                        val original: List<String> = listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
+                        val transform: (String) -> Result<Pair<String, Int>, Errors> = {
+                            val res = it.toInt()
+                            if (res > 10) Failure(Errors.Empty) else Success(it to res)
+                        }
+
+                        "then this function should return the failure value" {
+                            val result: Result<Map<String, Pair<String, Int>>, Errors> = original.traverseTo(
+                                destination = mutableMapOf(),
+                                keySelector = { it.first },
+                                transform = transform
+                            )
+                            result shouldBeFailure Errors.Empty
+                        }
+                    }
+                }
+
+                "when passed the `keySelector` and the `valueTransform` and the `transform` parameters" - {
+
+                    "when a collection is empty" - {
+                        val original: List<String> = listOf()
+                        val transform: (String) -> Result<Pair<String, Int>, Errors> = { Success(it to it.toInt()) }
+
+                        "then this function should return the empty list as the value" {
+                            val result: Result<Map<String, Int>, Errors> = original.traverseTo(
+                                destination = mutableMapOf(),
+                                keySelector = { it.first },
+                                valueTransform = { it.second },
+                                transform = transform
+                            )
+                            result.shouldBeSuccess()
+                            result.value.shouldBeEmpty()
+                        }
+                    }
+
+                    "when a transform function returns items only the `Success` type" - {
+                        val original: List<String> = listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
+                        val transform: (String) -> Result<Pair<String, Int>, Errors> = { Success(it to it.toInt()) }
+
+                        "then this function should return a list with all transformed values" {
+                            val result: Result<Map<String, Int>, Errors> = original.traverseTo(
+                                destination = mutableMapOf(),
+                                keySelector = { it.first },
+                                valueTransform = { it.second },
+                                transform = transform
+                            )
+                            result.shouldBeSuccess()
+                            result.value shouldContainExactly mapOf(
+                                ORIGINAL_VALUE to ORIGINAL_VALUE.toInt(),
+                                ALTERNATIVE_VALUE to ALTERNATIVE_VALUE.toInt()
+                            )
+                        }
+                    }
+
+                    "when a transform function returns any item of the `Failure` type" - {
+                        val original: List<String> = listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
+                        val transform: (String) -> Result<Pair<String, Int>, Errors> = {
+                            val res = it.toInt()
+                            if (res > 10) Failure(Errors.Empty) else Success(it to res)
+                        }
+
+                        "then this function should return the failure value" {
+                            val result: Result<Map<String, Int>, Errors> = original.traverseTo(
+                                destination = mutableMapOf(),
+                                keySelector = { it.first },
+                                valueTransform = { it.second },
+                                transform = transform
+                            )
+                            result shouldBeFailure Errors.Empty
+                        }
                     }
                 }
             }
