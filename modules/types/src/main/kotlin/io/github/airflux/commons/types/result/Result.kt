@@ -252,16 +252,7 @@ public inline infix fun <T, E> Result<T, E>.forEach(block: (T) -> Unit) {
 
 public fun <T> Result<T, T>.merge(): T = fold(onSuccess = ::identity, onFailure = ::identity)
 
-public fun <T, E> Iterable<Result<T, E>>.sequence(): Result<List<T>, E> {
-    val items = buildList {
-        val iter = this@sequence.iterator()
-        while (iter.hasNext()) {
-            val item = iter.next()
-            if (item.isSuccess()) add(item.value) else return item
-        }
-    }
-    return if (items.isNotEmpty()) items.asSuccess() else Success.asEmptyList
-}
+public fun <T, E> Iterable<Result<T, E>>.sequence(): Result<List<T>, E> = traverse(::identity)
 
 @OptIn(ExperimentalTypeInference::class, ExperimentalContracts::class)
 @OverloadResolutionByLambdaReturnType
