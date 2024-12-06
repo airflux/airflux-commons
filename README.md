@@ -7,6 +7,7 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=airflux_airflux-commons&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=airflux_airflux-commons)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=airflux_airflux-commons&metric=coverage)](https://sonarcloud.io/dashboard?id=airflux_airflux-commons)
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/airflux/airflux-commons.svg)](http://isitmaintained.com/project/airflux/airflux-commons "Percentage of issues still open")
+[![codebeat badge](https://codebeat.co/badges/6b52df64-47b8-4de1-9375-21331caa4323)](https://codebeat.co/projects/github-com-airflux-airflux-commons-main)
 
 [![](https://jitpack.io/v/airflux/airflux-commons.svg)](https://jitpack.io/#airflux/airflux-commons)
 
