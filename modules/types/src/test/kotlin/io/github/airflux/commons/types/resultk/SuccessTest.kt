@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.airflux.commons.types.result
+package io.github.airflux.commons.types.resultk
 
+import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 
 internal class SuccessTest : FreeSpec() {
@@ -24,27 +25,27 @@ internal class SuccessTest : FreeSpec() {
         "The `Success` type" - {
 
             "the `asNull` property should return the `Success` type with the `null` value" {
-                val result: Result<String?, String> = Success.asNull
+                val result: ResultK<String?, String> = Success.Companion.asNull
                 result shouldBeSuccess null
             }
 
             "the `asTrue` property should return the `Success` type with the `true` value" {
-                val result: Result<Boolean, String> = Success.asTrue
+                val result: ResultK<Boolean, String> = Success.Companion.asTrue
                 result shouldBeSuccess true
             }
 
             "the `asFalse` property should return the `Success` type with the `false` value" {
-                val result: Result<Boolean, String> = Success.asFalse
+                val result: ResultK<Boolean, String> = Success.Companion.asFalse
                 result shouldBeSuccess false
             }
 
             "the `asUnit` property should return the `Success` type with the `Unit` value" {
-                val result: Result<Unit, String> = Success.asUnit
+                val result: ResultK<Unit, String> = Success.Companion.asUnit
                 result shouldBeSuccess Unit
             }
 
             "the `asEmptyList` property should return the `Success` type with the `empty list` value" {
-                val result: Result<List<String>, String> = Success.asEmptyList
+                val result: ResultK<List<String>, String> = Success.Companion.asEmptyList
                 result shouldBeSuccess emptyList()
             }
 
@@ -54,7 +55,7 @@ internal class SuccessTest : FreeSpec() {
                     val param = true
 
                     "then this function should return the `Success` type with the `true` value" {
-                        val result: Result<Boolean, String> = Success.of(param)
+                        val result: ResultK<Boolean, String> = Success.Companion.of(param)
                         result shouldBeSuccess true
                     }
                 }
@@ -63,7 +64,7 @@ internal class SuccessTest : FreeSpec() {
                     val param = false
 
                     "then this function should return the `Success` type with the `true` value" {
-                        val result: Result<Boolean, String> = Success.of(param)
+                        val result: ResultK<Boolean, String> = Success.Companion.of(param)
                         result shouldBeSuccess false
                     }
                 }

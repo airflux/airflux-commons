@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.commons.types.result
+package io.github.airflux.commons.types.resultk
 
 import io.github.airflux.commons.types.failureOrRethrow
 import kotlin.contracts.ExperimentalContracts
@@ -23,7 +23,7 @@ import kotlin.contracts.contract
 
 @Suppress("FunctionNaming")
 @OptIn(ExperimentalContracts::class)
-public inline fun <T, E> result(block: Result.Raise<E>.() -> T): Result<T, E> {
+public inline fun <T, E> result(block: ResultK.Raise<E>.() -> T): ResultK<T, E> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
@@ -33,12 +33,12 @@ public inline fun <T, E> result(block: Result.Raise<E>.() -> T): Result<T, E> {
 
 @Suppress("FunctionNaming")
 @OptIn(ExperimentalContracts::class)
-public inline fun <T, E> resultWith(block: Result.Raise<E>.() -> Result<T, E>): Result<T, E> {
+public inline fun <T, E> resultWith(block: ResultK.Raise<E>.() -> ResultK<T, E>): ResultK<T, E> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
 
-    val raise = Result.Raise<E>()
+    val raise = ResultK.Raise<E>()
     return try {
         block(raise)
     } catch (expected: Exception) {

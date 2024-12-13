@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package io.github.airflux.commons.types.result
+package io.github.airflux.commons.types.resultk
 
+import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
+import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 
-internal class ResultDSLTest : FreeSpec() {
+internal class ResultKDSLTest : FreeSpec() {
 
     init {
         "The DSL" - {
@@ -28,13 +30,13 @@ internal class ResultDSLTest : FreeSpec() {
                 "when using one level of DSL" - {
 
                     "when every function returns a successful" - {
-                        fun first(): Result<Int, Error> = FIRST_VALUE.asSuccess()
-                        fun second(): Result<Int, Error> = SECOND_VALUE.asSuccess()
+                        fun first(): ResultK<Int, Error> = FIRST_VALUE.asSuccess()
+                        fun second(): ResultK<Int, Error> = SECOND_VALUE.asSuccess()
 
                         "when the execution result of a block is successful" - {
 
                             "then should return a successful value" {
-                                val result: Result<Int, Error> = result {
+                                val result: ResultK<Int, Error> = result {
                                     val (a) = first()
                                     val (b) = second()
                                     a + b
@@ -60,9 +62,9 @@ internal class ResultDSLTest : FreeSpec() {
                     }
 
                     "when some function returns a failure" - {
-                        fun first(): Result<Int, Error> = FIRST_VALUE.asSuccess()
-                        fun second(): Result<Int, Error> = Error.First.asFailure()
-                        fun third(): Result<Int, Error> = Error.Second.asFailure()
+                        fun first(): ResultK<Int, Error> = FIRST_VALUE.asSuccess()
+                        fun second(): ResultK<Int, Error> = Error.First.asFailure()
+                        fun third(): ResultK<Int, Error> = Error.Second.asFailure()
 
                         "then should return a first returned failure" {
                             val result = result {
@@ -80,9 +82,9 @@ internal class ResultDSLTest : FreeSpec() {
                 "when using a few levels of DSL" - {
 
                     "when every function returns a successful" - {
-                        fun first(): Result<Int, Error> = FIRST_VALUE.asSuccess()
-                        fun second(): Result<Int, Error> = SECOND_VALUE.asSuccess()
-                        fun third(): Result<String, Error> = "3".asSuccess()
+                        fun first(): ResultK<Int, Error> = FIRST_VALUE.asSuccess()
+                        fun second(): ResultK<Int, Error> = SECOND_VALUE.asSuccess()
+                        fun third(): ResultK<String, Error> = "3".asSuccess()
 
                         "then should return a successful value" {
                             val result = result {
@@ -100,9 +102,9 @@ internal class ResultDSLTest : FreeSpec() {
                     }
 
                     "when some function at an internal nesting level returns an error" - {
-                        fun first(): Result<Int, Error> = FIRST_VALUE.asSuccess()
-                        fun second(): Result<Int, Error> = SECOND_VALUE.asSuccess()
-                        fun third(): Result<String, Error> = Error.First.asFailure()
+                        fun first(): ResultK<Int, Error> = FIRST_VALUE.asSuccess()
+                        fun second(): ResultK<Int, Error> = SECOND_VALUE.asSuccess()
+                        fun third(): ResultK<String, Error> = Error.First.asFailure()
 
                         "then should return failure of an internal nesting level" {
                             val result = result {
@@ -120,9 +122,9 @@ internal class ResultDSLTest : FreeSpec() {
                     }
 
                     "when every function at all nesting levels returns an error" - {
-                        fun first(): Result<Int, Error> = FIRST_VALUE.asSuccess()
-                        fun second(): Result<Int, Error> = Error.First.asFailure()
-                        fun third(): Result<String, Error> = Error.Second.asFailure()
+                        fun first(): ResultK<Int, Error> = FIRST_VALUE.asSuccess()
+                        fun second(): ResultK<Int, Error> = Error.First.asFailure()
+                        fun third(): ResultK<String, Error> = Error.Second.asFailure()
 
                         "then should return failure of a top-level" {
                             val result = result {
@@ -141,10 +143,10 @@ internal class ResultDSLTest : FreeSpec() {
                 }
 
                 "when a function returns a successful" - {
-                    fun first(): Result<Int, Error> = FIRST_VALUE.asSuccess()
+                    fun first(): ResultK<Int, Error> = FIRST_VALUE.asSuccess()
 
                     "then calling the `raise` function should have no effect" {
-                        val result: Result<Int, Error> = result {
+                        val result: ResultK<Int, Error> = result {
                             first().raise()
                             SECOND_VALUE
                         }
@@ -154,10 +156,10 @@ internal class ResultDSLTest : FreeSpec() {
                 }
 
                 "when a function returns an error" - {
-                    fun first(): Result<Int, Error> = Error.First.asFailure()
+                    fun first(): ResultK<Int, Error> = Error.First.asFailure()
 
                     "then calling the `raise` function should return an error" {
-                        val result: Result<Int, Error> = result {
+                        val result: ResultK<Int, Error> = result {
                             first().raise()
                             SECOND_VALUE
                         }

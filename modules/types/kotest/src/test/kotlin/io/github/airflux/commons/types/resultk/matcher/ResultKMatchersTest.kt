@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package io.github.airflux.functional.test
+package io.github.airflux.commons.types.resultk.matcher
 
-import io.github.airflux.commons.types.result.Failure
-import io.github.airflux.commons.types.result.Result
-import io.github.airflux.commons.types.result.Success
-import io.github.airflux.commons.types.result.beFailure
-import io.github.airflux.commons.types.result.beSuccess
-import io.github.airflux.commons.types.result.shouldBeFailure
-import io.github.airflux.commons.types.result.shouldBeSuccess
+import io.github.airflux.commons.assertionCorrect
+import io.github.airflux.commons.assertionIncorrect
+import io.github.airflux.commons.types.resultk.Failure
+import io.github.airflux.commons.types.resultk.ResultK
+import io.github.airflux.commons.types.resultk.Success
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.should
 
-internal class ResultMatchersTest : FreeSpec() {
+internal class ResultKMatchersTest : FreeSpec() {
 
     init {
         "The Kotest matchers for the Result type" - {
 
             "when a result is the Success" - {
-                val result: Result<Int, String> = Success(SUCCESS_VALUE)
+                val result: ResultK<Int, String> = Success(SUCCESS_VALUE)
 
                 "then the Success expectation assertion should be correct" {
                     assertionCorrect {
@@ -62,8 +60,8 @@ internal class ResultMatchersTest : FreeSpec() {
                 }
 
                 "when the expected value and actual value is different" - {
-                    val expected: Result<String, String> = Success(EXPECTED_VALUE)
-                    val actual: Result<String, String> = Success(ACTUAL_VALUE)
+                    val expected: ResultK<String, String> = Success(EXPECTED_VALUE)
+                    val actual: ResultK<String, String> = Success(ACTUAL_VALUE)
 
                     "then the Success expectation assertion should be incorrect" {
                         assertionIncorrect("expected:<$expected> but was:<$actual>") {
@@ -74,7 +72,7 @@ internal class ResultMatchersTest : FreeSpec() {
             }
 
             "when a result is the Failure" - {
-                val result: Result<Int, String> = Failure(FAILURE_VALUE)
+                val result: ResultK<Int, String> = Failure(FAILURE_VALUE)
 
                 "then the Success expectation assertion should be incorrect" {
                     assertionIncorrect("expected:<${Success::class.simpleName}> but was:<$result>") {
@@ -104,8 +102,8 @@ internal class ResultMatchersTest : FreeSpec() {
                 }
 
                 "when the expected value and actual value is different" - {
-                    val expected: Result<String, String> = Failure(EXPECTED_VALUE)
-                    val actual: Result<String, String> = Failure(ACTUAL_VALUE)
+                    val expected: ResultK<String, String> = Failure(EXPECTED_VALUE)
+                    val actual: ResultK<String, String> = Failure(ACTUAL_VALUE)
 
                     "then the Failure expectation assertion should be incorrect" {
                         assertionIncorrect("expected:<$expected> but was:<$actual>") {

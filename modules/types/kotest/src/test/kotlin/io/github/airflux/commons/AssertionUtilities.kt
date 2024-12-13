@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.functional.test
+package io.github.airflux.commons
 
 import io.kotest.assertions.AssertionFailedError
 import io.kotest.assertions.throwables.shouldNotThrow

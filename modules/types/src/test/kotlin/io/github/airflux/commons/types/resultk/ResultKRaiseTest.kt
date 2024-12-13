@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package io.github.airflux.commons.types.result
+package io.github.airflux.commons.types.resultk
 
 import io.github.airflux.commons.types.RaiseException
+import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
+import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class ResultRaiseTest : FreeSpec() {
+internal class ResultKRaiseTest : FreeSpec() {
 
     init {
 
@@ -30,8 +32,8 @@ internal class ResultRaiseTest : FreeSpec() {
             "the `component1` function" - {
 
                 "when the result is successful" - {
-                    val raise = Result.Raise<Error>()
-                    val result: Result<Int, Error> = FIRST_VALUE.asSuccess()
+                    val raise = ResultK.Raise<Error>()
+                    val result: ResultK<Int, Error> = FIRST_VALUE.asSuccess()
 
                     "then should return the value" {
                         with(raise) {
@@ -42,8 +44,8 @@ internal class ResultRaiseTest : FreeSpec() {
                 }
 
                 "when the result is failure" - {
-                    val raise = Result.Raise<Error>()
-                    val result: Result<Int, Error> = Error.First.asFailure()
+                    val raise = ResultK.Raise<Error>()
+                    val result: ResultK<Int, Error> = Error.First.asFailure()
 
                     "then should raise an exception" {
                         val exception = shouldThrow<RaiseException> {
@@ -62,8 +64,8 @@ internal class ResultRaiseTest : FreeSpec() {
             "the `bind` function" - {
 
                 "when the result is successful" - {
-                    val raise = Result.Raise<Error>()
-                    val result: Result<Int, Error> = FIRST_VALUE.asSuccess()
+                    val raise = ResultK.Raise<Error>()
+                    val result: ResultK<Int, Error> = FIRST_VALUE.asSuccess()
 
                     "then should return the value" {
                         with(raise) {
@@ -74,8 +76,8 @@ internal class ResultRaiseTest : FreeSpec() {
                 }
 
                 "when the result is failure" - {
-                    val raise = Result.Raise<Error>()
-                    val result: Result<Int, Error> = Error.First.asFailure()
+                    val raise = ResultK.Raise<Error>()
+                    val result: ResultK<Int, Error> = Error.First.asFailure()
 
                     "then should raise an exception" {
                         val exception = shouldThrow<RaiseException> {
@@ -93,8 +95,8 @@ internal class ResultRaiseTest : FreeSpec() {
             "the `raise` function" - {
 
                 "when the result is successful" - {
-                    val raise = Result.Raise<Error>()
-                    val result: Result<Int, Error> = FIRST_VALUE.asSuccess()
+                    val raise = ResultK.Raise<Error>()
+                    val result: ResultK<Int, Error> = FIRST_VALUE.asSuccess()
 
                     "then should not raise an exception" {
                         with(raise) {
@@ -104,8 +106,8 @@ internal class ResultRaiseTest : FreeSpec() {
                 }
 
                 "when the result is failure" - {
-                    val raise = Result.Raise<Error>()
-                    val result: Result<Int, Error> = Error.First.asFailure()
+                    val raise = ResultK.Raise<Error>()
+                    val result: ResultK<Int, Error> = Error.First.asFailure()
 
                     "then should raise an exception" {
                         val exception = shouldThrow<RaiseException> {
@@ -126,7 +128,7 @@ internal class ResultRaiseTest : FreeSpec() {
                     val condition = true
 
                     "then should return a successful value" {
-                        val result: Result<Unit, Error> = result {
+                        val result: ResultK<Unit, Error> = result {
                             ensure(condition) { Error.First }
                         }
 
@@ -138,7 +140,7 @@ internal class ResultRaiseTest : FreeSpec() {
                     val condition = false
 
                     "then should return a failure value" {
-                        val result: Result<Unit, Error> = result {
+                        val result: ResultK<Unit, Error> = result {
                             ensure(condition) { Error.First }
                         }
 
@@ -153,7 +155,7 @@ internal class ResultRaiseTest : FreeSpec() {
                     val value: Int? = createValue(FIRST_VALUE)
 
                     "then should return a successful value" {
-                        val result: Result<Int, Error> = result {
+                        val result: ResultK<Int, Error> = result {
                             ensureNotNull(value) { Error.First }
                         }
 
@@ -165,7 +167,7 @@ internal class ResultRaiseTest : FreeSpec() {
                     val value: Int? = createValue(null)
 
                     "then should return a failure value" {
-                        val result: Result<Int, Error> = result {
+                        val result: ResultK<Int, Error> = result {
                             ensureNotNull(value) { Error.First }
                         }
 

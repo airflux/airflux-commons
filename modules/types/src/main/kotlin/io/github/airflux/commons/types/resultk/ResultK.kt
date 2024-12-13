@@ -16,7 +16,7 @@
 
 @file:Suppress("TooManyFunctions")
 
-package io.github.airflux.commons.types.result
+package io.github.airflux.commons.types.resultk
 
 import io.github.airflux.commons.types.AbstractRaise
 import io.github.airflux.commons.types.RaiseException
@@ -27,16 +27,16 @@ import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 import kotlin.experimental.ExperimentalTypeInference
 
-public sealed interface Result<out T, out E> {
+public sealed interface ResultK<out T, out E> {
 
     @Suppress("MemberNameEqualsClassName")
     public class Raise<E> : AbstractRaise<E>() {
 
-        public operator fun <T> Result<T, E>.component1(): T = bind()
+        public operator fun <T> ResultK<T, E>.component1(): T = bind()
 
-        public fun <T> Result<T, E>.bind(): T = if (isSuccess()) value else raise(this)
+        public fun <T> ResultK<T, E>.bind(): T = if (isSuccess()) value else raise(this)
 
-        public fun <T> Result<T, E>.raise() {
+        public fun <T> ResultK<T, E>.raise() {
             if (isFailure()) raise(this)
         }
 
@@ -52,7 +52,7 @@ public sealed interface Result<out T, out E> {
     public companion object
 }
 
-public data class Success<out T>(public val value: T) : Result<T, Nothing> {
+public data class Success<out T>(public val value: T) : ResultK<T, Nothing> {
 
     public companion object {
 
@@ -70,7 +70,7 @@ public data class Success<out T>(public val value: T) : Result<T, Nothing> {
     }
 }
 
-public data class Failure<out E>(public val cause: E) : Result<Nothing, E>
+public data class Failure<out E>(public val cause: E) : ResultK<Nothing, E>
 
 public fun <T> T.asSuccess(): Success<T> = success(this)
 
@@ -81,7 +81,7 @@ public fun <T> success(value: T): Success<T> = Success(value)
 public fun <E> failure(cause: E): Failure<E> = Failure(cause)
 
 @OptIn(ExperimentalContracts::class)
-public fun <T, E> Result<T, E>.isSuccess(): Boolean {
+public fun <T, E> ResultK<T, E>.isSuccess(): Boolean {
     contract {
         returns(true) implies (this@isSuccess is Success<T>)
         returns(false) implies (this@isSuccess is Failure<E>)
@@ -90,7 +90,7 @@ public fun <T, E> Result<T, E>.isSuccess(): Boolean {
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T, E> Result<T, E>.isSuccess(predicate: (T) -> Boolean): Boolean {
+public inline fun <T, E> ResultK<T, E>.isSuccess(predicate: (T) -> Boolean): Boolean {
     contract {
         callsInPlace(predicate, AT_MOST_ONCE)
     }
@@ -98,7 +98,7 @@ public inline fun <T, E> Result<T, E>.isSuccess(predicate: (T) -> Boolean): Bool
 }
 
 @OptIn(ExperimentalContracts::class)
-public fun <T, E> Result<T, E>.isFailure(): Boolean {
+public fun <T, E> ResultK<T, E>.isFailure(): Boolean {
     contract {
         returns(false) implies (this@isFailure is Success<T>)
         returns(true) implies (this@isFailure is Failure<E>)
@@ -107,7 +107,7 @@ public fun <T, E> Result<T, E>.isFailure(): Boolean {
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T, E> Result<T, E>.isFailure(predicate: (E) -> Boolean): Boolean {
+public inline fun <T, E> ResultK<T, E>.isFailure(predicate: (E) -> Boolean): Boolean {
     contract {
         callsInPlace(predicate, AT_MOST_ONCE)
     }
@@ -115,7 +115,7 @@ public inline fun <T, E> Result<T, E>.isFailure(predicate: (E) -> Boolean): Bool
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T, R, E> Result<T, E>.fold(onSuccess: (T) -> R, onFailure: (E) -> R): R {
+public inline fun <T, R, E> ResultK<T, E>.fold(onSuccess: (T) -> R, onFailure: (E) -> R): R {
     contract {
         callsInPlace(onFailure, AT_MOST_ONCE)
         callsInPlace(onSuccess, AT_MOST_ONCE)
@@ -125,7 +125,7 @@ public inline fun <T, R, E> Result<T, E>.fold(onSuccess: (T) -> R, onFailure: (E
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, R, E> Result<T, E>.map(transform: (T) -> R): Result<R, E> {
+public inline infix fun <T, R, E> ResultK<T, E>.map(transform: (T) -> R): ResultK<R, E> {
     contract {
         callsInPlace(transform, AT_MOST_ONCE)
     }
@@ -133,7 +133,7 @@ public inline infix fun <T, R, E> Result<T, E>.map(transform: (T) -> R): Result<
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, R, E> Result<T, E>.flatMap(transform: (T) -> Result<R, E>): Result<R, E> {
+public inline infix fun <T, R, E> ResultK<T, E>.flatMap(transform: (T) -> ResultK<R, E>): ResultK<R, E> {
     contract {
         callsInPlace(transform, AT_MOST_ONCE)
     }
@@ -141,7 +141,7 @@ public inline infix fun <T, R, E> Result<T, E>.flatMap(transform: (T) -> Result<
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, R, E> Result<T, E>.andThen(block: (T) -> Result<R, E>): Result<R, E> {
+public inline infix fun <T, R, E> ResultK<T, E>.andThen(block: (T) -> ResultK<R, E>): ResultK<R, E> {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
     }
@@ -149,7 +149,7 @@ public inline infix fun <T, R, E> Result<T, E>.andThen(block: (T) -> Result<R, E
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, E, R> Result<T, E>.mapFailure(transform: (E) -> R): Result<T, R> {
+public inline infix fun <T, E, R> ResultK<T, E>.mapFailure(transform: (E) -> R): ResultK<T, R> {
     contract {
         callsInPlace(transform, AT_MOST_ONCE)
     }
@@ -157,7 +157,7 @@ public inline infix fun <T, E, R> Result<T, E>.mapFailure(transform: (E) -> R): 
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T, E> Result<T, E>.onSuccess(block: (T) -> Unit): Result<T, E> {
+public inline fun <T, E> ResultK<T, E>.onSuccess(block: (T) -> Unit): ResultK<T, E> {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
     }
@@ -165,7 +165,7 @@ public inline fun <T, E> Result<T, E>.onSuccess(block: (T) -> Unit): Result<T, E
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T, E> Result<T, E>.onFailure(block: (E) -> Unit): Result<T, E> {
+public inline fun <T, E> ResultK<T, E>.onFailure(block: (E) -> Unit): ResultK<T, E> {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
     }
@@ -173,7 +173,7 @@ public inline fun <T, E> Result<T, E>.onFailure(block: (E) -> Unit): Result<T, E
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, E> Result<T, E>.recover(block: (E) -> T): Result<T, E> {
+public inline infix fun <T, E> ResultK<T, E>.recover(block: (E) -> T): ResultK<T, E> {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
     }
@@ -181,7 +181,7 @@ public inline infix fun <T, E> Result<T, E>.recover(block: (E) -> T): Result<T, 
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, E> Result<T, E>.recoverWith(block: (E) -> Result<T, E>): Result<T, E> {
+public inline infix fun <T, E> ResultK<T, E>.recoverWith(block: (E) -> ResultK<T, E>): ResultK<T, E> {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
     }
@@ -189,7 +189,7 @@ public inline infix fun <T, E> Result<T, E>.recoverWith(block: (E) -> Result<T, 
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, E> Result<T, E>.getOrForward(block: (Failure<E>) -> Nothing): T {
+public inline infix fun <T, E> ResultK<T, E>.getOrForward(block: (Failure<E>) -> Nothing): T {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
     }
@@ -197,7 +197,7 @@ public inline infix fun <T, E> Result<T, E>.getOrForward(block: (Failure<E>) -> 
 }
 
 @OptIn(ExperimentalContracts::class)
-public fun <T, E> Result<T, E>.getOrNull(): T? {
+public fun <T, E> ResultK<T, E>.getOrNull(): T? {
     contract {
         returns(null) implies (this@getOrNull is Failure<E>)
         returnsNotNull() implies (this@getOrNull is Success<T>)
@@ -206,10 +206,10 @@ public fun <T, E> Result<T, E>.getOrNull(): T? {
     return if (isSuccess()) value else null
 }
 
-public infix fun <T, E> Result<T, E>.getOrElse(default: T): T = if (isSuccess()) value else default
+public infix fun <T, E> ResultK<T, E>.getOrElse(default: T): T = if (isSuccess()) value else default
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, E> Result<T, E>.getOrElse(default: (E) -> T): T {
+public inline infix fun <T, E> ResultK<T, E>.getOrElse(default: (E) -> T): T {
     contract {
         callsInPlace(default, AT_MOST_ONCE)
     }
@@ -217,7 +217,7 @@ public inline infix fun <T, E> Result<T, E>.getOrElse(default: (E) -> T): T {
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, E> Result<T, E>.orElse(default: () -> Result<T, E>): Result<T, E> {
+public inline infix fun <T, E> ResultK<T, E>.orElse(default: () -> ResultK<T, E>): ResultK<T, E> {
     contract {
         callsInPlace(default, AT_MOST_ONCE)
     }
@@ -225,7 +225,7 @@ public inline infix fun <T, E> Result<T, E>.orElse(default: () -> Result<T, E>):
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, E> Result<T, E>.orThrow(exceptionBuilder: (E) -> Throwable): T {
+public inline infix fun <T, E> ResultK<T, E>.orThrow(exceptionBuilder: (E) -> Throwable): T {
     contract {
         callsInPlace(exceptionBuilder, AT_MOST_ONCE)
     }
@@ -233,7 +233,7 @@ public inline infix fun <T, E> Result<T, E>.orThrow(exceptionBuilder: (E) -> Thr
 }
 
 @OptIn(ExperimentalContracts::class)
-public fun <T, E> Result<T, E>.getFailureOrNull(): E? {
+public fun <T, E> ResultK<T, E>.getFailureOrNull(): E? {
     contract {
         returns(null) implies (this@getFailureOrNull is Success<T>)
         returnsNotNull() implies (this@getFailureOrNull is Failure<E>)
@@ -243,20 +243,20 @@ public fun <T, E> Result<T, E>.getFailureOrNull(): E? {
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, E> Result<T, E>.forEach(block: (T) -> Unit) {
+public inline infix fun <T, E> ResultK<T, E>.forEach(block: (T) -> Unit) {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
     }
     return if (isSuccess()) block(value) else Unit
 }
 
-public fun <T> Result<T, T>.merge(): T = fold(onSuccess = ::identity, onFailure = ::identity)
+public fun <T> ResultK<T, T>.merge(): T = fold(onSuccess = ::identity, onFailure = ::identity)
 
-public fun <T, E> Iterable<Result<T, E>>.sequence(): Result<List<T>, E> = traverse(::identity)
+public fun <T, E> Iterable<ResultK<T, E>>.sequence(): ResultK<List<T>, E> = traverse(::identity)
 
 @OptIn(ExperimentalTypeInference::class, ExperimentalContracts::class)
 @OverloadResolutionByLambdaReturnType
-public inline fun <T, R, E> Iterable<T>.traverse(transform: (T) -> Result<R, E>): Result<List<R>, E> {
+public inline fun <T, R, E> Iterable<T>.traverse(transform: (T) -> ResultK<R, E>): ResultK<List<R>, E> {
     contract {
         callsInPlace(transform, InvocationKind.UNKNOWN)
     }
@@ -274,8 +274,8 @@ public inline fun <T, R, E> Iterable<T>.traverse(transform: (T) -> Result<R, E>)
 @OptIn(ExperimentalContracts::class)
 public inline fun <T, R, E, M : MutableList<R>> Iterable<T>.traverseTo(
     destination: M,
-    transform: (T) -> Result<R, E>
-): Result<M, E> {
+    transform: (T) -> ResultK<R, E>
+): ResultK<M, E> {
     contract {
         callsInPlace(transform, InvocationKind.UNKNOWN)
     }
@@ -291,8 +291,8 @@ public inline fun <T, R, E, M : MutableList<R>> Iterable<T>.traverseTo(
 @OptIn(ExperimentalContracts::class)
 public inline fun <T, E, K, V, M : MutableMap<K, V>> Iterable<T>.traverseTo(
     destination: M,
-    transform: (T) -> Result<Pair<K, V>, E>
-): Result<M, E> {
+    transform: (T) -> ResultK<Pair<K, V>, E>
+): ResultK<M, E> {
     contract {
         callsInPlace(transform, InvocationKind.UNKNOWN)
     }
@@ -303,8 +303,8 @@ public inline fun <T, E, K, V, M : MutableMap<K, V>> Iterable<T>.traverseTo(
 public inline fun <T, R, E, K, M : MutableMap<K, R>> Iterable<T>.traverseTo(
     destination: M,
     keySelector: (R) -> K,
-    transform: (T) -> Result<R, E>
-): Result<M, E> {
+    transform: (T) -> ResultK<R, E>
+): ResultK<M, E> {
     contract {
         callsInPlace(keySelector, InvocationKind.UNKNOWN)
         callsInPlace(transform, InvocationKind.UNKNOWN)
@@ -317,8 +317,8 @@ public inline fun <T, R, E, K, V, M : MutableMap<K, V>> Iterable<T>.traverseTo(
     destination: M,
     keySelector: (R) -> K,
     valueTransform: (R) -> V,
-    transform: (T) -> Result<R, E>
-): Result<M, E> {
+    transform: (T) -> ResultK<R, E>
+): ResultK<M, E> {
     contract {
         callsInPlace(keySelector, InvocationKind.UNKNOWN)
         callsInPlace(valueTransform, InvocationKind.UNKNOWN)
@@ -336,7 +336,7 @@ public inline fun <T, R, E, K, V, M : MutableMap<K, V>> Iterable<T>.traverseTo(
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T : Any, E : Any> Result<T?, E>.filterNotNull(failureBuilder: () -> E): Result<T, E> {
+public inline fun <T : Any, E : Any> ResultK<T?, E>.filterNotNull(failureBuilder: () -> E): ResultK<T, E> {
     contract {
         callsInPlace(failureBuilder, AT_MOST_ONCE)
     }
@@ -344,13 +344,13 @@ public inline fun <T : Any, E : Any> Result<T?, E>.filterNotNull(failureBuilder:
         this
     else if (this.value != null) {
         @Suppress("UNCHECKED_CAST")
-        this as Result<T, E>
+        this as ResultK<T, E>
     } else
         failureBuilder().asFailure()
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T, E> Result<T, E>.filterOrElse(predicate: (T) -> Boolean, default: () -> E): Result<T, E> {
+public inline fun <T, E> ResultK<T, E>.filterOrElse(predicate: (T) -> Boolean, default: () -> E): ResultK<T, E> {
     contract {
         callsInPlace(predicate, AT_MOST_ONCE)
         callsInPlace(default, AT_MOST_ONCE)
