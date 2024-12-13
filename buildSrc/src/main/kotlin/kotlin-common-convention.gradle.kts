@@ -11,6 +11,10 @@ plugins {
     id("pitest-convention")
 }
 
+dependencies {
+    testImplementation("io.kotest.extensions:kotest-extensions-pitest:1.2.0")
+}
+
 tasks {
 
     withType<KotlinCompile>()
