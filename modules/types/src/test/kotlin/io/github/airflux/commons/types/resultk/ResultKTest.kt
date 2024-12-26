@@ -248,6 +248,48 @@ internal class ResultKTest : FreeSpec() {
                 }
             }
 
+            "the `flatMapBoolean` function" - {
+
+                "when a variable has the `Success` type" - {
+
+                    "when a value equals true" - {
+                        val original: ResultK<Boolean, Errors> = createResult(Success.of(true))
+
+                        "then this function should return a result of calling the ifTrue lambda" {
+                            val result = original.flatMapBoolean(
+                                ifTrue = { Success(ORIGINAL_VALUE) },
+                                ifFalse = { Success(ALTERNATIVE_VALUE) }
+                            )
+                            result shouldBeSuccess ORIGINAL_VALUE
+                        }
+                    }
+
+                    "when a value equals false" - {
+                        val original: ResultK<Boolean, Errors> = createResult(Success.of(false))
+
+                        "then this function should return a result of calling the ifFalse lambda" {
+                            val result = original.flatMapBoolean(
+                                ifTrue = { Success(ORIGINAL_VALUE) },
+                                ifFalse = { Success(ALTERNATIVE_VALUE) }
+                            )
+                            result shouldBeSuccess ALTERNATIVE_VALUE
+                        }
+                    }
+                }
+
+                "when a variable has the `Failure` type" - {
+                    val original: ResultK<Boolean, Errors> = createResult(Failure(Errors.Empty))
+
+                    "then this function should return an original failure" {
+                        val result = original.flatMapBoolean(
+                            ifTrue = { Success(ORIGINAL_VALUE) },
+                            ifFalse = { Success(ALTERNATIVE_VALUE) }
+                        )
+                        result shouldBeFailure Errors.Empty
+                    }
+                }
+            }
+
             "the `onSuccess` function" - {
 
                 "when a variable has the `Success` type" - {

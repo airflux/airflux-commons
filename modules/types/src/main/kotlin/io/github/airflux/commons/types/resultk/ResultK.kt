@@ -157,6 +157,23 @@ public inline infix fun <T, E, R> ResultK<T, E>.mapFailure(transform: (E) -> R):
 }
 
 @OptIn(ExperimentalContracts::class)
+public inline fun <T, E> ResultK<Boolean, E>.flatMapBoolean(
+    ifTrue: () -> ResultK<T, E>,
+    ifFalse: () -> ResultK<T, E>
+): ResultK<T, E> {
+    contract {
+        callsInPlace(ifTrue, AT_MOST_ONCE)
+        callsInPlace(ifFalse, AT_MOST_ONCE)
+    }
+    return if (this.isFailure())
+        this
+    else if (this.value)
+        ifTrue()
+    else
+        ifFalse()
+}
+
+@OptIn(ExperimentalContracts::class)
 public inline fun <T, E> ResultK<T, E>.onSuccess(block: (T) -> Unit): ResultK<T, E> {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
