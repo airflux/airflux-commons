@@ -50,6 +50,7 @@ public final class io/github/airflux/commons/types/resultk/ResultKDSLKt {
 
 public final class io/github/airflux/commons/types/resultk/ResultKKt {
 	public static final fun andThen (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun apply (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun asFailure (Ljava/lang/Object;)Lio/github/airflux/commons/types/resultk/Failure;
 	public static final fun asSuccess (Ljava/lang/Object;)Lio/github/airflux/commons/types/resultk/Success;
 	public static final fun failure (Ljava/lang/Object;)Lio/github/airflux/commons/types/resultk/Failure;

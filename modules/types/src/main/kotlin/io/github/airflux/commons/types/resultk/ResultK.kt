@@ -269,6 +269,18 @@ public inline infix fun <T, E> ResultK<T, E>.forEach(block: (T) -> Unit) {
 
 public fun <T> ResultK<T, T>.merge(): T = fold(onSuccess = ::identity, onFailure = ::identity)
 
+@OptIn(ExperimentalContracts::class)
+public inline fun <T, E> ResultK<T, E>.apply(block: T.() -> ResultK<Unit, E>): ResultK<T, E> {
+    contract {
+        callsInPlace(block, AT_MOST_ONCE)
+    }
+    return if (this.isSuccess()) {
+        val result = block(this.value)
+        if (result.isSuccess()) this else result
+    } else
+        this
+}
+
 public fun <T, E> Iterable<ResultK<T, E>>.sequence(): ResultK<List<T>, E> = traverse(::identity)
 
 @OptIn(ExperimentalTypeInference::class, ExperimentalContracts::class)

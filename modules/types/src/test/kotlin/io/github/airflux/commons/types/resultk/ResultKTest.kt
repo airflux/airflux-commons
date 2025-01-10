@@ -573,6 +573,51 @@ internal class ResultKTest : FreeSpec() {
                 }
             }
 
+            "the `apply` function" - {
+
+                "when a variable has the `Success` type" - {
+                    val original: ResultK<MutableList<String>, Errors> =
+                        createResult(Success(mutableListOf<String>().apply { add(ORIGINAL_VALUE) }))
+
+                    "when the block returns the `Success` type" - {
+                        val doIt: MutableList<String>.() -> ResultK<Unit, Errors> = {
+                            add(ALTERNATIVE_VALUE)
+                            Success.asUnit
+                        }
+
+                        "then this function should return the original value" {
+                            val result = original.apply(doIt)
+                            result.shouldBeSuccess()
+                            result.value shouldContainExactly listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
+                        }
+                    }
+
+                    "when the block returns the `Failure` type" - {
+                        val doIt: MutableList<String>.() -> ResultK<Unit, Errors> = {
+                            Errors.Empty.asFailure()
+                        }
+
+                        "then this function should return the failure value from the block" {
+                            val result = original.apply(doIt)
+                            result shouldBeFailure Errors.Empty
+                        }
+                    }
+                }
+
+                "when a variable has the `Failure` type" - {
+                    val original: ResultK<MutableList<String>, Errors> = createResult(Failure(Errors.Empty))
+                    val doIt: MutableList<String>.() -> ResultK<Unit, Errors> = {
+                        add(ALTERNATIVE_VALUE)
+                        Success.asUnit
+                    }
+
+                    "then this function should return an original do not invoke the [block]" {
+                        val result = original.apply(doIt)
+                        result shouldBeFailure Errors.Empty
+                    }
+                }
+            }
+
             "the `sequence` function" - {
 
                 "when a collection is empty" - {
