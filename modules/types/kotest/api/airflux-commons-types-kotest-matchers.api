@@ -1,3 +1,14 @@
+public final class io/github/airflux/commons/types/either/matcher/EitherMatchersKt {
+	public static final fun beLeft ()Lio/kotest/matchers/Matcher;
+	public static final fun beLeft (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;
+	public static final fun beRight ()Lio/kotest/matchers/Matcher;
+	public static final fun beRight (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;
+	public static final fun shouldBeLeft (Lio/github/airflux/commons/types/either/Either;)V
+	public static final fun shouldBeLeft (Lio/github/airflux/commons/types/either/Either;Ljava/lang/Object;)V
+	public static final fun shouldBeRight (Lio/github/airflux/commons/types/either/Either;)V
+	public static final fun shouldBeRight (Lio/github/airflux/commons/types/either/Either;Ljava/lang/Object;)V
+}
+
 public final class io/github/airflux/commons/types/resultk/matcher/ResultKMatchersKt {
 	public static final fun beFailure ()Lio/kotest/matchers/Matcher;
 	public static final fun beFailure (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;

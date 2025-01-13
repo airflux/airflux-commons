@@ -17,6 +17,84 @@ public final class io/github/airflux/commons/types/RaiseKt {
 	public static final fun failureOrRethrow (Ljava/lang/Exception;Lio/github/airflux/commons/types/AbstractRaise;)Ljava/lang/Object;
 }
 
+public abstract interface class io/github/airflux/commons/types/either/Either {
+	public static final field Companion Lio/github/airflux/commons/types/either/Either$Companion;
+}
+
+public final class io/github/airflux/commons/types/either/Either$Companion {
+}
+
+public final class io/github/airflux/commons/types/either/EitherKt {
+	public static final fun asLeft (Ljava/lang/Object;)Lio/github/airflux/commons/types/either/Left;
+	public static final fun asRight (Ljava/lang/Object;)Lio/github/airflux/commons/types/either/Right;
+	public static final fun flatMapLeft (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/either/Either;
+	public static final fun flatMapRight (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/either/Either;
+	public static final fun fold (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun getLeftOrElse (Lio/github/airflux/commons/types/either/Either;Ljava/lang/Object;)Ljava/lang/Object;
+	public static final fun getLeftOrElse (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun getLeftOrNull (Lio/github/airflux/commons/types/either/Either;)Ljava/lang/Object;
+	public static final fun getRightOrElse (Lio/github/airflux/commons/types/either/Either;Ljava/lang/Object;)Ljava/lang/Object;
+	public static final fun getRightOrElse (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun getRightOrNull (Lio/github/airflux/commons/types/either/Either;)Ljava/lang/Object;
+	public static final fun isLeft (Lio/github/airflux/commons/types/either/Either;)Z
+	public static final fun isLeft (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Z
+	public static final fun isRight (Lio/github/airflux/commons/types/either/Either;)Z
+	public static final fun isRight (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Z
+	public static final fun left (Ljava/lang/Object;)Lio/github/airflux/commons/types/either/Left;
+	public static final fun leftOrElse (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/either/Either;
+	public static final fun leftOrThrow (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun mapLeft (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/either/Either;
+	public static final fun mapRight (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/either/Either;
+	public static final fun merge (Lio/github/airflux/commons/types/either/Either;)Ljava/lang/Object;
+	public static final fun onLeft (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/either/Either;
+	public static final fun onRight (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/either/Either;
+	public static final fun right (Ljava/lang/Object;)Lio/github/airflux/commons/types/either/Right;
+	public static final fun rightOrElse (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/either/Either;
+	public static final fun rightOrThrow (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public final class io/github/airflux/commons/types/either/Left : io/github/airflux/commons/types/either/Either {
+	public static final field Companion Lio/github/airflux/commons/types/either/Left$Companion;
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lio/github/airflux/commons/types/either/Left;
+	public static synthetic fun copy$default (Lio/github/airflux/commons/types/either/Left;Ljava/lang/Object;ILjava/lang/Object;)Lio/github/airflux/commons/types/either/Left;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/commons/types/either/Left$Companion {
+	public final fun getAsEmptyList ()Lio/github/airflux/commons/types/either/Left;
+	public final fun getAsFalse ()Lio/github/airflux/commons/types/either/Left;
+	public final fun getAsNull ()Lio/github/airflux/commons/types/either/Left;
+	public final fun getAsTrue ()Lio/github/airflux/commons/types/either/Left;
+	public final fun getAsUnit ()Lio/github/airflux/commons/types/either/Left;
+	public final fun of (Z)Lio/github/airflux/commons/types/either/Left;
+}
+
+public final class io/github/airflux/commons/types/either/Right : io/github/airflux/commons/types/either/Either {
+	public static final field Companion Lio/github/airflux/commons/types/either/Right$Companion;
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lio/github/airflux/commons/types/either/Right;
+	public static synthetic fun copy$default (Lio/github/airflux/commons/types/either/Right;Ljava/lang/Object;ILjava/lang/Object;)Lio/github/airflux/commons/types/either/Right;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/commons/types/either/Right$Companion {
+	public final fun getAsEmptyList ()Lio/github/airflux/commons/types/either/Right;
+	public final fun getAsFalse ()Lio/github/airflux/commons/types/either/Right;
+	public final fun getAsNull ()Lio/github/airflux/commons/types/either/Right;
+	public final fun getAsTrue ()Lio/github/airflux/commons/types/either/Right;
+	public final fun getAsUnit ()Lio/github/airflux/commons/types/either/Right;
+	public final fun of (Z)Lio/github/airflux/commons/types/either/Right;
+}
+
 public final class io/github/airflux/commons/types/resultk/Failure : io/github/airflux/commons/types/resultk/ResultK {
 	public fun <init> (Ljava/lang/Object;)V
 	public final fun component1 ()Ljava/lang/Object;
