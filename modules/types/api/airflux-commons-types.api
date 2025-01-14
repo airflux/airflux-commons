@@ -97,6 +97,66 @@ public final class io/github/airflux/commons/types/either/EitherKt {
 	public static final fun rightOrThrow (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 }
 
+public abstract interface class io/github/airflux/commons/types/fail/Fail {
+	public static final field Companion Lio/github/airflux/commons/types/fail/Fail$Companion;
+}
+
+public final class io/github/airflux/commons/types/fail/Fail$Companion {
+	public final fun error (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Error;
+	public final fun exception (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Exception;
+}
+
+public final class io/github/airflux/commons/types/fail/Fail$Error : io/github/airflux/commons/types/fail/Fail {
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Error;
+	public static synthetic fun copy$default (Lio/github/airflux/commons/types/fail/Fail$Error;Ljava/lang/Object;ILjava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Error;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/commons/types/fail/Fail$Exception : io/github/airflux/commons/types/fail/Fail {
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Exception;
+	public static synthetic fun copy$default (Lio/github/airflux/commons/types/fail/Fail$Exception;Ljava/lang/Object;ILjava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Exception;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/commons/types/fail/FailKt {
+	public static final fun asError (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Error;
+	public static final fun asException (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Exception;
+	public static final fun error (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Error;
+	public static final fun errorOrElse (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/fail/Fail;
+	public static final fun errorOrThrow (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun exception (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Exception;
+	public static final fun exceptionOrElse (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/fail/Fail;
+	public static final fun exceptionOrThrow (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun flatMapError (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
+	public static final fun flatMapException (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
+	public static final fun fold (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun getErrorOrElse (Lio/github/airflux/commons/types/fail/Fail;Ljava/lang/Object;)Ljava/lang/Object;
+	public static final fun getErrorOrElse (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun getErrorOrNull (Lio/github/airflux/commons/types/fail/Fail;)Ljava/lang/Object;
+	public static final fun getExceptionOrElse (Lio/github/airflux/commons/types/fail/Fail;Ljava/lang/Object;)Ljava/lang/Object;
+	public static final fun getExceptionOrElse (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun getExceptionOrNull (Lio/github/airflux/commons/types/fail/Fail;)Ljava/lang/Object;
+	public static final fun isError (Lio/github/airflux/commons/types/fail/Fail;)Z
+	public static final fun isError (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Z
+	public static final fun isException (Lio/github/airflux/commons/types/fail/Fail;)Z
+	public static final fun isException (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Z
+	public static final fun mapError (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
+	public static final fun mapException (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
+	public static final fun merge (Lio/github/airflux/commons/types/fail/Fail;)Ljava/lang/Object;
+	public static final fun onError (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
+	public static final fun onException (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
+}
+
 public abstract interface class io/github/airflux/commons/types/resultk/ResultK {
 	public static final field Companion Lio/github/airflux/commons/types/resultk/ResultK$Companion;
 }

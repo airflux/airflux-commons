@@ -9,6 +9,17 @@ public final class io/github/airflux/commons/types/either/matcher/EitherMatchers
 	public static final fun shouldBeRight (Lio/github/airflux/commons/types/either/Either;Ljava/lang/Object;)V
 }
 
+public final class io/github/airflux/commons/types/fail/matcher/FailMatchersKt {
+	public static final fun beError ()Lio/kotest/matchers/Matcher;
+	public static final fun beError (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;
+	public static final fun beException ()Lio/kotest/matchers/Matcher;
+	public static final fun beException (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;
+	public static final fun shouldBeError (Lio/github/airflux/commons/types/fail/Fail;)V
+	public static final fun shouldBeError (Lio/github/airflux/commons/types/fail/Fail;Ljava/lang/Object;)V
+	public static final fun shouldBeException (Lio/github/airflux/commons/types/fail/Fail;)V
+	public static final fun shouldBeException (Lio/github/airflux/commons/types/fail/Fail;Ljava/lang/Object;)V
+}
+
 public final class io/github/airflux/commons/types/resultk/matcher/ResultKMatchersKt {
 	public static final fun beFailure ()Lio/kotest/matchers/Matcher;
 	public static final fun beFailure (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;
