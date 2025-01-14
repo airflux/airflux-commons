@@ -23,12 +23,12 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 
-public typealias Left<L> = Either.Left<L>
-public typealias Right<L> = Either.Right<L>
+public typealias Left<LeftT> = Either.Left<LeftT>
+public typealias Right<RightT> = Either.Right<RightT>
 
-public sealed interface Either<out L, out R> {
+public sealed interface Either<out LeftT, out RightT> {
 
-    public data class Left<out L>(public val value: L) : Either<L, Nothing> {
+    public data class Left<out LeftT>(public val value: LeftT) : Either<LeftT, Nothing> {
 
         public companion object {
 
@@ -46,7 +46,7 @@ public sealed interface Either<out L, out R> {
         }
     }
 
-    public data class Right<out R>(public val value: R) : Either<Nothing, R> {
+    public data class Right<out RightT>(public val value: RightT) : Either<Nothing, RightT> {
 
         public companion object {
 
@@ -66,56 +66,59 @@ public sealed interface Either<out L, out R> {
 
     public companion object {
 
-        public fun <L> left(value: L): Left<L> = Left(value)
+        public fun <LeftT> left(value: LeftT): Left<LeftT> = Left(value)
 
-        public fun <R> right(cause: R): Right<R> = Right(cause)
+        public fun <RightT> right(cause: RightT): Right<RightT> = Right(cause)
     }
 }
 
-public fun <L> L.asLeft(): Left<L> = Either.left(this)
+public fun <LeftT> LeftT.asLeft(): Left<LeftT> = Either.left(this)
 
-public fun <R> R.asRight(): Right<R> = Either.right(this)
+public fun <RightT> RightT.asRight(): Right<RightT> = Either.right(this)
 
-public fun <L> left(value: L): Left<L> = Either.left(value)
+public fun <LeftT> left(value: LeftT): Left<LeftT> = Either.left(value)
 
-public fun <R> right(cause: R): Right<R> = Either.right(cause)
+public fun <RightT> right(cause: RightT): Right<RightT> = Either.right(cause)
 
 @OptIn(ExperimentalContracts::class)
-public fun <L, R> Either<L, R>.isLeft(): Boolean {
+public fun <LeftT, RightT> Either<LeftT, RightT>.isLeft(): Boolean {
     contract {
-        returns(true) implies (this@isLeft is Left<L>)
-        returns(false) implies (this@isLeft is Right<R>)
+        returns(true) implies (this@isLeft is Left<LeftT>)
+        returns(false) implies (this@isLeft is Right<RightT>)
     }
-    return this is Left<L>
+    return this is Left<LeftT>
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <L, R> Either<L, R>.isLeft(predicate: (L) -> Boolean): Boolean {
-    contract {
-        callsInPlace(predicate, AT_MOST_ONCE)
-    }
-    return this is Left<L> && predicate(value)
-}
-
-@OptIn(ExperimentalContracts::class)
-public fun <L, R> Either<L, R>.isRight(): Boolean {
-    contract {
-        returns(false) implies (this@isRight is Left<L>)
-        returns(true) implies (this@isRight is Right<R>)
-    }
-    return this is Right<R>
-}
-
-@OptIn(ExperimentalContracts::class)
-public inline fun <L, R> Either<L, R>.isRight(predicate: (R) -> Boolean): Boolean {
+public inline fun <LeftT, RightT> Either<LeftT, RightT>.isLeft(predicate: (LeftT) -> Boolean): Boolean {
     contract {
         callsInPlace(predicate, AT_MOST_ONCE)
     }
-    return this is Right<R> && predicate(value)
+    return this is Left<LeftT> && predicate(value)
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <L, V, R> Either<L, R>.fold(onLeft: (L) -> V, onRight: (R) -> V): V {
+public fun <LeftT, RightT> Either<LeftT, RightT>.isRight(): Boolean {
+    contract {
+        returns(false) implies (this@isRight is Left<LeftT>)
+        returns(true) implies (this@isRight is Right<RightT>)
+    }
+    return this is Right<RightT>
+}
+
+@OptIn(ExperimentalContracts::class)
+public inline fun <LeftT, RightT> Either<LeftT, RightT>.isRight(predicate: (RightT) -> Boolean): Boolean {
+    contract {
+        callsInPlace(predicate, AT_MOST_ONCE)
+    }
+    return this is Right<RightT> && predicate(value)
+}
+
+@OptIn(ExperimentalContracts::class)
+public inline fun <LeftT, LeftR, RightT> Either<LeftT, RightT>.fold(
+    onLeft: (LeftT) -> LeftR,
+    onRight: (RightT) -> LeftR
+): LeftR {
     contract {
         callsInPlace(onRight, AT_MOST_ONCE)
         callsInPlace(onLeft, AT_MOST_ONCE)
@@ -125,7 +128,9 @@ public inline fun <L, V, R> Either<L, R>.fold(onLeft: (L) -> V, onRight: (R) -> 
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <L, V, R> Either<L, R>.mapLeft(transform: (L) -> V): Either<V, R> {
+public inline infix fun <LeftT, LeftR, RightT> Either<LeftT, RightT>.mapLeft(
+    transform: (LeftT) -> LeftR
+): Either<LeftR, RightT> {
     contract {
         callsInPlace(transform, AT_MOST_ONCE)
     }
@@ -133,7 +138,9 @@ public inline infix fun <L, V, R> Either<L, R>.mapLeft(transform: (L) -> V): Eit
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <L, V, R> Either<L, R>.flatMapLeft(transform: (L) -> Either<V, R>): Either<V, R> {
+public inline infix fun <LeftT, LeftR, RightT> Either<LeftT, RightT>.flatMapLeft(
+    transform: (LeftT) -> Either<LeftR, RightT>
+): Either<LeftR, RightT> {
     contract {
         callsInPlace(transform, AT_MOST_ONCE)
     }
@@ -141,7 +148,9 @@ public inline infix fun <L, V, R> Either<L, R>.flatMapLeft(transform: (L) -> Eit
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <L, R, V> Either<L, R>.mapRight(transform: (R) -> V): Either<L, V> {
+public inline infix fun <LeftT, RightT, RightR> Either<LeftT, RightT>.mapRight(
+    transform: (RightT) -> RightR
+): Either<LeftT, RightR> {
     contract {
         callsInPlace(transform, AT_MOST_ONCE)
     }
@@ -149,7 +158,9 @@ public inline infix fun <L, R, V> Either<L, R>.mapRight(transform: (R) -> V): Ei
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <L, R, V> Either<L, R>.flatMapRight(transform: (R) -> Either<L, V>): Either<L, V> {
+public inline infix fun <LeftT, RightT, RightR> Either<LeftT, RightT>.flatMapRight(
+    transform: (RightT) -> Either<LeftT, RightR>
+): Either<LeftT, RightR> {
     contract {
         callsInPlace(transform, AT_MOST_ONCE)
     }
@@ -157,7 +168,7 @@ public inline infix fun <L, R, V> Either<L, R>.flatMapRight(transform: (R) -> Ei
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <L, R> Either<L, R>.onLeft(block: (L) -> Unit): Either<L, R> {
+public inline fun <LeftT, RightT> Either<LeftT, RightT>.onLeft(block: (LeftT) -> Unit): Either<LeftT, RightT> {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
     }
@@ -165,7 +176,7 @@ public inline fun <L, R> Either<L, R>.onLeft(block: (L) -> Unit): Either<L, R> {
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <L, R> Either<L, R>.onRight(block: (R) -> Unit): Either<L, R> {
+public inline fun <LeftT, RightT> Either<LeftT, RightT>.onRight(block: (RightT) -> Unit): Either<LeftT, RightT> {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
     }
@@ -173,31 +184,33 @@ public inline fun <L, R> Either<L, R>.onRight(block: (R) -> Unit): Either<L, R> 
 }
 
 @OptIn(ExperimentalContracts::class)
-public fun <L, R> Either<L, R>.getLeftOrNull(): L? {
+public fun <LeftT, RightT> Either<LeftT, RightT>.getLeftOrNull(): LeftT? {
     contract {
-        returnsNotNull() implies (this@getLeftOrNull is Left<L>)
-        returns(null) implies (this@getLeftOrNull is Right<R>)
+        returnsNotNull() implies (this@getLeftOrNull is Left<LeftT>)
+        returns(null) implies (this@getLeftOrNull is Right<RightT>)
     }
 
     return if (isLeft()) value else null
 }
 
 @OptIn(ExperimentalContracts::class)
-public fun <L, R> Either<L, R>.getRightOrNull(): R? {
+public fun <LeftT, RightT> Either<LeftT, RightT>.getRightOrNull(): RightT? {
     contract {
-        returns(null) implies (this@getRightOrNull is Left<L>)
-        returnsNotNull() implies (this@getRightOrNull is Right<R>)
+        returns(null) implies (this@getRightOrNull is Left<LeftT>)
+        returnsNotNull() implies (this@getRightOrNull is Right<RightT>)
     }
 
     return if (isRight()) value else null
 }
 
-public infix fun <L, R> Either<L, R>.getLeftOrElse(default: L): L = if (isLeft()) value else default
+public infix fun <LeftT, RightT> Either<LeftT, RightT>.getLeftOrElse(default: LeftT): LeftT =
+    if (isLeft()) value else default
 
-public infix fun <L, R> Either<L, R>.getRightOrElse(default: R): R = if (isRight()) value else default
+public infix fun <LeftT, RightT> Either<LeftT, RightT>.getRightOrElse(default: RightT): RightT =
+    if (isRight()) value else default
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <L, R> Either<L, R>.getLeftOrElse(default: (R) -> L): L {
+public inline infix fun <LeftT, RightT> Either<LeftT, RightT>.getLeftOrElse(default: (RightT) -> LeftT): LeftT {
     contract {
         callsInPlace(default, AT_MOST_ONCE)
     }
@@ -205,7 +218,7 @@ public inline infix fun <L, R> Either<L, R>.getLeftOrElse(default: (R) -> L): L 
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <L, R> Either<L, R>.getRightOrElse(default: (L) -> R): R {
+public inline infix fun <LeftT, RightT> Either<LeftT, RightT>.getRightOrElse(default: (LeftT) -> RightT): RightT {
     contract {
         callsInPlace(default, AT_MOST_ONCE)
     }
@@ -213,7 +226,9 @@ public inline infix fun <L, R> Either<L, R>.getRightOrElse(default: (L) -> R): R
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <L, R> Either<L, R>.leftOrElse(default: () -> Either<L, R>): Either<L, R> {
+public inline infix fun <LeftT, RightT> Either<LeftT, RightT>.leftOrElse(
+    default: () -> Either<LeftT, RightT>
+): Either<LeftT, RightT> {
     contract {
         callsInPlace(default, AT_MOST_ONCE)
     }
@@ -221,7 +236,9 @@ public inline infix fun <L, R> Either<L, R>.leftOrElse(default: () -> Either<L, 
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <L, R> Either<L, R>.rightOrElse(default: () -> Either<L, R>): Either<L, R> {
+public inline infix fun <LeftT, RightT> Either<LeftT, RightT>.rightOrElse(
+    default: () -> Either<LeftT, RightT>
+): Either<LeftT, RightT> {
     contract {
         callsInPlace(default, AT_MOST_ONCE)
     }
@@ -229,7 +246,9 @@ public inline infix fun <L, R> Either<L, R>.rightOrElse(default: () -> Either<L,
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <L, R> Either<L, R>.leftOrThrow(exceptionBuilder: (R) -> Throwable): L {
+public inline infix fun <LeftT, RightT> Either<LeftT, RightT>.leftOrThrow(
+    exceptionBuilder: (RightT) -> Throwable
+): LeftT {
     contract {
         callsInPlace(exceptionBuilder, AT_MOST_ONCE)
     }
@@ -237,7 +256,9 @@ public inline infix fun <L, R> Either<L, R>.leftOrThrow(exceptionBuilder: (R) ->
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <L, R> Either<L, R>.rightOrThrow(exceptionBuilder: (L) -> Throwable): R {
+public inline infix fun <LeftT, RightT> Either<LeftT, RightT>.rightOrThrow(
+    exceptionBuilder: (LeftT) -> Throwable
+): RightT {
     contract {
         callsInPlace(exceptionBuilder, AT_MOST_ONCE)
     }

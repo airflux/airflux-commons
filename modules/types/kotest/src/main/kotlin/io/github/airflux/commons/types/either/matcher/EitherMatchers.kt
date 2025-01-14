@@ -17,8 +17,8 @@
 package io.github.airflux.commons.types.either.matcher
 
 import io.github.airflux.commons.types.either.Either
-import io.github.airflux.commons.types.either.Left
-import io.github.airflux.commons.types.either.Right
+import io.github.airflux.commons.types.either.Either.Left
+import io.github.airflux.commons.types.either.Either.Right
 import io.kotest.matchers.ComparableMatcherResult
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.should
@@ -28,48 +28,50 @@ import kotlin.reflect.KClass
 
 public fun beLeft(): Matcher<Either<*, *>> = TypeMatcher(Left::class)
 
-public fun <T> beLeft(expected: T): Matcher<Either<T, *>> = ValueMatcher(Left(expected))
+public fun <LeftT> beLeft(expected: LeftT): Matcher<Either<LeftT, *>> = ValueMatcher(Left(expected))
 
 @OptIn(ExperimentalContracts::class)
-public fun <L> Either<L, *>.shouldBeLeft() {
+public fun <LeftT> Either<LeftT, *>.shouldBeLeft() {
     contract {
-        returns() implies (this@shouldBeLeft is Left<L>)
+        returns() implies (this@shouldBeLeft is Left<LeftT>)
     }
     this should beLeft()
 }
 
-public infix fun <L> Either<L, *>.shouldBeLeft(expected: L) {
+public infix fun <LeftT> Either<LeftT, *>.shouldBeLeft(expected: LeftT) {
     this should beLeft(expected)
 }
 
 public fun beRight(): Matcher<Either<*, *>> = TypeMatcher(Right::class)
 
-public fun <R> beRight(expected: R): Matcher<Either<*, R>> = ValueMatcher(Right(expected))
+public fun <RightT> beRight(expected: RightT): Matcher<Either<*, RightT>> = ValueMatcher(Right(expected))
 
 @OptIn(ExperimentalContracts::class)
-public fun <R> Either<*, R>.shouldBeRight() {
+public fun <RightT> Either<*, RightT>.shouldBeRight() {
     contract {
-        returns() implies (this@shouldBeRight is Right<R>)
+        returns() implies (this@shouldBeRight is Either.Right<RightT>)
     }
     this should beRight()
 }
 
-public infix fun <R> Either<*, R>.shouldBeRight(expected: R) {
+public infix fun <RightT> Either<*, RightT>.shouldBeRight(expected: RightT) {
     this should beRight(expected)
 }
 
-private class ValueMatcher<L, R>(private val expected: Either<L, R>) : Matcher<Either<L, R>> {
+private class ValueMatcher<LeftT, RightT>(private val expected: Either<LeftT, RightT>) :
+    Matcher<Either<LeftT, RightT>> {
 
-    override fun test(value: Either<L, R>) = comparableMatcherResult(
+    override fun test(value: Either<LeftT, RightT>) = comparableMatcherResult(
         passed = expected == value,
         actual = value.toString(),
         expected = expected.toString()
     )
 }
 
-private class TypeMatcher<L, R, C : Either<L, R>>(private val expected: KClass<C>) : Matcher<Either<L, R>> {
+private class TypeMatcher<LeftT, RightT, C : Either<LeftT, RightT>>(private val expected: KClass<C>) :
+    Matcher<Either<LeftT, RightT>> {
 
-    override fun test(value: Either<L, R>) = comparableMatcherResult(
+    override fun test(value: Either<LeftT, RightT>) = comparableMatcherResult(
         passed = expected.isInstance(value),
         actual = value.toString(),
         expected = expected.simpleName!!

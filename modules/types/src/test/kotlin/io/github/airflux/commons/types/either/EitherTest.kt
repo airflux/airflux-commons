@@ -15,6 +15,8 @@
  */
 package io.github.airflux.commons.types.either
 
+import io.github.airflux.commons.types.either.Either.Left
+import io.github.airflux.commons.types.either.Either.Right
 import io.github.airflux.commons.types.either.matcher.shouldBeLeft
 import io.github.airflux.commons.types.either.matcher.shouldBeRight
 import io.kotest.assertions.throwables.shouldNotThrow
@@ -549,5 +551,5 @@ internal class EitherTest : FreeSpec() {
         private const val ALTERNATIVE_VALUE = "20"
     }
 
-    private fun <T, E> createEither(value: Either<T, E>): Either<T, E> = value
+    private fun <LeftT, RightT> createEither(value: Either<LeftT, RightT>): Either<LeftT, RightT> = value
 }
