@@ -23,54 +23,62 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 
+public typealias Left<L> = Either.Left<L>
+public typealias Right<L> = Either.Right<L>
+
 public sealed interface Either<out L, out R> {
 
-    public companion object
-}
+    public data class Left<out L>(public val value: L) : Either<L, Nothing> {
 
-public data class Left<out L>(public val value: L) : Either<L, Nothing> {
+        public companion object {
+
+            public val asNull: Left<Nothing?> = Left(null)
+
+            public val asTrue: Left<Boolean> = Left(true)
+
+            public val asFalse: Left<Boolean> = Left(false)
+
+            public val asUnit: Left<Unit> = Left(Unit)
+
+            public val asEmptyList: Left<List<Nothing>> = Left(emptyList())
+
+            public fun of(value: Boolean): Left<Boolean> = if (value) asTrue else asFalse
+        }
+    }
+
+    public data class Right<out R>(public val value: R) : Either<Nothing, R> {
+
+        public companion object {
+
+            public val asNull: Right<Nothing?> = Right(null)
+
+            public val asTrue: Right<Boolean> = Right(true)
+
+            public val asFalse: Right<Boolean> = Right(false)
+
+            public val asUnit: Right<Unit> = Right(Unit)
+
+            public val asEmptyList: Right<List<Nothing>> = Right(emptyList())
+
+            public fun of(value: Boolean): Right<Boolean> = if (value) asTrue else asFalse
+        }
+    }
 
     public companion object {
 
-        public val asNull: Left<Nothing?> = Left(null)
+        public fun <L> left(value: L): Left<L> = Left(value)
 
-        public val asTrue: Left<Boolean> = Left(true)
-
-        public val asFalse: Left<Boolean> = Left(false)
-
-        public val asUnit: Left<Unit> = Left(Unit)
-
-        public val asEmptyList: Left<List<Nothing>> = Left(emptyList())
-
-        public fun of(value: Boolean): Left<Boolean> = if (value) asTrue else asFalse
+        public fun <R> right(cause: R): Right<R> = Right(cause)
     }
 }
 
-public data class Right<out R>(public val value: R) : Either<Nothing, R> {
+public fun <L> L.asLeft(): Left<L> = Either.left(this)
 
-    public companion object {
+public fun <R> R.asRight(): Right<R> = Either.right(this)
 
-        public val asNull: Right<Nothing?> = Right(null)
+public fun <L> left(value: L): Left<L> = Either.left(value)
 
-        public val asTrue: Right<Boolean> = Right(true)
-
-        public val asFalse: Right<Boolean> = Right(false)
-
-        public val asUnit: Right<Unit> = Right(Unit)
-
-        public val asEmptyList: Right<List<Nothing>> = Right(emptyList())
-
-        public fun of(value: Boolean): Right<Boolean> = if (value) asTrue else asFalse
-    }
-}
-
-public fun <L> L.asLeft(): Left<L> = left(this)
-
-public fun <R> R.asRight(): Right<R> = right(this)
-
-public fun <L> left(value: L): Left<L> = Left(value)
-
-public fun <R> right(cause: R): Right<R> = Right(cause)
+public fun <R> right(cause: R): Right<R> = Either.right(cause)
 
 @OptIn(ExperimentalContracts::class)
 public fun <L, R> Either<L, R>.isLeft(): Boolean {
