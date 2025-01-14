@@ -27,6 +27,9 @@ import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 import kotlin.experimental.ExperimentalTypeInference
 
+public typealias Success<T> = ResultK.Success<T>
+public typealias Failure<E> = ResultK.Failure<E>
+
 public sealed interface ResultK<out T, out E> {
 
     @Suppress("MemberNameEqualsClassName")
@@ -49,36 +52,41 @@ public sealed interface ResultK<out T, out E> {
         }
     }
 
-    public companion object
-}
+    public data class Success<out T>(public val value: T) : ResultK<T, Nothing> {
 
-public data class Success<out T>(public val value: T) : ResultK<T, Nothing> {
+        public companion object {
+
+            public val asNull: Success<Nothing?> = Success(null)
+
+            public val asTrue: Success<Boolean> = Success(true)
+
+            public val asFalse: Success<Boolean> = Success(false)
+
+            public val asUnit: Success<Unit> = Success(Unit)
+
+            public val asEmptyList: Success<List<Nothing>> = Success(emptyList())
+
+            public fun of(value: Boolean): Success<Boolean> = if (value) asTrue else asFalse
+        }
+    }
+
+    public data class Failure<out E>(public val cause: E) : ResultK<Nothing, E>
 
     public companion object {
 
-        public val asNull: Success<Nothing?> = Success(null)
+        public fun <T> success(value: T): Success<T> = Success(value)
 
-        public val asTrue: Success<Boolean> = Success(true)
-
-        public val asFalse: Success<Boolean> = Success(false)
-
-        public val asUnit: Success<Unit> = Success(Unit)
-
-        public val asEmptyList: Success<List<Nothing>> = Success(emptyList())
-
-        public fun of(value: Boolean): Success<Boolean> = if (value) asTrue else asFalse
+        public fun <E> failure(cause: E): Failure<E> = Failure(cause)
     }
 }
 
-public data class Failure<out E>(public val cause: E) : ResultK<Nothing, E>
+public fun <T> T.asSuccess(): Success<T> = ResultK.success(this)
 
-public fun <T> T.asSuccess(): Success<T> = success(this)
+public fun <E> E.asFailure(): Failure<E> = ResultK.failure(this)
 
-public fun <E> E.asFailure(): Failure<E> = failure(this)
+public fun <T> success(value: T): Success<T> = ResultK.success(value)
 
-public fun <T> success(value: T): Success<T> = Success(value)
-
-public fun <E> failure(cause: E): Failure<E> = Failure(cause)
+public fun <E> failure(cause: E): Failure<E> = ResultK.failure(cause)
 
 @OptIn(ExperimentalContracts::class)
 public fun <T, E> ResultK<T, E>.isSuccess(): Boolean {

@@ -25,27 +25,27 @@ internal class SuccessTest : FreeSpec() {
         "The `Success` type" - {
 
             "the `asNull` property should return the `Success` type with the `null` value" {
-                val result: ResultK<String?, String> = Success.Companion.asNull
+                val result: ResultK<String?, String> = Success.asNull
                 result shouldBeSuccess null
             }
 
             "the `asTrue` property should return the `Success` type with the `true` value" {
-                val result: ResultK<Boolean, String> = Success.Companion.asTrue
+                val result: ResultK<Boolean, String> = Success.asTrue
                 result shouldBeSuccess true
             }
 
             "the `asFalse` property should return the `Success` type with the `false` value" {
-                val result: ResultK<Boolean, String> = Success.Companion.asFalse
+                val result: ResultK<Boolean, String> = Success.asFalse
                 result shouldBeSuccess false
             }
 
             "the `asUnit` property should return the `Success` type with the `Unit` value" {
-                val result: ResultK<Unit, String> = Success.Companion.asUnit
+                val result: ResultK<Unit, String> = Success.asUnit
                 result shouldBeSuccess Unit
             }
 
             "the `asEmptyList` property should return the `Success` type with the `empty list` value" {
-                val result: ResultK<List<String>, String> = Success.Companion.asEmptyList
+                val result: ResultK<List<String>, String> = Success.asEmptyList
                 result shouldBeSuccess emptyList()
             }
 
@@ -55,7 +55,7 @@ internal class SuccessTest : FreeSpec() {
                     val param = true
 
                     "then this function should return the `Success` type with the `true` value" {
-                        val result: ResultK<Boolean, String> = Success.Companion.of(param)
+                        val result: ResultK<Boolean, String> = Success.of(param)
                         result shouldBeSuccess true
                     }
                 }
@@ -64,7 +64,7 @@ internal class SuccessTest : FreeSpec() {
                     val param = false
 
                     "then this function should return the `Success` type with the `true` value" {
-                        val result: ResultK<Boolean, String> = Success.Companion.of(param)
+                        val result: ResultK<Boolean, String> = Success.of(param)
                         result shouldBeSuccess false
                     }
                 }

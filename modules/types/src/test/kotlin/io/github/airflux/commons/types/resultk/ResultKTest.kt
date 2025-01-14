@@ -15,6 +15,8 @@
  */
 package io.github.airflux.commons.types.resultk
 
+import io.github.airflux.commons.types.resultk.ResultK.Failure
+import io.github.airflux.commons.types.resultk.ResultK.Success
 import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
 import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
 import io.kotest.assertions.throwables.shouldNotThrow
@@ -626,7 +628,7 @@ internal class ResultKTest : FreeSpec() {
                     "then this function should return the value of the asEmptyList property" {
                         val result = original.sequence()
                         result.shouldBeSuccess()
-                        result shouldBeSameInstanceAs Success.Companion.asEmptyList
+                        result shouldBeSameInstanceAs Success.asEmptyList
                     }
                 }
 
@@ -665,7 +667,7 @@ internal class ResultKTest : FreeSpec() {
                     "then this function should return the value of the asEmptyList property" {
                         val result: ResultK<List<Int>, Errors> = original.traverse(transform)
                         result.shouldBeSuccess()
-                        result shouldBeSameInstanceAs Success.Companion.asEmptyList
+                        result shouldBeSameInstanceAs Success.asEmptyList
                     }
                 }
 
