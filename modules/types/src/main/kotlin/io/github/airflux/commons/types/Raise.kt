@@ -48,7 +48,7 @@ public inline fun <ValueT : Any, ErrorT, RaiseT : Raise<ErrorT>> RaiseT.ensureNo
 
 @Suppress("FunctionNaming")
 @OptIn(ExperimentalContracts::class)
-public inline fun <CauseT, ResultT, RaiseT : Raise<CauseT>> defaultRaise(
+public inline fun <RaiseT : Raise<ErrorT>, ResultT, ErrorT> defaultRaise(
     raise: RaiseT,
     block: RaiseT.() -> ResultT
 ): ResultT {

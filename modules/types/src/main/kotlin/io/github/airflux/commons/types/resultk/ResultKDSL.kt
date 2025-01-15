@@ -23,9 +23,9 @@ import kotlin.contracts.contract
 
 @Suppress("FunctionNaming")
 @OptIn(ExperimentalContracts::class)
-public inline fun <ValueT, CauseT> result(
-    block: ResultK.Raise<CauseT>.() -> ValueT
-): ResultK<ValueT, CauseT> {
+public inline fun <ValueT, FailT> result(
+    block: ResultK.Raise<FailT>.() -> ValueT
+): ResultK<ValueT, FailT> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
@@ -35,12 +35,12 @@ public inline fun <ValueT, CauseT> result(
 
 @Suppress("FunctionNaming")
 @OptIn(ExperimentalContracts::class)
-public inline fun <ValueT, CauseT> resultWith(
-    block: ResultK.Raise<CauseT>.() -> ResultK<ValueT, CauseT>
-): ResultK<ValueT, CauseT> {
+public inline fun <ValueT, FailT> resultWith(
+    block: ResultK.Raise<FailT>.() -> ResultK<ValueT, FailT>
+): ResultK<ValueT, FailT> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
 
-    return defaultRaise(ResultK.Raise<CauseT>(), block)
+    return defaultRaise(ResultK.Raise<FailT>(), block)
 }
