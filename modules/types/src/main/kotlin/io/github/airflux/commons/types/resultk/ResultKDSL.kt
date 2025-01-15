@@ -16,7 +16,7 @@
 
 package io.github.airflux.commons.types.resultk
 
-import io.github.airflux.commons.types.defaultRaise
+import io.github.airflux.commons.types.withRaise
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -42,5 +42,5 @@ public inline fun <ValueT, FailT> resultWith(
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
 
-    return defaultRaise(ResultK.Raise<FailT>(), block)
+    return withRaise(ResultK.Raise<FailT>(), block)
 }
