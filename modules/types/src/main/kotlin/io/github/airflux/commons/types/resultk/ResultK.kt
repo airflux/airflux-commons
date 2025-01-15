@@ -42,8 +42,8 @@ public sealed interface ResultK<out ValueT, out FailT> {
             if (isFailure()) raise(this)
         }
 
-        public override fun raise(cause: FailT): Nothing {
-            raise(Failure(cause))
+        public override fun raise(error: FailT): Nothing {
+            raise(Failure(error))
         }
 
         private fun raise(failure: Failure<FailT>): Nothing {

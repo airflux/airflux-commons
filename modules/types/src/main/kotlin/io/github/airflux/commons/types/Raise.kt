@@ -23,7 +23,7 @@ import kotlin.contracts.contract
 import kotlin.coroutines.cancellation.CancellationException
 
 public interface Raise<in ErrorT> {
-    public fun raise(cause: ErrorT): Nothing
+    public fun raise(error: ErrorT): Nothing
 }
 
 @OptIn(ExperimentalContracts::class)
