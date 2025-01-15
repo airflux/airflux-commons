@@ -17,36 +17,55 @@
 package io.github.airflux.commons.types
 
 import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 import kotlin.coroutines.cancellation.CancellationException
 
-public abstract class AbstractRaise<in E> {
+public interface Raise<in ErrorT> {
+    public fun raise(cause: ErrorT): Nothing
+}
 
-    public abstract fun raise(cause: E): Nothing
-
-    @OptIn(ExperimentalContracts::class)
-    public inline fun ensure(condition: Boolean, raise: () -> E) {
-        contract {
-            callsInPlace(raise, AT_MOST_ONCE)
-        }
-        if (!condition) raise(raise())
+@OptIn(ExperimentalContracts::class)
+public inline fun <ErrorT, RaiseT : Raise<ErrorT>> RaiseT.ensure(condition: Boolean, raise: () -> ErrorT) {
+    contract {
+        callsInPlace(raise, AT_MOST_ONCE)
     }
+    if (!condition) raise(raise())
+}
 
-    @OptIn(ExperimentalContracts::class)
-    public inline fun <T : Any> ensureNotNull(value: T?, raise: () -> E): T {
-        contract {
-            callsInPlace(raise, AT_MOST_ONCE)
-            returns() implies (value != null)
-        }
-        return value ?: raise(raise())
+@OptIn(ExperimentalContracts::class)
+public inline fun <ValueT : Any, ErrorT, RaiseT : Raise<ErrorT>> RaiseT.ensureNotNull(
+    value: ValueT?,
+    raise: () -> ErrorT
+): ValueT {
+    contract {
+        callsInPlace(raise, AT_MOST_ONCE)
+        returns() implies (value != null)
+    }
+    return value ?: raise(raise())
+}
+
+@Suppress("FunctionNaming")
+@OptIn(ExperimentalContracts::class)
+public inline fun <CauseT, ResultT, RaiseT : Raise<CauseT>> defaultRaise(
+    raise: RaiseT,
+    block: RaiseT.() -> ResultT
+): ResultT {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+    return try {
+        block(raise)
+    } catch (expected: Exception) {
+        expected.failureOrRethrow(raise)
     }
 }
 
-internal class RaiseException(val failure: Any, val raise: AbstractRaise<*>) : CancellationException()
+public class RaiseException(public val failure: Any, public val raise: Raise<*>) : CancellationException()
 
 @PublishedApi
-internal fun <T> Exception.failureOrRethrow(raise: AbstractRaise<*>): T =
+internal fun <T> Exception.failureOrRethrow(raise: Raise<*>): T =
     if (this is RaiseException && this.raise === raise)
         @Suppress("UNCHECKED_CAST")
         failure as T

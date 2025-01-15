@@ -17,6 +17,8 @@
 package io.github.airflux.commons.types.resultk
 
 import io.github.airflux.commons.types.RaiseException
+import io.github.airflux.commons.types.ensure
+import io.github.airflux.commons.types.ensureNotNull
 import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
 import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
 import io.kotest.assertions.throwables.shouldThrow

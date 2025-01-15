@@ -16,16 +16,16 @@
 
 package io.github.airflux.commons.types.resultk
 
-import io.github.airflux.commons.types.failureOrRethrow
+import io.github.airflux.commons.types.defaultRaise
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 @Suppress("FunctionNaming")
 @OptIn(ExperimentalContracts::class)
-public inline fun <SuccessT, FailureT> result(
-    block: ResultK.Raise<FailureT>.() -> SuccessT
-): ResultK<SuccessT, FailureT> {
+public inline fun <ValueT, CauseT> result(
+    block: ResultK.Raise<CauseT>.() -> ValueT
+): ResultK<ValueT, CauseT> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
@@ -35,17 +35,12 @@ public inline fun <SuccessT, FailureT> result(
 
 @Suppress("FunctionNaming")
 @OptIn(ExperimentalContracts::class)
-public inline fun <SuccessT, FailureT> resultWith(
-    block: ResultK.Raise<FailureT>.() -> ResultK<SuccessT, FailureT>
-): ResultK<SuccessT, FailureT> {
+public inline fun <ValueT, CauseT> resultWith(
+    block: ResultK.Raise<CauseT>.() -> ResultK<ValueT, CauseT>
+): ResultK<ValueT, CauseT> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
 
-    val raise = ResultK.Raise<FailureT>()
-    return try {
-        block(raise)
-    } catch (expected: Exception) {
-        expected.failureOrRethrow(raise)
-    }
+    return defaultRaise(ResultK.Raise<CauseT>(), block)
 }
