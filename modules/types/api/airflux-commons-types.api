@@ -165,6 +165,7 @@ public final class io/github/airflux/commons/types/fail/FailKt {
 
 public abstract interface class io/github/airflux/commons/types/resultk/ResultK {
 	public static final field Companion Lio/github/airflux/commons/types/resultk/ResultK$Companion;
+	public fun orRaise (Lio/github/airflux/commons/types/resultk/ResultK$Raise;)Ljava/lang/Object;
 }
 
 public final class io/github/airflux/commons/types/resultk/ResultK$Companion {

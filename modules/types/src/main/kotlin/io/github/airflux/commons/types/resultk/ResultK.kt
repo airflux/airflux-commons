@@ -31,6 +31,15 @@ public typealias Failure<FailT> = ResultK.Failure<FailT>
 
 public sealed interface ResultK<out ValueT, out FailT> {
 
+    public fun Raise<FailT>.orRaise(): ValueT =
+        if (this@ResultK.isSuccess())
+            this@ResultK.value
+        else {
+            val failure = this@ResultK
+            val raise = this
+            throw RaiseException(failure, raise)
+        }
+
     @Suppress("MemberNameEqualsClassName")
     public class Raise<in FailT> : io.github.airflux.commons.types.Raise<FailT> {
 
