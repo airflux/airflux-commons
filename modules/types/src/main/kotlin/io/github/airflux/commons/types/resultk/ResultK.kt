@@ -18,7 +18,7 @@
 
 package io.github.airflux.commons.types.resultk
 
-import io.github.airflux.commons.types.RaiseException
+import io.github.airflux.commons.types.doRaise
 import io.github.airflux.commons.types.identity
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
@@ -31,32 +31,19 @@ public typealias Failure<FailT> = ResultK.Failure<FailT>
 
 public sealed interface ResultK<out ValueT, out FailT> {
 
-    public fun Raise<FailT>.orRaise(): ValueT =
-        if (this@ResultK.isSuccess())
-            this@ResultK.value
-        else {
-            val failure = this@ResultK
-            val raise = this
-            throw RaiseException(failure, raise)
-        }
-
     @Suppress("MemberNameEqualsClassName")
-    public class Raise<in FailT> : io.github.airflux.commons.types.Raise<FailT> {
+    public class Raise<in FailT : Any> : io.github.airflux.commons.types.Raise<FailT> {
 
         public operator fun <ValueT> ResultK<ValueT, FailT>.component1(): ValueT = bind()
 
-        public fun <ValueT> ResultK<ValueT, FailT>.bind(): ValueT = if (isSuccess()) value else raise(this)
+        public fun <ValueT> ResultK<ValueT, FailT>.bind(): ValueT = if (isSuccess()) value else raise(cause)
 
         public fun <ValueT> ResultK<ValueT, FailT>.raise() {
-            if (isFailure()) raise(this)
+            if (isFailure()) raise(cause)
         }
 
         public override fun raise(error: FailT): Nothing {
-            raise(Failure(error))
-        }
-
-        private fun raise(failure: Failure<FailT>): Nothing {
-            throw RaiseException(failure, this)
+            doRaise(error)
         }
     }
 

@@ -22,34 +22,35 @@ import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 import kotlin.coroutines.cancellation.CancellationException
 
-public interface Raise<in ErrorT> {
+public interface Raise<in ErrorT : Any> {
     public fun raise(error: ErrorT): Nothing
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ErrorT, RaiseT : Raise<ErrorT>> RaiseT.ensure(condition: Boolean, raise: () -> ErrorT) {
+public inline fun <ErrorT, RaiseT : Raise<ErrorT>> RaiseT.ensure(condition: Boolean, error: () -> ErrorT) {
     contract {
-        callsInPlace(raise, AT_MOST_ONCE)
+        callsInPlace(error, AT_MOST_ONCE)
     }
-    if (!condition) raise(raise())
+    if (!condition) this.raise(error())
 }
 
 @OptIn(ExperimentalContracts::class)
 public inline fun <ValueT : Any, ErrorT, RaiseT : Raise<ErrorT>> RaiseT.ensureNotNull(
     value: ValueT?,
-    raise: () -> ErrorT
+    error: () -> ErrorT
 ): ValueT {
     contract {
-        callsInPlace(raise, AT_MOST_ONCE)
+        callsInPlace(error, AT_MOST_ONCE)
         returns() implies (value != null)
     }
-    return value ?: raise(raise())
+    return value ?: this.raise(error())
 }
 
 @Suppress("FunctionNaming")
 @OptIn(ExperimentalContracts::class)
 public inline fun <RaiseT : Raise<ErrorT>, ErrorT, ResultT> withRaise(
     raise: RaiseT,
+    wrap: (ErrorT) -> ResultT,
     block: RaiseT.() -> ResultT
 ): ResultT {
     contract {
@@ -58,16 +59,19 @@ public inline fun <RaiseT : Raise<ErrorT>, ErrorT, ResultT> withRaise(
     return try {
         block(raise)
     } catch (expected: Exception) {
-        expected.failureOrRethrow(raise)
+        wrap(expected.failureOrRethrow<ErrorT>(raise))
     }
 }
 
-public class RaiseException(public val failure: Any, public val raise: Raise<*>) : CancellationException()
+public fun <RaiseT : Raise<ErrorT>, ErrorT : Any> RaiseT.doRaise(error: ErrorT): Nothing =
+    throw RaiseException(error, this)
+
+internal class RaiseException(val failure: Any, val raise: Raise<*>) : CancellationException()
 
 @PublishedApi
-internal fun <T> Exception.failureOrRethrow(raise: Raise<*>): T =
+internal fun <ErrorT> Exception.failureOrRethrow(raise: Raise<*>): ErrorT =
     if (this is RaiseException && this.raise === raise)
         @Suppress("UNCHECKED_CAST")
-        failure as T
+        failure as ErrorT
     else
         throw this

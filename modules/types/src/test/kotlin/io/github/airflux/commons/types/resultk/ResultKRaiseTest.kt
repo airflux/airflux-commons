@@ -21,6 +21,7 @@ import io.github.airflux.commons.types.ensure
 import io.github.airflux.commons.types.ensureNotNull
 import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
 import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
+import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -38,10 +39,12 @@ internal class ResultKRaiseTest : FreeSpec() {
                     val result: ResultK<Int, Error> = FIRST_VALUE.asSuccess()
 
                     "then should return the value" {
-                        with(raise) {
+                        val result = with(raise) {
                             val (bindValue: Int) = result
-                            bindValue shouldBe FIRST_VALUE
+                            bindValue
                         }
+
+                        result shouldBe FIRST_VALUE
                     }
                 }
 
@@ -58,7 +61,7 @@ internal class ResultKRaiseTest : FreeSpec() {
                         }
 
                         exception.raise shouldBe raise
-                        exception.failure shouldBe result
+                        exception.failure shouldBe Error.First
                     }
                 }
             }
@@ -70,10 +73,11 @@ internal class ResultKRaiseTest : FreeSpec() {
                     val result: ResultK<Int, Error> = FIRST_VALUE.asSuccess()
 
                     "then should return the value" {
-                        with(raise) {
-                            val bindValue: Int = result.bind()
-                            bindValue shouldBe FIRST_VALUE
+                        val result = with(raise) {
+                            result.bind()
                         }
+
+                        result shouldBe FIRST_VALUE
                     }
                 }
 
@@ -89,7 +93,7 @@ internal class ResultKRaiseTest : FreeSpec() {
                         }
 
                         exception.raise shouldBe raise
-                        exception.failure shouldBe result
+                        exception.failure shouldBe Error.First
                     }
                 }
             }
@@ -101,8 +105,10 @@ internal class ResultKRaiseTest : FreeSpec() {
                     val result: ResultK<Int, Error> = FIRST_VALUE.asSuccess()
 
                     "then should not raise an exception" {
-                        with(raise) {
-                            result.raise()
+                        shouldNotThrow<RaiseException> {
+                            with(raise) {
+                                result.raise()
+                            }
                         }
                     }
                 }
@@ -119,7 +125,7 @@ internal class ResultKRaiseTest : FreeSpec() {
                         }
 
                         exception.raise shouldBe raise
-                        exception.failure shouldBe result
+                        exception.failure shouldBe Error.First
                     }
                 }
             }

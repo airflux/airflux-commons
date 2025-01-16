@@ -10,17 +10,12 @@ public abstract interface class io/github/airflux/commons/types/Raise {
 	public abstract fun raise (Ljava/lang/Object;)Ljava/lang/Void;
 }
 
-public final class io/github/airflux/commons/types/RaiseException : java/util/concurrent/CancellationException {
-	public fun <init> (Ljava/lang/Object;Lio/github/airflux/commons/types/Raise;)V
-	public final fun getFailure ()Ljava/lang/Object;
-	public final fun getRaise ()Lio/github/airflux/commons/types/Raise;
-}
-
 public final class io/github/airflux/commons/types/RaiseKt {
+	public static final fun doRaise (Lio/github/airflux/commons/types/Raise;Ljava/lang/Object;)Ljava/lang/Void;
 	public static final fun ensure (Lio/github/airflux/commons/types/Raise;ZLkotlin/jvm/functions/Function0;)V
 	public static final fun ensureNotNull (Lio/github/airflux/commons/types/Raise;Ljava/lang/Object;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
 	public static final fun failureOrRethrow (Ljava/lang/Exception;Lio/github/airflux/commons/types/Raise;)Ljava/lang/Object;
-	public static final fun withRaise (Lio/github/airflux/commons/types/Raise;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun withRaise (Lio/github/airflux/commons/types/Raise;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 }
 
 public abstract interface class io/github/airflux/commons/types/either/Either {
@@ -165,7 +160,6 @@ public final class io/github/airflux/commons/types/fail/FailKt {
 
 public abstract interface class io/github/airflux/commons/types/resultk/ResultK {
 	public static final field Companion Lio/github/airflux/commons/types/resultk/ResultK$Companion;
-	public fun orRaise (Lio/github/airflux/commons/types/resultk/ResultK$Raise;)Ljava/lang/Object;
 }
 
 public final class io/github/airflux/commons/types/resultk/ResultK$Companion {
