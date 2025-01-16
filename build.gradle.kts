@@ -2,6 +2,7 @@ plugins {
     id("kover-merge-convention")
     id("licenses-convention")
     id("org.sonarqube") version "5.0.0.4638"
+    id("git-info-convention")
 }
 
 repositories {
