@@ -18,7 +18,6 @@
 
 package io.github.airflux.commons.types.fail
 
-import io.github.airflux.commons.types.identity
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
@@ -85,15 +84,14 @@ public inline fun <ErrorT, ExceptionT> Fail<ErrorT, ExceptionT>.isException(
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ErrorT, ErrorR, ExceptionT> Fail<ErrorT, ExceptionT>.fold(
-    onError: (ErrorT) -> ErrorR,
-    onException: (ExceptionT) -> ErrorR
-): ErrorR {
+public inline fun <ErrorT, ExceptionT, ResultT> Fail<ErrorT, ExceptionT>.fold(
+    onError: (ErrorT) -> ResultT,
+    onException: (ExceptionT) -> ResultT
+): ResultT {
     contract {
-        callsInPlace(onException, AT_MOST_ONCE)
         callsInPlace(onError, AT_MOST_ONCE)
+        callsInPlace(onException, AT_MOST_ONCE)
     }
-
     return if (isError()) onError(value) else onException(value)
 }
 
@@ -163,7 +161,6 @@ public fun <ErrorT, ExceptionT> Fail<ErrorT, ExceptionT>.getErrorOrNull(): Error
         returnsNotNull() implies (this@getErrorOrNull is Fail.Error<ErrorT>)
         returns(null) implies (this@getErrorOrNull is Fail.Exception<ExceptionT>)
     }
-
     return if (isError()) value else null
 }
 
@@ -173,7 +170,6 @@ public fun <ErrorT, ExceptionT> Fail<ErrorT, ExceptionT>.getExceptionOrNull(): E
         returns(null) implies (this@getExceptionOrNull is Fail.Error<ErrorT>)
         returnsNotNull() implies (this@getExceptionOrNull is Fail.Exception<ExceptionT>)
     }
-
     return if (isException()) value else null
 }
 
@@ -242,5 +238,3 @@ public inline infix fun <ErrorT, ExceptionT> Fail<ErrorT, ExceptionT>.exceptionO
     }
     return if (isException()) value else throw exceptionBuilder(value)
 }
-
-public fun <T> Fail<T, T>.merge(): T = fold(onError = ::identity, onException = ::identity)

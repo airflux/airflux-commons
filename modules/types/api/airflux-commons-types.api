@@ -153,7 +153,6 @@ public final class io/github/airflux/commons/types/fail/FailKt {
 	public static final fun isException (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Z
 	public static final fun mapError (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
 	public static final fun mapException (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
-	public static final fun merge (Lio/github/airflux/commons/types/fail/Fail;)Ljava/lang/Object;
 	public static final fun onError (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
 	public static final fun onException (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
 }
