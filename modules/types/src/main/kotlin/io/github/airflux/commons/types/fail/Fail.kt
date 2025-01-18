@@ -27,15 +27,21 @@ public typealias Exception<ExceptionT> = Fail.Exception<ExceptionT>
 
 public sealed interface Fail<out ErrorT, out ExceptionT> {
 
+    /**
+     * Represents a domain (business) error.
+     */
     public data class Error<out ErrorT>(public val value: ErrorT) : Fail<ErrorT, Nothing>
 
+    /**
+     * Represents a technical error.
+     */
     public data class Exception<out ExceptionT>(public val value: ExceptionT) : Fail<Nothing, ExceptionT>
 
     public companion object {
 
         public fun <ErrorT> error(value: ErrorT): Error<ErrorT> = Error(value)
 
-        public fun <ExceptionT> exception(cause: ExceptionT): Exception<ExceptionT> = Exception(cause)
+        public fun <ExceptionT> exception(value: ExceptionT): Exception<ExceptionT> = Exception(value)
     }
 }
 
@@ -45,7 +51,7 @@ public fun <ExceptionT> ExceptionT.asException(): Fail.Exception<ExceptionT> = F
 
 public fun <ErrorT> error(value: ErrorT): Fail.Error<ErrorT> = Fail.error(value)
 
-public fun <ExceptionT> exception(cause: ExceptionT): Fail.Exception<ExceptionT> = Fail.exception(cause)
+public fun <ExceptionT> exception(value: ExceptionT): Fail.Exception<ExceptionT> = Fail.exception(value)
 
 @OptIn(ExperimentalContracts::class)
 public fun <ErrorT, ExceptionT> Fail<ErrorT, ExceptionT>.isError(): Boolean {
