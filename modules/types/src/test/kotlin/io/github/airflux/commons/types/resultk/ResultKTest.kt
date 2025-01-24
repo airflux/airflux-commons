@@ -1044,5 +1044,7 @@ internal class ResultKTest : FreeSpec() {
         private const val ALTERNATIVE_VALUE = "20"
     }
 
-    private fun <ValueT, FailT> createResult(value: ResultK<ValueT, FailT>): ResultK<ValueT, FailT> = value
+    private fun <ValueT, FailureT : Any> createResult(
+        value: ResultK<ValueT, FailureT>
+    ): ResultK<ValueT, FailureT> = value
 }

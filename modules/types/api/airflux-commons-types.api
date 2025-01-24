@@ -232,6 +232,8 @@ public final class io/github/airflux/commons/types/resultk/ResultKExtensionsKt {
 	public static final fun isFailure (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Z
 	public static final fun isSuccess (Lio/github/airflux/commons/types/resultk/ResultK;)Z
 	public static final fun isSuccess (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Z
+	public static final fun liftToError (Lio/github/airflux/commons/types/resultk/ResultK;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun liftToException (Lio/github/airflux/commons/types/resultk/ResultK;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun map (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun mapFailure (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun merge (Lio/github/airflux/commons/types/resultk/ResultK;)Ljava/lang/Object;
@@ -248,10 +250,5 @@ public final class io/github/airflux/commons/types/resultk/ResultKExtensionsKt {
 	public static final fun traverseTo (Ljava/lang/Iterable;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun traverseTo (Ljava/lang/Iterable;Ljava/util/Map;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun traverseTo (Ljava/lang/Iterable;Ljava/util/Map;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
-}
-
-public final class io/github/airflux/commons/types/resultk/ResultKKt {
-	public static final fun liftToError (Lio/github/airflux/commons/types/resultk/ResultK;)Lio/github/airflux/commons/types/resultk/ResultK;
-	public static final fun liftToException (Lio/github/airflux/commons/types/resultk/ResultK;)Lio/github/airflux/commons/types/resultk/ResultK;
 }
 

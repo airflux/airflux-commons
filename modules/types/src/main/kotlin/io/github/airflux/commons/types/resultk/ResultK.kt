@@ -17,12 +17,11 @@
 package io.github.airflux.commons.types.resultk
 
 import io.github.airflux.commons.types.doRaise
-import io.github.airflux.commons.types.fail.Fail
 
 public typealias Success<ValueT> = ResultK.Success<ValueT>
 public typealias Failure<FailureT> = ResultK.Failure<FailureT>
 
-public sealed interface ResultK<out ValueT, out FailureT> {
+public sealed interface ResultK<out ValueT, out FailureT : Any> {
 
     @Suppress("MemberNameEqualsClassName")
     public class Raise<in FailureT : Any> : io.github.airflux.commons.types.Raise<FailureT> {
@@ -58,18 +57,12 @@ public sealed interface ResultK<out ValueT, out FailureT> {
         }
     }
 
-    public data class Failure<out FailureT>(public val cause: FailureT) : ResultK<Nothing, FailureT>
+    public data class Failure<out FailureT : Any>(public val cause: FailureT) : ResultK<Nothing, FailureT>
 
     public companion object {
 
         public fun <ValueT> success(value: ValueT): Success<ValueT> = Success(value)
 
-        public fun <FailureT> failure(cause: FailureT): Failure<FailureT> = Failure(cause)
+        public fun <FailureT : Any> failure(cause: FailureT): Failure<FailureT> = Failure(cause)
     }
 }
-
-public fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.liftToError(): ResultK<ValueT, Fail<FailureT, Nothing>> =
-    if (isSuccess()) this else failure(Fail.error(cause))
-
-public fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.liftToException(): ResultK<ValueT, Fail<Nothing, FailureT>> =
-    if (isSuccess()) this else failure(Fail.exception(cause))

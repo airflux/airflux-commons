@@ -43,36 +43,36 @@ public infix fun <ValueT> ResultK<ValueT, *>.shouldBeSuccess(expected: ValueT) {
 
 public fun beFailure(): Matcher<ResultK<*, *>> = TypeMatcher(ResultK.Failure::class)
 
-public fun <FailT> beFailure(expected: FailT): Matcher<ResultK<*, FailT>> =
+public fun <FailureT : Any> beFailure(expected: FailureT): Matcher<ResultK<*, FailureT>> =
     ValueMatcher(ResultK.Failure(expected))
 
 @OptIn(ExperimentalContracts::class)
-public fun <FailT> ResultK<*, FailT>.shouldBeFailure() {
+public fun <FailureT : Any> ResultK<*, FailureT>.shouldBeFailure() {
     contract {
-        returns() implies (this@shouldBeFailure is ResultK.Failure<FailT>)
+        returns() implies (this@shouldBeFailure is ResultK.Failure<FailureT>)
     }
     this should beFailure()
 }
 
-public infix fun <FailT> ResultK<*, FailT>.shouldBeFailure(expected: FailT) {
+public infix fun <FailureT : Any> ResultK<*, FailureT>.shouldBeFailure(expected: FailureT) {
     this should beFailure(expected)
 }
 
-private class ValueMatcher<ValueT, FailT>(private val expected: ResultK<ValueT, FailT>) :
-    Matcher<ResultK<ValueT, FailT>> {
+private class ValueMatcher<ValueT, FailureT : Any>(private val expected: ResultK<ValueT, FailureT>) :
+    Matcher<ResultK<ValueT, FailureT>> {
 
-    override fun test(value: ResultK<ValueT, FailT>) = comparableMatcherResult(
+    override fun test(value: ResultK<ValueT, FailureT>) = comparableMatcherResult(
         passed = expected == value,
         actual = value.toString(),
         expected = expected.toString()
     )
 }
 
-private class TypeMatcher<ValueT, FailT, C : ResultK<ValueT, FailT>>(
+private class TypeMatcher<ValueT, FailureT : Any, C : ResultK<ValueT, FailureT>>(
     private val expected: KClass<C>
-) : Matcher<ResultK<ValueT, FailT>> {
+) : Matcher<ResultK<ValueT, FailureT>> {
 
-    override fun test(value: ResultK<ValueT, FailT>) = comparableMatcherResult(
+    override fun test(value: ResultK<ValueT, FailureT>) = comparableMatcherResult(
         passed = expected.isInstance(value),
         actual = value.toString(),
         expected = expected.simpleName!!
