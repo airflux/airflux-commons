@@ -17,6 +17,7 @@
 package io.github.airflux.commons.types.resultk
 
 import io.github.airflux.commons.types.doRaise
+import io.github.airflux.commons.types.fail.Fail
 
 public typealias Success<ValueT> = ResultK.Success<ValueT>
 public typealias Failure<FailureT> = ResultK.Failure<FailureT>
@@ -66,3 +67,9 @@ public sealed interface ResultK<out ValueT, out FailureT> {
         public fun <FailureT> failure(cause: FailureT): Failure<FailureT> = Failure(cause)
     }
 }
+
+public fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.liftToError(): ResultK<ValueT, Fail<FailureT, Nothing>> =
+    if (isSuccess()) this else failure(Fail.error(cause))
+
+public fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.liftToException(): ResultK<ValueT, Fail<Nothing, FailureT>> =
+    if (isSuccess()) this else failure(Fail.exception(cause))

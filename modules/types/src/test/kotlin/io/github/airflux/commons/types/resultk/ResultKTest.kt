@@ -15,6 +15,8 @@
  */
 package io.github.airflux.commons.types.resultk
 
+import io.github.airflux.commons.types.fail.matcher.shouldBeError
+import io.github.airflux.commons.types.fail.matcher.shouldBeException
 import io.github.airflux.commons.types.resultk.ResultK.Failure
 import io.github.airflux.commons.types.resultk.ResultK.Success
 import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
@@ -972,6 +974,50 @@ internal class ResultKTest : FreeSpec() {
                             val result = original.filterOrElse(predicate) { Errors.Blank }
                             result.shouldBeSameInstanceAs(original)
                         }
+                    }
+                }
+            }
+
+            "the `liftToError` function" - {
+
+                "when a variable has the `Success` type" - {
+                    val original: ResultK<String, Errors> = createResult(Success(ORIGINAL_VALUE))
+
+                    "then this function should return original value" {
+                        val result = original.liftToError()
+                        result.shouldBeSameInstanceAs(original)
+                    }
+                }
+
+                "when a variable has the `Failure` type" - {
+                    val original: ResultK<String, Errors> = createResult(Failure(Errors.Empty))
+
+                    "then this function should return the `Failure` type with the value of the `Fail.Error` type" {
+                        val result = original.liftToError()
+                        result.shouldBeFailure()
+                        result.cause shouldBeError Errors.Empty
+                    }
+                }
+            }
+
+            "the `liftToException` function" - {
+
+                "when a variable has the `Success` type" - {
+                    val original: ResultK<String, Errors> = createResult(Success(ORIGINAL_VALUE))
+
+                    "then this function should return original value" {
+                        val result = original.liftToException()
+                        result.shouldBeSameInstanceAs(original)
+                    }
+                }
+
+                "when a variable has the `Failure` type" - {
+                    val original: ResultK<String, Errors> = createResult(Failure(Errors.Empty))
+
+                    "then this function should return the `Failure` type with the value of the `Fail.Exception` type" {
+                        val result = original.liftToException()
+                        result.shouldBeFailure()
+                        result.cause shouldBeException Errors.Empty
                     }
                 }
             }
