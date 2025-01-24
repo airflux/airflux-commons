@@ -19,10 +19,9 @@ package io.github.airflux.commons.types.either.matcher
 import io.github.airflux.commons.assertionCorrect
 import io.github.airflux.commons.assertionIncorrect
 import io.github.airflux.commons.types.either.Either
-import io.github.airflux.commons.types.either.Left
-import io.github.airflux.commons.types.either.Right
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 internal class EitherMatchersTest : FreeSpec() {
 
@@ -30,7 +29,7 @@ internal class EitherMatchersTest : FreeSpec() {
         "The Kotest matchers for the Either type" - {
 
             "when a result is the Left" - {
-                val result: Either<Int, String> = Left(SUCCESS_VALUE)
+                val result: Either<Int, String> = Either.Left(LEFT_VALUE)
 
                 "then the Left expectation assertion should be correct" {
                     assertionCorrect {
@@ -38,30 +37,31 @@ internal class EitherMatchersTest : FreeSpec() {
                     }
 
                     assertionCorrect {
-                        result.shouldBeLeft()
+                        val left = result.shouldBeLeft()
+                        left shouldBe LEFT_VALUE
                     }
 
                     assertionCorrect {
-                        result should beLeft(SUCCESS_VALUE)
+                        result should beLeft(LEFT_VALUE)
                     }
 
                     assertionCorrect {
-                        result shouldBeLeft SUCCESS_VALUE
+                        result shouldBeLeft LEFT_VALUE
                     }
                 }
 
                 "then the Right expectation assertion should be incorrect" {
-                    assertionIncorrect("expected:<${Right::class.simpleName}> but was:<$result>") {
+                    assertionIncorrect("expected:<${Either.Right::class.simpleName}> but was:<$result>") {
                         result.shouldBeRight()
                     }
-                    assertionIncorrect("expected:<${Right(value = SUCCESS_VALUE)}> but was:<$result>") {
-                        result shouldBeRight SUCCESS_VALUE
+                    assertionIncorrect("expected:<${Either.Right(value = RIGHT_VALUE)}> but was:<$result>") {
+                        result shouldBeRight RIGHT_VALUE
                     }
                 }
 
                 "when the expected value and actual value is different" - {
-                    val expected: Either<String, String> = Left(EXPECTED_VALUE)
-                    val actual: Either<String, String> = Left(ACTUAL_VALUE)
+                    val expected: Either<String, String> = Either.Left(EXPECTED_VALUE)
+                    val actual: Either<String, String> = Either.Left(ACTUAL_VALUE)
 
                     "then the Left expectation assertion should be incorrect" {
                         assertionIncorrect("expected:<$expected> but was:<$actual>") {
@@ -72,14 +72,14 @@ internal class EitherMatchersTest : FreeSpec() {
             }
 
             "when a result is the Right" - {
-                val result: Either<Int, String> = Right(FAILURE_VALUE)
+                val result: Either<Int, String> = Either.Right(RIGHT_VALUE)
 
                 "then the Left expectation assertion should be incorrect" {
-                    assertionIncorrect("expected:<${Left::class.simpleName}> but was:<$result>") {
+                    assertionIncorrect("expected:<${Either.Left::class.simpleName}> but was:<$result>") {
                         result.shouldBeLeft()
                     }
-                    assertionIncorrect("expected:<${Left(value = FAILURE_VALUE)}> but was:<$result>") {
-                        result shouldBeLeft FAILURE_VALUE
+                    assertionIncorrect("expected:<${Either.Left(value = LEFT_VALUE)}> but was:<$result>") {
+                        result shouldBeLeft LEFT_VALUE
                     }
                 }
 
@@ -89,21 +89,22 @@ internal class EitherMatchersTest : FreeSpec() {
                     }
 
                     assertionCorrect {
-                        result.shouldBeRight()
+                        val right = result.shouldBeRight()
+                        right shouldBe RIGHT_VALUE
                     }
 
                     assertionCorrect {
-                        result should beRight(FAILURE_VALUE)
+                        result should beRight(RIGHT_VALUE)
                     }
 
                     assertionCorrect {
-                        result shouldBeRight FAILURE_VALUE
+                        result shouldBeRight RIGHT_VALUE
                     }
                 }
 
                 "when the expected value and actual value is different" - {
-                    val expected: Either<String, String> = Right(EXPECTED_VALUE)
-                    val actual: Either<String, String> = Right(ACTUAL_VALUE)
+                    val expected: Either<String, String> = Either.Right(EXPECTED_VALUE)
+                    val actual: Either<String, String> = Either.Right(ACTUAL_VALUE)
 
                     "then the Right expectation assertion should be incorrect" {
                         assertionIncorrect("expected:<$expected> but was:<$actual>") {
@@ -118,7 +119,7 @@ internal class EitherMatchersTest : FreeSpec() {
     private companion object {
         private const val ACTUAL_VALUE = "Actual value"
         private const val EXPECTED_VALUE = "Expected value"
-        private const val FAILURE_VALUE = "Failed"
-        private const val SUCCESS_VALUE = 42
+        private const val RIGHT_VALUE = "right value"
+        private const val LEFT_VALUE = 42
     }
 }

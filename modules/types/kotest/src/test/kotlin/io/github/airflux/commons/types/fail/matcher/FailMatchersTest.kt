@@ -21,6 +21,7 @@ import io.github.airflux.commons.assertionIncorrect
 import io.github.airflux.commons.types.fail.Fail
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 internal class FailMatchersTest : FreeSpec() {
 
@@ -36,7 +37,8 @@ internal class FailMatchersTest : FreeSpec() {
                     }
 
                     assertionCorrect {
-                        result.shouldBeError()
+                        val error = result.shouldBeError()
+                        error shouldBe ERROR_VALUE
                     }
 
                     assertionCorrect {
@@ -52,8 +54,8 @@ internal class FailMatchersTest : FreeSpec() {
                     assertionIncorrect("expected:<${Fail.Exception::class.simpleName}> but was:<$result>") {
                         result.shouldBeException()
                     }
-                    assertionIncorrect("expected:<${Fail.Exception(value = ERROR_VALUE)}> but was:<$result>") {
-                        result shouldBeException ERROR_VALUE
+                    assertionIncorrect("expected:<${Fail.Exception(value = EXCEPTION_VALUE)}> but was:<$result>") {
+                        result shouldBeException EXCEPTION_VALUE
                     }
                 }
 
@@ -76,8 +78,8 @@ internal class FailMatchersTest : FreeSpec() {
                     assertionIncorrect("expected:<${Fail.Error::class.simpleName}> but was:<$result>") {
                         result.shouldBeError()
                     }
-                    assertionIncorrect("expected:<${Fail.Error(value = EXCEPTION_VALUE)}> but was:<$result>") {
-                        result shouldBeError EXCEPTION_VALUE
+                    assertionIncorrect("expected:<${Fail.Error(value = ERROR_VALUE)}> but was:<$result>") {
+                        result shouldBeError ERROR_VALUE
                     }
                 }
 
@@ -87,7 +89,8 @@ internal class FailMatchersTest : FreeSpec() {
                     }
 
                     assertionCorrect {
-                        result.shouldBeException()
+                        val exception = result.shouldBeException()
+                        exception shouldBe EXCEPTION_VALUE
                     }
 
                     assertionCorrect {
