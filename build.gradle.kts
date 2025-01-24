@@ -14,7 +14,7 @@ allprojects {
         mavenCentral()
     }
 
-    version = "0.0.1-alpha.4-SNAPSHOT"
+    version = "0.0.1-alpha.5-SNAPSHOT"
     group = "io.github.airflux"
 }
 
