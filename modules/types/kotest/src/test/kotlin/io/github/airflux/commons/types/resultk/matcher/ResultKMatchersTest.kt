@@ -37,7 +37,11 @@ internal class ResultKMatchersTest : FreeSpec() {
                     }
 
                     assertionCorrect {
-                        val success = result.shouldBeSuccess()
+                        result.shouldBeSuccess()
+                    }
+
+                    assertionCorrect {
+                        val success = result.shouldContainSuccessInstance()
                         success shouldBe SUCCESS_VALUE
                     }
 
@@ -89,7 +93,11 @@ internal class ResultKMatchersTest : FreeSpec() {
                     }
 
                     assertionCorrect {
-                        val failure = result.shouldBeFailure()
+                        result.shouldBeFailure()
+                    }
+
+                    assertionCorrect {
+                        val failure = result.shouldContainFailureInstance()
                         failure shouldBe FAILURE_VALUE
                     }
 

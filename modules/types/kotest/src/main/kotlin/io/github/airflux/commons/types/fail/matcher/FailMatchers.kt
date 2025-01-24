@@ -29,10 +29,14 @@ public fun beError(): Matcher<Fail<*, *>> = TypeMatcher(Fail.Error::class)
 public fun <ErrorT : Any> beError(expected: ErrorT): Matcher<Fail<ErrorT, *>> = ValueMatcher(Fail.Error(expected))
 
 @OptIn(ExperimentalContracts::class)
-public fun <ErrorT : Any> Fail<ErrorT, *>.shouldBeError(): ErrorT {
+public fun <ErrorT : Any> Fail<ErrorT, *>.shouldBeError() {
     contract {
         returns() implies (this@shouldBeError is Fail.Error<ErrorT>)
     }
+    this should beError()
+}
+
+public fun <ErrorT : Any> Fail<ErrorT, *>.shouldContainErrorInstance(): ErrorT {
     this should beError()
     return (this as Fail.Error<ErrorT>).value
 }
@@ -47,10 +51,14 @@ public fun <ExceptionT : Any> beException(expected: ExceptionT): Matcher<Fail<*,
     ValueMatcher(Fail.Exception(expected))
 
 @OptIn(ExperimentalContracts::class)
-public fun <ExceptionT : Any> Fail<*, ExceptionT>.shouldBeException(): ExceptionT {
+public fun <ExceptionT : Any> Fail<*, ExceptionT>.shouldBeException() {
     contract {
         returns() implies (this@shouldBeException is Fail.Exception<ExceptionT>)
     }
+    this should beException()
+}
+
+public fun <ExceptionT : Any> Fail<*, ExceptionT>.shouldContainExceptionInstance(): ExceptionT {
     this should beException()
     return (this as Fail.Exception<ExceptionT>).value
 }

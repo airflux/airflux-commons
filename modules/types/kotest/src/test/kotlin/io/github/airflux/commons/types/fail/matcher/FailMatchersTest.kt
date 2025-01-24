@@ -37,7 +37,11 @@ internal class FailMatchersTest : FreeSpec() {
                     }
 
                     assertionCorrect {
-                        val error = result.shouldBeError()
+                        result.shouldBeError()
+                    }
+
+                    assertionCorrect {
+                        val error = result.shouldContainErrorInstance()
                         error shouldBe ERROR_VALUE
                     }
 
@@ -89,7 +93,11 @@ internal class FailMatchersTest : FreeSpec() {
                     }
 
                     assertionCorrect {
-                        val exception = result.shouldBeException()
+                        result.shouldBeException()
+                    }
+
+                    assertionCorrect {
+                        val exception = result.shouldContainExceptionInstance()
                         exception shouldBe EXCEPTION_VALUE
                     }
 

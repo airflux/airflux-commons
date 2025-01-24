@@ -30,10 +30,14 @@ public fun <ValueT> beSuccess(expected: ValueT): Matcher<ResultK<ValueT, *>> =
     ValueMatcher(ResultK.Success(expected))
 
 @OptIn(ExperimentalContracts::class)
-public fun <ValueT> ResultK<ValueT, *>.shouldBeSuccess(): ValueT {
+public fun <ValueT> ResultK<ValueT, *>.shouldBeSuccess() {
     contract {
         returns() implies (this@shouldBeSuccess is ResultK.Success<ValueT>)
     }
+    this should beSuccess()
+}
+
+public fun <ValueT> ResultK<ValueT, *>.shouldContainSuccessInstance(): ValueT {
     this should beSuccess()
     return (this as ResultK.Success<ValueT>).value
 }
@@ -48,10 +52,14 @@ public fun <FailureT : Any> beFailure(expected: FailureT): Matcher<ResultK<*, Fa
     ValueMatcher(ResultK.Failure(expected))
 
 @OptIn(ExperimentalContracts::class)
-public fun <FailureT : Any> ResultK<*, FailureT>.shouldBeFailure(): FailureT {
+public fun <FailureT : Any> ResultK<*, FailureT>.shouldBeFailure() {
     contract {
         returns() implies (this@shouldBeFailure is ResultK.Failure<FailureT>)
     }
+    this should beFailure()
+}
+
+public fun <FailureT : Any> ResultK<*, FailureT>.shouldContainFailureInstance(): FailureT {
     this should beFailure()
     return (this as ResultK.Failure<FailureT>).cause
 }

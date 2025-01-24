@@ -37,7 +37,11 @@ internal class EitherMatchersTest : FreeSpec() {
                     }
 
                     assertionCorrect {
-                        val left = result.shouldBeLeft()
+                        result.shouldBeLeft()
+                    }
+
+                    assertionCorrect {
+                        val left = result.shouldContainLeftInstance()
                         left shouldBe LEFT_VALUE
                     }
 
@@ -89,7 +93,11 @@ internal class EitherMatchersTest : FreeSpec() {
                     }
 
                     assertionCorrect {
-                        val right = result.shouldBeRight()
+                        result.shouldBeRight()
+                    }
+
+                    assertionCorrect {
+                        val right = result.shouldContainRightInstance()
                         right shouldBe RIGHT_VALUE
                     }
 

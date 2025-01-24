@@ -29,10 +29,14 @@ public fun beLeft(): Matcher<Either<*, *>> = TypeMatcher(Either.Left::class)
 public fun <LeftT> beLeft(expected: LeftT): Matcher<Either<LeftT, *>> = ValueMatcher(Either.Left(expected))
 
 @OptIn(ExperimentalContracts::class)
-public fun <LeftT> Either<LeftT, *>.shouldBeLeft(): LeftT {
+public fun <LeftT> Either<LeftT, *>.shouldBeLeft() {
     contract {
         returns() implies (this@shouldBeLeft is Either.Left<LeftT>)
     }
+    this should beLeft()
+}
+
+public fun <LeftT> Either<LeftT, *>.shouldContainLeftInstance(): LeftT {
     this should beLeft()
     return (this as Either.Left<LeftT>).value
 }
@@ -46,10 +50,14 @@ public fun beRight(): Matcher<Either<*, *>> = TypeMatcher(Either.Right::class)
 public fun <RightT> beRight(expected: RightT): Matcher<Either<*, RightT>> = ValueMatcher(Either.Right(expected))
 
 @OptIn(ExperimentalContracts::class)
-public fun <RightT> Either<*, RightT>.shouldBeRight(): RightT {
+public fun <RightT> Either<*, RightT>.shouldBeRight() {
     contract {
         returns() implies (this@shouldBeRight is Either.Right<RightT>)
     }
+    this should beRight()
+}
+
+public fun <RightT> Either<*, RightT>.shouldContainRightInstance(): RightT {
     this should beRight()
     return (this as Either.Right<RightT>).value
 }
