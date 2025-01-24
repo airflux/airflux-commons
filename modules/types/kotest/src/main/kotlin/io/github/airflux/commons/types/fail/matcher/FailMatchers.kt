@@ -26,48 +26,50 @@ import kotlin.reflect.KClass
 
 public fun beError(): Matcher<Fail<*, *>> = TypeMatcher(Fail.Error::class)
 
-public fun <ErrorT> beError(expected: ErrorT): Matcher<Fail<ErrorT, *>> = ValueMatcher(Fail.Error(expected))
+public fun <ErrorT : Any> beError(expected: ErrorT): Matcher<Fail<ErrorT, *>> = ValueMatcher(Fail.Error(expected))
 
 @OptIn(ExperimentalContracts::class)
-public fun <ErrorT> Fail<ErrorT, *>.shouldBeError() {
+public fun <ErrorT : Any> Fail<ErrorT, *>.shouldBeError() {
     contract {
         returns() implies (this@shouldBeError is Fail.Error<ErrorT>)
     }
     this should beError()
 }
 
-public infix fun <ErrorT> Fail<ErrorT, *>.shouldBeError(expected: ErrorT) {
+public infix fun <ErrorT : Any> Fail<ErrorT, *>.shouldBeError(expected: ErrorT) {
     this should beError(expected)
 }
 
 public fun beException(): Matcher<Fail<*, *>> = TypeMatcher(Fail.Exception::class)
 
-public fun <ExceptionT> beException(expected: ExceptionT): Matcher<Fail<*, ExceptionT>> =
+public fun <ExceptionT : Any> beException(expected: ExceptionT): Matcher<Fail<*, ExceptionT>> =
     ValueMatcher(Fail.Exception(expected))
 
 @OptIn(ExperimentalContracts::class)
-public fun <ExceptionT> Fail<*, ExceptionT>.shouldBeException() {
+public fun <ExceptionT : Any> Fail<*, ExceptionT>.shouldBeException() {
     contract {
         returns() implies (this@shouldBeException is Fail.Exception<ExceptionT>)
     }
     this should beException()
 }
 
-public infix fun <R> Fail<*, R>.shouldBeException(expected: R) {
+public infix fun <ExceptionT : Any> Fail<*, ExceptionT>.shouldBeException(expected: ExceptionT) {
     this should beException(expected)
 }
 
-private class ValueMatcher<L, R>(private val expected: Fail<L, R>) : Matcher<Fail<L, R>> {
+private class ValueMatcher<ErrorT : Any, ExceptionT : Any>(private val expected: Fail<ErrorT, ExceptionT>) :
+    Matcher<Fail<ErrorT, ExceptionT>> {
 
-    override fun test(value: Fail<L, R>) = comparableMatcherResult(
+    override fun test(value: Fail<ErrorT, ExceptionT>) = comparableMatcherResult(
         passed = expected == value,
         actual = value.toString(),
         expected = expected.toString()
     )
 }
 
-private class TypeMatcher<ErrorT, ExceptionT, C : Fail<ErrorT, ExceptionT>>(private val expected: KClass<C>) :
-    Matcher<Fail<ErrorT, ExceptionT>> {
+private class TypeMatcher<ErrorT : Any, ExceptionT : Any, C : Fail<ErrorT, ExceptionT>>(
+    private val expected: KClass<C>
+) : Matcher<Fail<ErrorT, ExceptionT>> {
 
     override fun test(value: Fail<ErrorT, ExceptionT>) = comparableMatcherResult(
         passed = expected.isInstance(value),

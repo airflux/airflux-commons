@@ -69,7 +69,7 @@ public final class io/github/airflux/commons/types/either/Either$Right$Companion
 	public final fun of (Z)Lio/github/airflux/commons/types/either/Either$Right;
 }
 
-public final class io/github/airflux/commons/types/either/EitherKt {
+public final class io/github/airflux/commons/types/either/EitherExtensionsKt {
 	public static final fun asLeft (Ljava/lang/Object;)Lio/github/airflux/commons/types/either/Either$Left;
 	public static final fun asRight (Ljava/lang/Object;)Lio/github/airflux/commons/types/either/Either$Right;
 	public static final fun flatMapLeft (Lio/github/airflux/commons/types/either/Either;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/either/Either;
@@ -129,7 +129,7 @@ public final class io/github/airflux/commons/types/fail/Fail$Exception : io/gith
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/commons/types/fail/FailKt {
+public final class io/github/airflux/commons/types/fail/FailExtensionsKt {
 	public static final fun asError (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Error;
 	public static final fun asException (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Exception;
 	public static final fun error (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Error;
@@ -211,7 +211,7 @@ public final class io/github/airflux/commons/types/resultk/ResultKDSLKt {
 	public static final fun resultWith (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 }
 
-public final class io/github/airflux/commons/types/resultk/ResultKKt {
+public final class io/github/airflux/commons/types/resultk/ResultKExtensionsKt {
 	public static final fun andThen (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun apply (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun asFailure (Ljava/lang/Object;)Lio/github/airflux/commons/types/resultk/ResultK$Failure;

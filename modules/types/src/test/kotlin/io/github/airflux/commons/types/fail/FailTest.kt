@@ -528,5 +528,7 @@ internal class FailTest : FreeSpec() {
         private const val ALTERNATIVE_VALUE = "20"
     }
 
-    private fun <T, E> createFail(value: Fail<T, E>): Fail<T, E> = value
+    private fun <ErrorT : Any, ExceptionT : Any> createFail(
+        value: Fail<ErrorT, ExceptionT>
+    ): Fail<ErrorT, ExceptionT> = value
 }
