@@ -33,11 +33,11 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
 @Suppress("LargeClass")
-internal class ResultKTest : FreeSpec() {
+internal class ResultKExtensionsTest : FreeSpec() {
 
     init {
 
-        "The `ResultK` type functions" - {
+        "The extension functions of the `ResultK` type" - {
 
             "the `isSuccess` function" - {
 

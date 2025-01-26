@@ -25,11 +25,11 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
 @Suppress("LargeClass")
-internal class FailTest : FreeSpec() {
+internal class FailExtensionsTest : FreeSpec() {
 
     init {
 
-        "The `Fail` type functions" - {
+        "The extension functions of the `Fail` type" - {
 
             "the `isError` function" - {
 

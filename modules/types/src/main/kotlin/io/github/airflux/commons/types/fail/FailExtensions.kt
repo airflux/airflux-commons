@@ -69,10 +69,10 @@ public inline fun <ErrorT : Any, ExceptionT : Any> Fail<ErrorT, ExceptionT>.isEx
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ErrorT : Any, ExceptionT : Any, ResultT : Any> Fail<ErrorT, ExceptionT>.fold(
-    onError: (ErrorT) -> ResultT,
-    onException: (ExceptionT) -> ResultT
-): ResultT {
+public inline fun <ErrorT : Any, ExceptionT : Any, FailureT> Fail<ErrorT, ExceptionT>.fold(
+    onError: (ErrorT) -> FailureT,
+    onException: (ExceptionT) -> FailureT
+): FailureT {
     contract {
         callsInPlace(onError, AT_MOST_ONCE)
         callsInPlace(onException, AT_MOST_ONCE)

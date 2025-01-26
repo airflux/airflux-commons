@@ -27,11 +27,11 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
 @Suppress("LargeClass")
-internal class EitherTest : FreeSpec() {
+internal class EitherExtensionsTest : FreeSpec() {
 
     init {
 
-        "The `Either` type functions" - {
+        "The extension functions of the `Either` type" - {
 
             "the `isLeft` function" - {
 
