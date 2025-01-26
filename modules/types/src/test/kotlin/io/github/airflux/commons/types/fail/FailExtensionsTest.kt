@@ -147,7 +147,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 "when a variable has the `Exception` type" - {
                     val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
 
-                    "then this function should return the null value" {
+                    "then this function should return the alternative value" {
                         val result = original.fold(onError = { it }, onException = { ALTERNATIVE_VALUE })
                         result shouldBe ALTERNATIVE_VALUE
                     }

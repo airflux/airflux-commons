@@ -155,7 +155,7 @@ internal class ResultKExtensionsTest : FreeSpec() {
                 "when a variable has the `Failure` type" - {
                     val original: ResultK<String, Errors> = createResult(Failure(Errors.Empty))
 
-                    "then this function should return the null value" {
+                    "then this function should return the alternative value" {
                         val result = original.fold(onFailure = { ALTERNATIVE_VALUE }, onSuccess = { it })
                         result shouldBe ALTERNATIVE_VALUE
                     }

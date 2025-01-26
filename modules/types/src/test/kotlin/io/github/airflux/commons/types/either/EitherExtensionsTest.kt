@@ -149,7 +149,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 "when a variable has the `Right` type" - {
                     val original: Either<String, Errors> = createEither(Right(Errors.Empty))
 
-                    "then this function should return the null value" {
+                    "then this function should return the alternative value" {
                         val result = original.fold(onLeft = { it }, onRight = { ALTERNATIVE_VALUE })
                         result shouldBe ALTERNATIVE_VALUE
                     }
