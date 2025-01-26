@@ -36,7 +36,11 @@ public fun <LeftT> Either<LeftT, *>.shouldBeLeft() {
     this should beLeft()
 }
 
+@OptIn(ExperimentalContracts::class)
 public fun <LeftT> Either<LeftT, *>.shouldContainLeftInstance(): LeftT {
+    contract {
+        returns() implies (this@shouldContainLeftInstance is Either.Left<LeftT>)
+    }
     this should beLeft()
     return (this as Either.Left<LeftT>).value
 }
@@ -57,7 +61,11 @@ public fun <RightT> Either<*, RightT>.shouldBeRight() {
     this should beRight()
 }
 
+@OptIn(ExperimentalContracts::class)
 public fun <RightT> Either<*, RightT>.shouldContainRightInstance(): RightT {
+    contract {
+        returns() implies (this@shouldContainRightInstance is Either.Right<RightT>)
+    }
     this should beRight()
     return (this as Either.Right<RightT>).value
 }

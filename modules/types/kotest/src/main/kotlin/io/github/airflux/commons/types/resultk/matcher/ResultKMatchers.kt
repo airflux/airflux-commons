@@ -37,7 +37,11 @@ public fun <ValueT> ResultK<ValueT, *>.shouldBeSuccess() {
     this should beSuccess()
 }
 
+@OptIn(ExperimentalContracts::class)
 public fun <ValueT> ResultK<ValueT, *>.shouldContainSuccessInstance(): ValueT {
+    contract {
+        returns() implies (this@shouldContainSuccessInstance is ResultK.Success<ValueT>)
+    }
     this should beSuccess()
     return (this as ResultK.Success<ValueT>).value
 }
@@ -59,7 +63,11 @@ public fun <FailureT : Any> ResultK<*, FailureT>.shouldBeFailure() {
     this should beFailure()
 }
 
+@OptIn(ExperimentalContracts::class)
 public fun <FailureT : Any> ResultK<*, FailureT>.shouldContainFailureInstance(): FailureT {
+    contract {
+        returns() implies (this@shouldContainFailureInstance is ResultK.Failure<FailureT>)
+    }
     this should beFailure()
     return (this as ResultK.Failure<FailureT>).cause
 }

@@ -36,7 +36,11 @@ public fun <ErrorT : Any> Fail<ErrorT, *>.shouldBeError() {
     this should beError()
 }
 
+@OptIn(ExperimentalContracts::class)
 public fun <ErrorT : Any> Fail<ErrorT, *>.shouldContainErrorInstance(): ErrorT {
+    contract {
+        returns() implies (this@shouldContainErrorInstance is Fail.Error<ErrorT>)
+    }
     this should beError()
     return (this as Fail.Error<ErrorT>).value
 }
@@ -58,7 +62,11 @@ public fun <ExceptionT : Any> Fail<*, ExceptionT>.shouldBeException() {
     this should beException()
 }
 
+@OptIn(ExperimentalContracts::class)
 public fun <ExceptionT : Any> Fail<*, ExceptionT>.shouldContainExceptionInstance(): ExceptionT {
+    contract {
+        returns() implies (this@shouldContainExceptionInstance is Fail.Exception<ExceptionT>)
+    }
     this should beException()
     return (this as Fail.Exception<ExceptionT>).value
 }
