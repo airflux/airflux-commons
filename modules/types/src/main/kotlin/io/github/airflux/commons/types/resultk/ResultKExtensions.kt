@@ -227,12 +227,12 @@ public inline infix fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.orEls
 
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.orThrow(
-    exceptionBuilder: (FailureT) -> Throwable
+    builder: (FailureT) -> Throwable
 ): ValueT {
     contract {
-        callsInPlace(exceptionBuilder, AT_MOST_ONCE)
+        callsInPlace(builder, AT_MOST_ONCE)
     }
-    return if (isSuccess()) value else throw exceptionBuilder(cause)
+    return if (isSuccess()) value else throw builder(cause)
 }
 
 @OptIn(ExperimentalContracts::class)

@@ -138,8 +138,6 @@ public final class io/github/airflux/commons/types/fail/FailExtensionsKt {
 	public static final fun exception (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Exception;
 	public static final fun exceptionOrElse (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/fail/Fail;
 	public static final fun exceptionOrThrow (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public static final fun flatMapError (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
-	public static final fun flatMapException (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
 	public static final fun fold (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public static final fun getErrorOrElse (Lio/github/airflux/commons/types/fail/Fail;Ljava/lang/Object;)Ljava/lang/Object;
 	public static final fun getErrorOrElse (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;

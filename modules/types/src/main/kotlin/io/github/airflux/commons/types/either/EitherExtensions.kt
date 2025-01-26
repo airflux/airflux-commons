@@ -197,23 +197,19 @@ public inline infix fun <LeftT, RightT> Either<LeftT, RightT>.rightOrElse(
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <LeftT, RightT> Either<LeftT, RightT>.leftOrThrow(
-    exceptionBuilder: (RightT) -> Throwable
-): LeftT {
+public inline infix fun <LeftT, RightT> Either<LeftT, RightT>.leftOrThrow(builder: (RightT) -> Throwable): LeftT {
     contract {
-        callsInPlace(exceptionBuilder, AT_MOST_ONCE)
+        callsInPlace(builder, AT_MOST_ONCE)
     }
-    return if (isLeft()) value else throw exceptionBuilder(value)
+    return if (isLeft()) value else throw builder(value)
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <LeftT, RightT> Either<LeftT, RightT>.rightOrThrow(
-    exceptionBuilder: (LeftT) -> Throwable
-): RightT {
+public inline infix fun <LeftT, RightT> Either<LeftT, RightT>.rightOrThrow(builder: (LeftT) -> Throwable): RightT {
     contract {
-        callsInPlace(exceptionBuilder, AT_MOST_ONCE)
+        callsInPlace(builder, AT_MOST_ONCE)
     }
-    return if (isRight()) value else throw exceptionBuilder(value)
+    return if (isRight()) value else throw builder(value)
 }
 
 public fun <T> Either<T, T>.merge(): T = fold(onLeft = ::identity, onRight = ::identity)

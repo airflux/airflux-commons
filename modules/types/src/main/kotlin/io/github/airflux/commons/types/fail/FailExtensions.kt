@@ -87,17 +87,7 @@ public inline infix fun <ErrorT : Any, ErrorR : Any, ExceptionT : Any> Fail<Erro
     contract {
         callsInPlace(transform, AT_MOST_ONCE)
     }
-    return flatMapError { value -> transform(value).asError() }
-}
-
-@OptIn(ExperimentalContracts::class)
-public inline infix fun <ErrorT : Any, ErrorR : Any, ExceptionT : Any> Fail<ErrorT, ExceptionT>.flatMapError(
-    transform: (ErrorT) -> Fail<ErrorR, ExceptionT>
-): Fail<ErrorR, ExceptionT> {
-    contract {
-        callsInPlace(transform, AT_MOST_ONCE)
-    }
-    return if (isError()) transform(value) else this
+    return if (isError()) transform(value).asError() else this
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -107,17 +97,7 @@ public inline infix fun <ErrorT : Any, ExceptionT : Any, ExceptionR : Any> Fail<
     contract {
         callsInPlace(transform, AT_MOST_ONCE)
     }
-    return flatMapException { value -> transform(value).asException() }
-}
-
-@OptIn(ExperimentalContracts::class)
-public inline infix fun <ErrorT : Any, ExceptionT : Any, ExceptionR : Any> Fail<ErrorT, ExceptionT>.flatMapException(
-    transform: (ExceptionT) -> Fail<ErrorT, ExceptionR>
-): Fail<ErrorT, ExceptionR> {
-    contract {
-        callsInPlace(transform, AT_MOST_ONCE)
-    }
-    return if (isException()) transform(value) else this
+    return if (isException()) transform(value).asException() else this
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -208,20 +188,20 @@ public inline infix fun <ErrorT : Any, ExceptionT : Any> Fail<ErrorT, ExceptionT
 
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <ErrorT : Any, ExceptionT : Any> Fail<ErrorT, ExceptionT>.errorOrThrow(
-    exceptionBuilder: (ExceptionT) -> Throwable
+    builder: (ExceptionT) -> Throwable
 ): ErrorT {
     contract {
-        callsInPlace(exceptionBuilder, AT_MOST_ONCE)
+        callsInPlace(builder, AT_MOST_ONCE)
     }
-    return if (isError()) value else throw exceptionBuilder(value)
+    return if (isError()) value else throw builder(value)
 }
 
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <ErrorT : Any, ExceptionT : Any> Fail<ErrorT, ExceptionT>.exceptionOrThrow(
-    exceptionBuilder: (ErrorT) -> Throwable
+    builder: (ErrorT) -> Throwable
 ): ExceptionT {
     contract {
-        callsInPlace(exceptionBuilder, AT_MOST_ONCE)
+        callsInPlace(builder, AT_MOST_ONCE)
     }
-    return if (isException()) value else throw exceptionBuilder(value)
+    return if (isException()) value else throw builder(value)
 }

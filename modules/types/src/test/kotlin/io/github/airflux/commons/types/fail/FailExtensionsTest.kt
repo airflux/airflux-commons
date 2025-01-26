@@ -175,30 +175,6 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
             }
 
-            "the `flatMapError` function" - {
-
-                "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
-
-                    "then this function should return a result of applying the transform function to the value" {
-                        val result = original.flatMapError { result -> error(result.toInt()) }
-                        result shouldBeError ORIGINAL_VALUE.toInt()
-                    }
-                }
-
-                "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
-
-                    "then this function should return an original do not apply the transform function to a value" {
-                        val result = original.flatMapError { success ->
-                            error(success.toInt())
-                        }
-
-                        result shouldBeSameInstanceAs original
-                    }
-                }
-            }
-
             "the `mapException` function" - {
 
                 "when a variable has the `Error` type" - {
@@ -215,30 +191,6 @@ internal class FailExtensionsTest : FreeSpec() {
 
                     "then this function should return a result of applying the transform function to the value" {
                         val result = original.mapException { it.toInt() }
-                        result shouldBeException ORIGINAL_VALUE.toInt()
-                    }
-                }
-            }
-
-            "the `flatMapException` function" - {
-
-                "when a variable has the `Error` type" - {
-                    val original: Fail<String, String> = createFail(error(ORIGINAL_VALUE))
-
-                    "then this function should return an original do not apply the transform function to a value" {
-                        val result = original.flatMapException { success ->
-                            error(success.toInt())
-                        }
-
-                        result shouldBeSameInstanceAs original
-                    }
-                }
-
-                "when a variable has the `Exception` type" - {
-                    val original: Fail<String, String> = createFail(exception(ORIGINAL_VALUE))
-
-                    "then this function should return a result of applying the transform function to the value" {
-                        val result = original.flatMapException { result -> exception(result.toInt()) }
                         result shouldBeException ORIGINAL_VALUE.toInt()
                     }
                 }
