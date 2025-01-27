@@ -15,9 +15,11 @@
  */
 package io.github.airflux.commons.types.either
 
+import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.either.matcher.shouldBeRight
 import io.kotest.core.spec.style.FreeSpec
 
+@OptIn(AirfluxTypesExperimental::class)
 internal class RightTest : FreeSpec() {
 
     init {
@@ -25,27 +27,27 @@ internal class RightTest : FreeSpec() {
         "The `Right` type" - {
 
             "the `asNull` property should return the `Right` type with the `null` value" {
-                val result: Either<String, String?> = Right.asNull
+                val result: Either<String, String?> = Either.Right.asNull
                 result shouldBeRight null
             }
 
             "the `asTrue` property should return the `Right` type with the `true` value" {
-                val result: Either<String, Boolean> = Right.asTrue
+                val result: Either<String, Boolean> = Either.Right.asTrue
                 result shouldBeRight true
             }
 
             "the `asFalse` property should return the `Right` type with the `false` value" {
-                val result: Either<String, Boolean> = Right.asFalse
+                val result: Either<String, Boolean> = Either.Right.asFalse
                 result shouldBeRight false
             }
 
             "the `asUnit` property should return the `Right` type with the `Unit` value" {
-                val result: Either<String, Unit> = Right.asUnit
+                val result: Either<String, Unit> = Either.Right.asUnit
                 result shouldBeRight Unit
             }
 
             "the `asEmptyList` property should return the `Right` type with the `empty list` value" {
-                val result: Either<String, List<String>> = Right.asEmptyList
+                val result: Either<String, List<String>> = Either.Right.asEmptyList
                 result shouldBeRight emptyList()
             }
 
@@ -55,7 +57,7 @@ internal class RightTest : FreeSpec() {
                     val param = true
 
                     "then this function should return the `Right` type with the `true` value" {
-                        val result: Either<String, Boolean> = Right.of(param)
+                        val result: Either<String, Boolean> = Either.Right.of(param)
                         result shouldBeRight true
                     }
                 }
@@ -64,7 +66,7 @@ internal class RightTest : FreeSpec() {
                     val param = false
 
                     "then this function should return the `Right` type with the `true` value" {
-                        val result: Either<String, Boolean> = Right.of(param)
+                        val result: Either<String, Boolean> = Either.Right.of(param)
                         result shouldBeRight false
                     }
                 }

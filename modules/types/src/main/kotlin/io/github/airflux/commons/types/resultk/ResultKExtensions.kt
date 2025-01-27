@@ -26,21 +26,21 @@ import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 import kotlin.experimental.ExperimentalTypeInference
 
-public fun <ValueT> ValueT.asSuccess(): Success<ValueT> = ResultK.success(this)
+public fun <ValueT> ValueT.asSuccess(): ResultK.Success<ValueT> = ResultK.success(this)
 
-public fun <FailureT : Any> FailureT.asFailure(): Failure<FailureT> = ResultK.failure(this)
+public fun <FailureT : Any> FailureT.asFailure(): ResultK.Failure<FailureT> = ResultK.failure(this)
 
-public fun <ValueT> success(value: ValueT): Success<ValueT> = ResultK.success(value)
+public fun <ValueT> success(value: ValueT): ResultK.Success<ValueT> = ResultK.success(value)
 
-public fun <FailureT : Any> failure(cause: FailureT): Failure<FailureT> = ResultK.failure(cause)
+public fun <FailureT : Any> failure(cause: FailureT): ResultK.Failure<FailureT> = ResultK.failure(cause)
 
 @OptIn(ExperimentalContracts::class)
 public fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.isSuccess(): Boolean {
     contract {
-        returns(true) implies (this@isSuccess is Success<ValueT>)
-        returns(false) implies (this@isSuccess is Failure<FailureT>)
+        returns(true) implies (this@isSuccess is ResultK.Success<ValueT>)
+        returns(false) implies (this@isSuccess is ResultK.Failure<FailureT>)
     }
-    return this is Success<ValueT>
+    return this is ResultK.Success<ValueT>
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -50,16 +50,16 @@ public inline fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.isSuccess(
     contract {
         callsInPlace(predicate, AT_MOST_ONCE)
     }
-    return this is Success<ValueT> && predicate(value)
+    return this is ResultK.Success<ValueT> && predicate(value)
 }
 
 @OptIn(ExperimentalContracts::class)
 public fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.isFailure(): Boolean {
     contract {
-        returns(false) implies (this@isFailure is Success<ValueT>)
-        returns(true) implies (this@isFailure is Failure<FailureT>)
+        returns(false) implies (this@isFailure is ResultK.Success<ValueT>)
+        returns(true) implies (this@isFailure is ResultK.Failure<FailureT>)
     }
-    return this is Failure<FailureT>
+    return this is ResultK.Failure<FailureT>
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -69,7 +69,7 @@ public inline fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.isFailure(
     contract {
         callsInPlace(predicate, AT_MOST_ONCE)
     }
-    return this is Failure<FailureT> && predicate(cause)
+    return this is ResultK.Failure<FailureT> && predicate(cause)
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -184,7 +184,7 @@ public inline infix fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.recov
 
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.getOrForward(
-    block: (Failure<FailureT>) -> Nothing
+    block: (ResultK.Failure<FailureT>) -> Nothing
 ): ValueT {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
@@ -195,8 +195,8 @@ public inline infix fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.getOr
 @OptIn(ExperimentalContracts::class)
 public fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.getOrNull(): ValueT? {
     contract {
-        returns(null) implies (this@getOrNull is Failure<FailureT>)
-        returnsNotNull() implies (this@getOrNull is Success<ValueT>)
+        returns(null) implies (this@getOrNull is ResultK.Failure<FailureT>)
+        returnsNotNull() implies (this@getOrNull is ResultK.Success<ValueT>)
     }
 
     return if (isSuccess()) value else null
@@ -238,8 +238,8 @@ public inline infix fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.orThr
 @OptIn(ExperimentalContracts::class)
 public fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.getFailureOrNull(): FailureT? {
     contract {
-        returns(null) implies (this@getFailureOrNull is Success<ValueT>)
-        returnsNotNull() implies (this@getFailureOrNull is Failure<FailureT>)
+        returns(null) implies (this@getFailureOrNull is ResultK.Success<ValueT>)
+        returnsNotNull() implies (this@getFailureOrNull is ResultK.Failure<FailureT>)
     }
 
     return if (isFailure()) cause else null
@@ -288,7 +288,7 @@ public inline fun <ValueT, SuccessR, FailureT : Any> Iterable<ValueT>.traverse(
             add(item.value)
         }
     }
-    return if (items.isNotEmpty()) items.asSuccess() else Success.asEmptyList
+    return if (items.isNotEmpty()) items.asSuccess() else ResultK.Success.asEmptyList
 }
 
 @OptIn(ExperimentalContracts::class)

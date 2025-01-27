@@ -23,21 +23,21 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 
-public fun <LeftT> LeftT.asLeft(): Left<LeftT> = Either.left(this)
+public fun <LeftT> LeftT.asLeft(): Either.Left<LeftT> = Either.left(this)
 
-public fun <RightT> RightT.asRight(): Right<RightT> = Either.right(this)
+public fun <RightT> RightT.asRight(): Either.Right<RightT> = Either.right(this)
 
-public fun <LeftT> left(value: LeftT): Left<LeftT> = Either.left(value)
+public fun <LeftT> left(value: LeftT): Either.Left<LeftT> = Either.left(value)
 
-public fun <RightT> right(cause: RightT): Right<RightT> = Either.right(cause)
+public fun <RightT> right(cause: RightT): Either.Right<RightT> = Either.right(cause)
 
 @OptIn(ExperimentalContracts::class)
 public fun <LeftT, RightT> Either<LeftT, RightT>.isLeft(): Boolean {
     contract {
-        returns(true) implies (this@isLeft is Left<LeftT>)
-        returns(false) implies (this@isLeft is Right<RightT>)
+        returns(true) implies (this@isLeft is Either.Left<LeftT>)
+        returns(false) implies (this@isLeft is Either.Right<RightT>)
     }
-    return this is Left<LeftT>
+    return this is Either.Left<LeftT>
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -45,16 +45,16 @@ public inline fun <LeftT, RightT> Either<LeftT, RightT>.isLeft(predicate: (LeftT
     contract {
         callsInPlace(predicate, AT_MOST_ONCE)
     }
-    return this is Left<LeftT> && predicate(value)
+    return this is Either.Left<LeftT> && predicate(value)
 }
 
 @OptIn(ExperimentalContracts::class)
 public fun <LeftT, RightT> Either<LeftT, RightT>.isRight(): Boolean {
     contract {
-        returns(false) implies (this@isRight is Left<LeftT>)
-        returns(true) implies (this@isRight is Right<RightT>)
+        returns(false) implies (this@isRight is Either.Left<LeftT>)
+        returns(true) implies (this@isRight is Either.Right<RightT>)
     }
-    return this is Right<RightT>
+    return this is Either.Right<RightT>
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -62,7 +62,7 @@ public inline fun <LeftT, RightT> Either<LeftT, RightT>.isRight(predicate: (Righ
     contract {
         callsInPlace(predicate, AT_MOST_ONCE)
     }
-    return this is Right<RightT> && predicate(value)
+    return this is Either.Right<RightT> && predicate(value)
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -137,8 +137,8 @@ public inline fun <LeftT, RightT> Either<LeftT, RightT>.onRight(block: (RightT) 
 @OptIn(ExperimentalContracts::class)
 public fun <LeftT, RightT> Either<LeftT, RightT>.getLeftOrNull(): LeftT? {
     contract {
-        returnsNotNull() implies (this@getLeftOrNull is Left<LeftT>)
-        returns(null) implies (this@getLeftOrNull is Right<RightT>)
+        returnsNotNull() implies (this@getLeftOrNull is Either.Left<LeftT>)
+        returns(null) implies (this@getLeftOrNull is Either.Right<RightT>)
     }
 
     return if (isLeft()) value else null
@@ -147,8 +147,8 @@ public fun <LeftT, RightT> Either<LeftT, RightT>.getLeftOrNull(): LeftT? {
 @OptIn(ExperimentalContracts::class)
 public fun <LeftT, RightT> Either<LeftT, RightT>.getRightOrNull(): RightT? {
     contract {
-        returns(null) implies (this@getRightOrNull is Left<LeftT>)
-        returnsNotNull() implies (this@getRightOrNull is Right<RightT>)
+        returns(null) implies (this@getRightOrNull is Either.Left<LeftT>)
+        returnsNotNull() implies (this@getRightOrNull is Either.Right<RightT>)
     }
 
     return if (isRight()) value else null

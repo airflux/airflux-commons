@@ -20,7 +20,6 @@ import io.github.airflux.commons.assertionCorrect
 import io.github.airflux.commons.assertionIncorrect
 import io.github.airflux.commons.types.resultk.ResultK
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 internal class ResultKMatchersTest : FreeSpec() {
@@ -33,33 +32,30 @@ internal class ResultKMatchersTest : FreeSpec() {
 
                 "then the Success expectation assertion should be correct" {
                     assertionCorrect {
-                        result should beSuccess()
+                        result.shouldBeSuccess()
                     }
 
                     assertionCorrect {
-                        result.shouldBeSuccess()
+                        result shouldBeSuccess SUCCESS_VALUE
                     }
 
                     assertionCorrect {
                         val success = result.shouldContainSuccessInstance()
                         success shouldBe SUCCESS_VALUE
                     }
-
-                    assertionCorrect {
-                        result should beSuccess(SUCCESS_VALUE)
-                    }
-
-                    assertionCorrect {
-                        result shouldBeSuccess SUCCESS_VALUE
-                    }
                 }
 
                 "then the Failure expectation assertion should be incorrect" {
-                    assertionIncorrect("expected:<${ResultK.Failure::class.simpleName}> but was:<$result>") {
+                    assertionIncorrect("expected:<$EXPECTED_FAILURE_TYPE> but was:<$result>") {
                         result.shouldBeFailure()
                     }
-                    assertionIncorrect("expected:<${ResultK.Failure(cause = FAILURE_VALUE)}> but was:<$result>") {
+
+                    assertionIncorrect("expected:<$expectedFailureValue> but was:<$result>") {
                         result shouldBeFailure FAILURE_VALUE
+                    }
+
+                    assertionIncorrect("expected:<$EXPECTED_FAILURE_TYPE> but was:<$result>") {
+                        result.shouldContainFailureInstance()
                     }
                 }
 
@@ -79,34 +75,31 @@ internal class ResultKMatchersTest : FreeSpec() {
                 val result: ResultK<Int, String> = ResultK.Failure(FAILURE_VALUE)
 
                 "then the Success expectation assertion should be incorrect" {
-                    assertionIncorrect("expected:<${ResultK.Success::class.simpleName}> but was:<$result>") {
+                    assertionIncorrect("expected:<$EXPECTED_SUCCESS_TYPE> but was:<$result>") {
                         result.shouldBeSuccess()
                     }
-                    assertionIncorrect("expected:<${ResultK.Success(value = SUCCESS_VALUE)}> but was:<$result>") {
+
+                    assertionIncorrect("expected:<$expectedSuccessValue> but was:<$result>") {
                         result shouldBeSuccess SUCCESS_VALUE
+                    }
+
+                    assertionIncorrect("expected:<$EXPECTED_SUCCESS_TYPE> but was:<$result>") {
+                        result.shouldContainSuccessInstance()
                     }
                 }
 
                 "then the Failure expectation assertion should be correct" {
                     assertionCorrect {
-                        result should beFailure()
+                        result.shouldBeFailure()
                     }
 
                     assertionCorrect {
-                        result.shouldBeFailure()
+                        result shouldBeFailure FAILURE_VALUE
                     }
 
                     assertionCorrect {
                         val failure = result.shouldContainFailureInstance()
                         failure shouldBe FAILURE_VALUE
-                    }
-
-                    assertionCorrect {
-                        result should beFailure(FAILURE_VALUE)
-                    }
-
-                    assertionCorrect {
-                        result shouldBeFailure FAILURE_VALUE
                     }
                 }
 
@@ -129,5 +122,11 @@ internal class ResultKMatchersTest : FreeSpec() {
         private const val EXPECTED_VALUE = "Expected value"
         private const val FAILURE_VALUE = "Failed"
         private const val SUCCESS_VALUE = 42
+
+        private const val EXPECTED_SUCCESS_TYPE = "ResultK.Success<Int>"
+        private const val EXPECTED_FAILURE_TYPE = "ResultK.Failure<String>"
+
+        private val expectedSuccessValue = ResultK.Success(value = SUCCESS_VALUE)
+        private val expectedFailureValue = ResultK.Failure(FAILURE_VALUE)
     }
 }

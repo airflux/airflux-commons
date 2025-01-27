@@ -18,11 +18,12 @@ package io.github.airflux.commons.types.fail.matcher
 
 import io.github.airflux.commons.assertionCorrect
 import io.github.airflux.commons.assertionIncorrect
+import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.fail.Fail
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+@OptIn(AirfluxTypesExperimental::class)
 internal class FailMatchersTest : FreeSpec() {
 
     init {
@@ -33,33 +34,30 @@ internal class FailMatchersTest : FreeSpec() {
 
                 "then the Error expectation assertion should be correct" {
                     assertionCorrect {
-                        result should beError()
+                        result.shouldBeError()
                     }
 
                     assertionCorrect {
-                        result.shouldBeError()
+                        result shouldBeError ERROR_VALUE
                     }
 
                     assertionCorrect {
                         val error = result.shouldContainErrorInstance()
                         error shouldBe ERROR_VALUE
                     }
-
-                    assertionCorrect {
-                        result should beError(ERROR_VALUE)
-                    }
-
-                    assertionCorrect {
-                        result shouldBeError ERROR_VALUE
-                    }
                 }
 
-                "then the Right expectation assertion should be incorrect" {
-                    assertionIncorrect("expected:<${Fail.Exception::class.simpleName}> but was:<$result>") {
+                "then the Exception expectation assertion should be incorrect" {
+                    assertionIncorrect("expected:<$EXPECTED_EXCEPTION_TYPE> but was:<$result>") {
                         result.shouldBeException()
                     }
-                    assertionIncorrect("expected:<${Fail.Exception(value = EXCEPTION_VALUE)}> but was:<$result>") {
+
+                    assertionIncorrect("expected:<$expectedExceptionValue> but was:<$result>") {
                         result shouldBeException EXCEPTION_VALUE
+                    }
+
+                    assertionIncorrect("expected:<$EXPECTED_EXCEPTION_TYPE> but was:<$result>") {
+                        result.shouldContainExceptionInstance()
                     }
                 }
 
@@ -75,38 +73,35 @@ internal class FailMatchersTest : FreeSpec() {
                 }
             }
 
-            "when a result is the Right" - {
+            "when a result is the Exception" - {
                 val result: Fail<Int, String> = Fail.Exception(EXCEPTION_VALUE)
-
-                "then the Error expectation assertion should be incorrect" {
-                    assertionIncorrect("expected:<${Fail.Error::class.simpleName}> but was:<$result>") {
-                        result.shouldBeError()
-                    }
-                    assertionIncorrect("expected:<${Fail.Error(value = ERROR_VALUE)}> but was:<$result>") {
-                        result shouldBeError ERROR_VALUE
-                    }
-                }
 
                 "then the Exception expectation assertion should be correct" {
                     assertionCorrect {
-                        result should beException()
+                        result.shouldBeException()
                     }
 
                     assertionCorrect {
-                        result.shouldBeException()
+                        result shouldBeException EXCEPTION_VALUE
                     }
 
                     assertionCorrect {
                         val exception = result.shouldContainExceptionInstance()
                         exception shouldBe EXCEPTION_VALUE
                     }
+                }
 
-                    assertionCorrect {
-                        result should beException(EXCEPTION_VALUE)
+                "then the Error expectation assertion should be incorrect" {
+                    assertionIncorrect("expected:<$EXPECTED_ERROR_TYPE> but was:<$result>") {
+                        result.shouldBeError()
                     }
 
-                    assertionCorrect {
-                        result shouldBeException EXCEPTION_VALUE
+                    assertionIncorrect("expected:<$expectedErrorValue> but was:<$result>") {
+                        result shouldBeError ERROR_VALUE
+                    }
+
+                    assertionIncorrect("expected:<$EXPECTED_ERROR_TYPE> but was:<$result>") {
+                        result.shouldContainErrorInstance()
                     }
                 }
 
@@ -129,5 +124,11 @@ internal class FailMatchersTest : FreeSpec() {
         private const val EXPECTED_VALUE = "Expected value"
         private const val ERROR_VALUE = 42
         private const val EXCEPTION_VALUE = "Failed"
+
+        private const val EXPECTED_ERROR_TYPE = "Fail.Error<Int>"
+        private const val EXPECTED_EXCEPTION_TYPE = "Fail.Exception<String>"
+
+        private val expectedErrorValue = Fail.Error(value = ERROR_VALUE)
+        private val expectedExceptionValue = Fail.Exception(EXCEPTION_VALUE)
     }
 }

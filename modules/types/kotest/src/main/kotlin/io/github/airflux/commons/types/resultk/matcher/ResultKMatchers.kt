@@ -16,6 +16,7 @@
 
 package io.github.airflux.commons.types.resultk.matcher
 
+import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.resultk.ResultK
 import io.kotest.matchers.ComparableMatcherResult
 import io.kotest.matchers.Matcher
@@ -24,60 +25,64 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
-public fun beSuccess(): Matcher<ResultK<*, *>> = TypeMatcher(ResultK.Success::class)
-
-public fun <ValueT> beSuccess(expected: ValueT): Matcher<ResultK<ValueT, *>> =
-    ValueMatcher(ResultK.Success(expected))
-
+@AirfluxTypesExperimental
 @OptIn(ExperimentalContracts::class)
-public fun <ValueT> ResultK<ValueT, *>.shouldBeSuccess() {
+public inline fun <reified ValueT> ResultK<ValueT, *>.shouldBeSuccess() {
     contract {
         returns() implies (this@shouldBeSuccess is ResultK.Success<ValueT>)
     }
-    this should beSuccess()
+    this should TypeMatcher(
+        expectedType = ResultK.Success::class,
+        expectedTypeName = "ResultK.Success<${ValueT::class.simpleName}>"
+    )
 }
 
+@AirfluxTypesExperimental
+public infix fun <ValueT> ResultK<ValueT, *>.shouldBeSuccess(expected: ValueT) {
+    this should ValueMatcher(ResultK.Success(expected))
+}
+
+@AirfluxTypesExperimental
 @OptIn(ExperimentalContracts::class)
-public fun <ValueT> ResultK<ValueT, *>.shouldContainSuccessInstance(): ValueT {
+public inline fun <reified ValueT> ResultK<ValueT, *>.shouldContainSuccessInstance(): ValueT {
     contract {
         returns() implies (this@shouldContainSuccessInstance is ResultK.Success<ValueT>)
     }
-    this should beSuccess()
-    return (this as ResultK.Success<ValueT>).value
+    this.shouldBeSuccess()
+    return this.value
 }
 
-public infix fun <ValueT> ResultK<ValueT, *>.shouldBeSuccess(expected: ValueT) {
-    this should beSuccess(expected)
-}
-
-public fun beFailure(): Matcher<ResultK<*, *>> = TypeMatcher(ResultK.Failure::class)
-
-public fun <FailureT : Any> beFailure(expected: FailureT): Matcher<ResultK<*, FailureT>> =
-    ValueMatcher(ResultK.Failure(expected))
-
+@AirfluxTypesExperimental
 @OptIn(ExperimentalContracts::class)
-public fun <FailureT : Any> ResultK<*, FailureT>.shouldBeFailure() {
+public inline fun <reified FailureT : Any> ResultK<*, FailureT>.shouldBeFailure() {
     contract {
         returns() implies (this@shouldBeFailure is ResultK.Failure<FailureT>)
     }
-    this should beFailure()
+    this should TypeMatcher(
+        expectedType = ResultK.Failure::class,
+        expectedTypeName = "ResultK.Failure<${FailureT::class.simpleName}>"
+    )
 }
 
+@AirfluxTypesExperimental
+public infix fun <FailureT : Any> ResultK<*, FailureT>.shouldBeFailure(expected: FailureT) {
+    this should ValueMatcher(ResultK.Failure(expected))
+}
+
+@AirfluxTypesExperimental
 @OptIn(ExperimentalContracts::class)
-public fun <FailureT : Any> ResultK<*, FailureT>.shouldContainFailureInstance(): FailureT {
+public inline fun <reified FailureT : Any> ResultK<*, FailureT>.shouldContainFailureInstance(): FailureT {
     contract {
         returns() implies (this@shouldContainFailureInstance is ResultK.Failure<FailureT>)
     }
-    this should beFailure()
-    return (this as ResultK.Failure<FailureT>).cause
+    this.shouldBeFailure()
+    return this.cause
 }
 
-public infix fun <FailureT : Any> ResultK<*, FailureT>.shouldBeFailure(expected: FailureT) {
-    this should beFailure(expected)
-}
-
-private class ValueMatcher<ValueT, FailureT : Any>(private val expected: ResultK<ValueT, FailureT>) :
-    Matcher<ResultK<ValueT, FailureT>> {
+@PublishedApi
+internal class ValueMatcher<ValueT, FailureT : Any>(
+    private val expected: ResultK<ValueT, FailureT>
+) : Matcher<ResultK<ValueT, FailureT>> {
 
     override fun test(value: ResultK<ValueT, FailureT>) = comparableMatcherResult(
         passed = expected == value,
@@ -86,14 +91,16 @@ private class ValueMatcher<ValueT, FailureT : Any>(private val expected: ResultK
     )
 }
 
-private class TypeMatcher<ValueT, FailureT : Any, C : ResultK<ValueT, FailureT>>(
-    private val expected: KClass<C>
+@PublishedApi
+internal class TypeMatcher<ValueT, FailureT : Any, ResultT : ResultK<ValueT, FailureT>>(
+    private val expectedType: KClass<ResultT>,
+    private val expectedTypeName: String
 ) : Matcher<ResultK<ValueT, FailureT>> {
 
     override fun test(value: ResultK<ValueT, FailureT>) = comparableMatcherResult(
-        passed = expected.isInstance(value),
+        passed = expectedType.isInstance(value),
         actual = value.toString(),
-        expected = expected.simpleName!!
+        expected = expectedTypeName
     )
 }
 

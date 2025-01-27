@@ -15,8 +15,7 @@
  */
 package io.github.airflux.commons.types.either
 
-import io.github.airflux.commons.types.either.Either.Left
-import io.github.airflux.commons.types.either.Either.Right
+import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.either.matcher.shouldBeLeft
 import io.github.airflux.commons.types.either.matcher.shouldBeRight
 import io.kotest.assertions.throwables.shouldNotThrow
@@ -26,6 +25,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
+@OptIn(AirfluxTypesExperimental::class)
 @Suppress("LargeClass")
 internal class EitherExtensionsTest : FreeSpec() {
 
@@ -36,7 +36,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `isLeft` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return the true value" {
                         original.isLeft() shouldBe true
@@ -44,7 +44,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "then this function should return the false value" {
                         original.isLeft() shouldBe false
@@ -55,7 +55,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `isLeft` function with predicate" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "when the predicate return the true value" - {
                         val predicate: (String) -> Boolean = { it == ORIGINAL_VALUE }
@@ -75,7 +75,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
                     val predicate: (String) -> Boolean = { throw IllegalStateException() }
 
                     "then the predicate is not invoked and should return the false value" {
@@ -87,7 +87,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `isRight` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return the false value" {
                         original.isRight() shouldBe false
@@ -95,7 +95,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "then this function should return the true value" {
                         original.isRight() shouldBe true
@@ -106,7 +106,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `isRight` function with predicate" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
                     val predicate: (Errors) -> Boolean = { throw IllegalStateException() }
 
                     "then the predicate is not invoked and should return the false value" {
@@ -115,7 +115,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "when the predicate return the true value" - {
                         val predicate: (Errors) -> Boolean = { it == Errors.Empty }
@@ -138,7 +138,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `fold` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.fold(onLeft = { it }, onRight = { ALTERNATIVE_VALUE })
@@ -147,7 +147,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "then this function should return the alternative value" {
                         val result = original.fold(onLeft = { it }, onRight = { ALTERNATIVE_VALUE })
@@ -159,7 +159,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `mapLeft` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return a result of applying the transform function to the value" {
                         val result = original.mapLeft { it.toInt() }
@@ -168,7 +168,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "then this function should return an original do not apply the transform function to a value" {
                         val result = original.mapLeft { it.toInt() }
@@ -180,22 +180,19 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `flatMapLeft` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return a result of applying the transform function to the value" {
-                        val result = original.flatMapLeft { result -> Left(result.toInt()) }
+                        val result = original.flatMapLeft { Either.Left(it.toInt()) }
                         result shouldBeLeft ORIGINAL_VALUE.toInt()
                     }
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "then this function should return an original do not apply the transform function to a value" {
-                        val result = original.flatMapLeft { success ->
-                            Left(success.toInt())
-                        }
-
+                        val result = original.flatMapLeft { Either.Left(it.toInt()) }
                         result shouldBeSameInstanceAs original
                     }
                 }
@@ -204,7 +201,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `mapRight` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, String> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, String> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return an original do not apply the transform function to a value" {
                         val result = original.mapRight { it.toInt() }
@@ -213,7 +210,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, String> = createEither(Right(ORIGINAL_VALUE))
+                    val original: Either<String, String> = createEither(Either.Right(ORIGINAL_VALUE))
 
                     "then this function should return a result of applying the transform function to the value" {
                         val result = original.mapRight { it.toInt() }
@@ -225,22 +222,19 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `flatMapRight` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, String> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, String> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return an original do not apply the transform function to a value" {
-                        val result = original.flatMapRight { success ->
-                            Left(success.toInt())
-                        }
-
+                        val result = original.flatMapRight { Either.Left(it.toInt()) }
                         result shouldBeSameInstanceAs original
                     }
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, String> = createEither(Right(ORIGINAL_VALUE))
+                    val original: Either<String, String> = createEither(Either.Right(ORIGINAL_VALUE))
 
                     "then this function should return a result of applying the transform function to the value" {
-                        val result = original.flatMapRight { result -> Right(result.toInt()) }
+                        val result = original.flatMapRight { Either.Right(it.toInt()) }
                         result shouldBeRight ORIGINAL_VALUE.toInt()
                     }
                 }
@@ -249,7 +243,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `onLeft` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then a code block should execute" {
                         shouldThrow<IllegalStateException> {
@@ -259,7 +253,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "then should not anything do" {
                         shouldNotThrow<IllegalStateException> {
@@ -272,7 +266,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `onRight` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then should not anything do" {
                         shouldNotThrow<IllegalStateException> {
@@ -282,7 +276,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "then a code block should execute" {
                         shouldThrow<IllegalStateException> {
@@ -295,7 +289,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `getLeftOrNull` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getLeftOrNull()
@@ -304,7 +298,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "then this function should return the null value" {
                         val result = original.getLeftOrNull()
@@ -316,7 +310,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `getRightOrNull` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, String> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, String> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return the null value" {
                         val result = original.getRightOrNull()
@@ -325,7 +319,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, String> = createEither(Right(ORIGINAL_VALUE))
+                    val original: Either<String, String> = createEither(Either.Right(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getRightOrNull()
@@ -337,7 +331,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `getLeftOrElse` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getLeftOrElse(ALTERNATIVE_VALUE)
@@ -346,7 +340,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "then this function should return the defaultValue value" {
                         val result = original.getLeftOrElse(ALTERNATIVE_VALUE)
@@ -358,7 +352,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `getRightOrElse` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, String> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, String> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return the defaultValue value" {
                         val result = original.getRightOrElse(ALTERNATIVE_VALUE)
@@ -367,7 +361,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, String> = createEither(Right(ORIGINAL_VALUE))
+                    val original: Either<String, String> = createEither(Either.Right(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getRightOrElse(ALTERNATIVE_VALUE)
@@ -379,7 +373,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `getLeftOrElse` function with a predicate" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getLeftOrElse { ALTERNATIVE_VALUE }
@@ -388,7 +382,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "then this function should return a value from a handler" {
                         val result = original.getLeftOrElse { ALTERNATIVE_VALUE }
@@ -400,7 +394,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `getRightOrElse` function with a predicate" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, String> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, String> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return a value from a handler" {
                         val result = original.getRightOrElse { ALTERNATIVE_VALUE }
@@ -409,7 +403,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, String> = createEither(Right(ORIGINAL_VALUE))
+                    val original: Either<String, String> = createEither(Either.Right(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getRightOrElse { ALTERNATIVE_VALUE }
@@ -421,20 +415,20 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `leftOrElse` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
-                        val elseResult: Either<String, Errors> = createEither(Left(ALTERNATIVE_VALUE))
+                        val elseResult: Either<String, Errors> = createEither(Either.Left(ALTERNATIVE_VALUE))
                         val result = original.leftOrElse { elseResult }
                         result shouldBe original
                     }
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "then this function should return the defaultValue value" {
-                        val elseResult: Either<String, Errors> = createEither(Left(ALTERNATIVE_VALUE))
+                        val elseResult: Either<String, Errors> = createEither(Either.Left(ALTERNATIVE_VALUE))
                         val result = original.leftOrElse { elseResult }
                         result shouldBe elseResult
                     }
@@ -444,20 +438,20 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `rightOrElse` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return the defaultValue value" {
-                        val elseResult: Either<String, Errors> = createEither(Left(ALTERNATIVE_VALUE))
+                        val elseResult: Either<String, Errors> = createEither(Either.Left(ALTERNATIVE_VALUE))
                         val result = original.rightOrElse { elseResult }
                         result shouldBe elseResult
                     }
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "then this function should return a value" {
-                        val elseResult: Either<String, Errors> = createEither(Left(ALTERNATIVE_VALUE))
+                        val elseResult: Either<String, Errors> = createEither(Either.Left(ALTERNATIVE_VALUE))
                         val result = original.rightOrElse { elseResult }
                         result shouldBe original
                     }
@@ -467,7 +461,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `leftOrThrow` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, Errors> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, Errors> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.leftOrThrow { throw IllegalStateException() }
@@ -476,7 +470,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, Errors> = createEither(Right(Errors.Empty))
+                    val original: Either<String, Errors> = createEither(Either.Right(Errors.Empty))
 
                     "then this function should return an exception" {
                         shouldThrow<IllegalStateException> {
@@ -489,7 +483,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `rightOrThrow` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, String> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, String> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return an exception" {
                         shouldThrow<IllegalStateException> {
@@ -499,7 +493,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, String> = createEither(Right(ORIGINAL_VALUE))
+                    val original: Either<String, String> = createEither(Either.Right(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.rightOrThrow { throw IllegalStateException() }
@@ -511,7 +505,7 @@ internal class EitherExtensionsTest : FreeSpec() {
             "the `merge` function" - {
 
                 "when a variable has the `Left` type" - {
-                    val original: Either<String, String> = createEither(Left(ORIGINAL_VALUE))
+                    val original: Either<String, String> = createEither(Either.Left(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.merge()
@@ -520,7 +514,7 @@ internal class EitherExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Right` type" - {
-                    val original: Either<String, String> = createEither(Right(ALTERNATIVE_VALUE))
+                    val original: Either<String, String> = createEither(Either.Right(ALTERNATIVE_VALUE))
 
                     "then this function should return the alternative value" {
                         val result = original.merge()

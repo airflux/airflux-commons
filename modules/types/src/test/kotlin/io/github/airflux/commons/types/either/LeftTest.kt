@@ -15,9 +15,11 @@
  */
 package io.github.airflux.commons.types.either
 
+import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.either.matcher.shouldBeLeft
 import io.kotest.core.spec.style.FreeSpec
 
+@OptIn(AirfluxTypesExperimental::class)
 internal class LeftTest : FreeSpec() {
 
     init {
@@ -25,27 +27,27 @@ internal class LeftTest : FreeSpec() {
         "The `Left` type" - {
 
             "the `asNull` property should return the `Left` type with the `null` value" {
-                val result: Either<String?, String> = Left.asNull
+                val result: Either<String?, String> = Either.Left.asNull
                 result shouldBeLeft null
             }
 
             "the `asTrue` property should return the `Left` type with the `true` value" {
-                val result: Either<Boolean, String> = Left.asTrue
+                val result: Either<Boolean, String> = Either.Left.asTrue
                 result shouldBeLeft true
             }
 
             "the `asFalse` property should return the `Left` type with the `false` value" {
-                val result: Either<Boolean, String> = Left.asFalse
+                val result: Either<Boolean, String> = Either.Left.asFalse
                 result shouldBeLeft false
             }
 
             "the `asUnit` property should return the `Left` type with the `Unit` value" {
-                val result: Either<Unit, String> = Left.asUnit
+                val result: Either<Unit, String> = Either.Left.asUnit
                 result shouldBeLeft Unit
             }
 
             "the `asEmptyList` property should return the `Left` type with the `empty list` value" {
-                val result: Either<List<String>, String> = Left.asEmptyList
+                val result: Either<List<String>, String> = Either.Left.asEmptyList
                 result shouldBeLeft emptyList()
             }
 
@@ -55,7 +57,7 @@ internal class LeftTest : FreeSpec() {
                     val param = true
 
                     "then this function should return the `Left` type with the `true` value" {
-                        val result: Either<Boolean, String> = Left.of(param)
+                        val result: Either<Boolean, String> = Either.Left.of(param)
                         result shouldBeLeft true
                     }
                 }
@@ -64,7 +66,7 @@ internal class LeftTest : FreeSpec() {
                     val param = false
 
                     "then this function should return the `Left` type with the `true` value" {
-                        val result: Either<Boolean, String> = Left.of(param)
+                        val result: Either<Boolean, String> = Either.Left.of(param)
                         result shouldBeLeft false
                     }
                 }

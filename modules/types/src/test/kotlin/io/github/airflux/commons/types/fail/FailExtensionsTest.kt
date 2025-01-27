@@ -15,6 +15,7 @@
  */
 package io.github.airflux.commons.types.fail
 
+import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.fail.matcher.shouldBeError
 import io.github.airflux.commons.types.fail.matcher.shouldBeException
 import io.kotest.assertions.throwables.shouldNotThrow
@@ -24,6 +25,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
+@OptIn(AirfluxTypesExperimental::class)
 @Suppress("LargeClass")
 internal class FailExtensionsTest : FreeSpec() {
 
@@ -34,7 +36,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `isError` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return the true value" {
                         original.isError() shouldBe true
@@ -42,7 +44,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
 
                     "then this function should return the false value" {
                         original.isError() shouldBe false
@@ -53,7 +55,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `isError` function with predicate" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "when the predicate return the true value" - {
                         val predicate: (String) -> Boolean = { it == ORIGINAL_VALUE }
@@ -73,7 +75,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
                     val predicate: (String) -> Boolean = { throw IllegalStateException() }
 
                     "then the predicate is not invoked and should return the false value" {
@@ -85,7 +87,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `isException` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return the false value" {
                         original.isException() shouldBe false
@@ -93,7 +95,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
 
                     "then this function should return the true value" {
                         original.isException() shouldBe true
@@ -104,7 +106,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `isException` function with predicate" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
                     val predicate: (Errors) -> Boolean = { throw IllegalStateException() }
 
                     "then the predicate is not invoked and should return the false value" {
@@ -113,7 +115,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
 
                     "when the predicate return the true value" - {
                         val predicate: (Errors) -> Boolean = { it == Errors.Empty }
@@ -136,7 +138,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `fold` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.fold(onError = { it }, onException = { ALTERNATIVE_VALUE })
@@ -145,7 +147,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
 
                     "then this function should return the alternative value" {
                         val result = original.fold(onError = { it }, onException = { ALTERNATIVE_VALUE })
@@ -157,7 +159,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `mapError` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return a result of applying the transform function to the value" {
                         val result = original.mapError { it.toInt() }
@@ -166,7 +168,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
 
                     "then this function should return an original do not apply the transform function to a value" {
                         val result = original.mapError { it.toInt() }
@@ -178,7 +180,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `mapException` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, String> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, String> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return an original do not apply the transform function to a value" {
                         val result = original.mapException { it.toInt() }
@@ -187,7 +189,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, String> = createFail(exception(ORIGINAL_VALUE))
+                    val original: Fail<String, String> = createFail(Fail.exception(ORIGINAL_VALUE))
 
                     "then this function should return a result of applying the transform function to the value" {
                         val result = original.mapException { it.toInt() }
@@ -199,7 +201,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `onError` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then a code block should execute" {
                         shouldThrow<IllegalStateException> {
@@ -209,7 +211,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
 
                     "then should not anything do" {
                         shouldNotThrow<IllegalStateException> {
@@ -222,7 +224,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `onException` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then should not anything do" {
                         shouldNotThrow<IllegalStateException> {
@@ -232,7 +234,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
 
                     "then a code block should execute" {
                         shouldThrow<IllegalStateException> {
@@ -245,7 +247,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `getErrorOrNull` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getErrorOrNull()
@@ -254,7 +256,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
 
                     "then this function should return the null value" {
                         val result = original.getErrorOrNull()
@@ -266,7 +268,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `getExceptionOrNull` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, String> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, String> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return the null value" {
                         val result = original.getExceptionOrNull()
@@ -275,7 +277,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, String> = createFail(exception(ORIGINAL_VALUE))
+                    val original: Fail<String, String> = createFail(Fail.exception(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getExceptionOrNull()
@@ -287,7 +289,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `getErrorOrElse` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getErrorOrElse(ALTERNATIVE_VALUE)
@@ -296,7 +298,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
 
                     "then this function should return the defaultValue value" {
                         val result = original.getErrorOrElse(ALTERNATIVE_VALUE)
@@ -308,7 +310,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `getExceptionOrElse` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, String> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, String> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return the defaultValue value" {
                         val result = original.getExceptionOrElse(ALTERNATIVE_VALUE)
@@ -317,7 +319,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, String> = createFail(exception(ORIGINAL_VALUE))
+                    val original: Fail<String, String> = createFail(Fail.exception(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getExceptionOrElse(ALTERNATIVE_VALUE)
@@ -329,7 +331,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `getErrorOrElse` function with a predicate" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getErrorOrElse { ALTERNATIVE_VALUE }
@@ -338,7 +340,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
 
                     "then this function should return a value from a handler" {
                         val result = original.getErrorOrElse { ALTERNATIVE_VALUE }
@@ -350,7 +352,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `getExceptionOrElse` function with a predicate" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, String> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, String> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return a value from a handler" {
                         val result = original.getExceptionOrElse { ALTERNATIVE_VALUE }
@@ -359,7 +361,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, String> = createFail(exception(ORIGINAL_VALUE))
+                    val original: Fail<String, String> = createFail(Fail.exception(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.getExceptionOrElse { ALTERNATIVE_VALUE }
@@ -371,20 +373,20 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `errorOrElse` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
-                        val elseResult: Fail<String, Errors> = createFail(error(ALTERNATIVE_VALUE))
+                        val elseResult: Fail<String, Errors> = createFail(Fail.error(ALTERNATIVE_VALUE))
                         val result = original.errorOrElse { elseResult }
                         result shouldBe original
                     }
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
 
                     "then this function should return the defaultValue value" {
-                        val elseResult: Fail<String, Errors> = createFail(error(ALTERNATIVE_VALUE))
+                        val elseResult: Fail<String, Errors> = createFail(Fail.error(ALTERNATIVE_VALUE))
                         val result = original.errorOrElse { elseResult }
                         result shouldBe elseResult
                     }
@@ -394,20 +396,20 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `exceptionOrElse` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return the defaultValue value" {
-                        val elseResult: Fail<String, Errors> = createFail(error(ALTERNATIVE_VALUE))
+                        val elseResult: Fail<String, Errors> = createFail(Fail.error(ALTERNATIVE_VALUE))
                         val result = original.exceptionOrElse { elseResult }
                         result shouldBe elseResult
                     }
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
 
                     "then this function should return a value" {
-                        val elseResult: Fail<String, Errors> = createFail(error(ALTERNATIVE_VALUE))
+                        val elseResult: Fail<String, Errors> = createFail(Fail.error(ALTERNATIVE_VALUE))
                         val result = original.exceptionOrElse { elseResult }
                         result shouldBe original
                     }
@@ -417,7 +419,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `errorOrThrow` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, Errors> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, Errors> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.errorOrThrow { throw IllegalStateException() }
@@ -426,7 +428,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, Errors> = createFail(exception(Errors.Empty))
+                    val original: Fail<String, Errors> = createFail(Fail.exception(Errors.Empty))
 
                     "then this function should return an exception" {
                         shouldThrow<IllegalStateException> {
@@ -439,7 +441,7 @@ internal class FailExtensionsTest : FreeSpec() {
             "the `exceptionOrThrow` function" - {
 
                 "when a variable has the `Error` type" - {
-                    val original: Fail<String, String> = createFail(error(ORIGINAL_VALUE))
+                    val original: Fail<String, String> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return an exception" {
                         shouldThrow<IllegalStateException> {
@@ -449,7 +451,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
 
                 "when a variable has the `Exception` type" - {
-                    val original: Fail<String, String> = createFail(exception(ORIGINAL_VALUE))
+                    val original: Fail<String, String> = createFail(Fail.exception(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
                         val result = original.exceptionOrThrow { throw IllegalStateException() }

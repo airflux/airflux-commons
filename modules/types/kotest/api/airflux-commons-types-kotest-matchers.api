@@ -1,39 +1,78 @@
+public abstract interface annotation class io/github/airflux/commons/types/AirfluxTypesExperimental : java/lang/annotation/Annotation {
+}
+
 public final class io/github/airflux/commons/types/either/matcher/EitherMatchersKt {
-	public static final fun beLeft ()Lio/kotest/matchers/Matcher;
-	public static final fun beLeft (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;
-	public static final fun beRight ()Lio/kotest/matchers/Matcher;
-	public static final fun beRight (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;
-	public static final fun shouldBeLeft (Lio/github/airflux/commons/types/either/Either;)V
 	public static final fun shouldBeLeft (Lio/github/airflux/commons/types/either/Either;Ljava/lang/Object;)V
-	public static final fun shouldBeRight (Lio/github/airflux/commons/types/either/Either;)V
 	public static final fun shouldBeRight (Lio/github/airflux/commons/types/either/Either;Ljava/lang/Object;)V
-	public static final fun shouldContainLeftInstance (Lio/github/airflux/commons/types/either/Either;)Ljava/lang/Object;
-	public static final fun shouldContainRightInstance (Lio/github/airflux/commons/types/either/Either;)Ljava/lang/Object;
+}
+
+public final class io/github/airflux/commons/types/either/matcher/TypeMatcher : io/kotest/matchers/Matcher {
+	public fun <init> (Lkotlin/reflect/KClass;Ljava/lang/String;)V
+	public fun compose (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun contramap (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun invert ()Lio/kotest/matchers/Matcher;
+	public fun invertIf (Lio/kotest/matchers/Matcher;Z)Lio/kotest/matchers/Matcher;
+	public fun test (Lio/github/airflux/commons/types/either/Either;)Lio/kotest/matchers/ComparableMatcherResult;
+	public synthetic fun test (Ljava/lang/Object;)Lio/kotest/matchers/MatcherResult;
+}
+
+public final class io/github/airflux/commons/types/either/matcher/ValueMatcher : io/kotest/matchers/Matcher {
+	public fun <init> (Lio/github/airflux/commons/types/either/Either;)V
+	public fun compose (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun contramap (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun invert ()Lio/kotest/matchers/Matcher;
+	public fun invertIf (Lio/kotest/matchers/Matcher;Z)Lio/kotest/matchers/Matcher;
+	public fun test (Lio/github/airflux/commons/types/either/Either;)Lio/kotest/matchers/ComparableMatcherResult;
+	public synthetic fun test (Ljava/lang/Object;)Lio/kotest/matchers/MatcherResult;
 }
 
 public final class io/github/airflux/commons/types/fail/matcher/FailMatchersKt {
-	public static final fun beError ()Lio/kotest/matchers/Matcher;
-	public static final fun beError (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;
-	public static final fun beException ()Lio/kotest/matchers/Matcher;
-	public static final fun beException (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;
-	public static final fun shouldBeError (Lio/github/airflux/commons/types/fail/Fail;)V
 	public static final fun shouldBeError (Lio/github/airflux/commons/types/fail/Fail;Ljava/lang/Object;)V
-	public static final fun shouldBeException (Lio/github/airflux/commons/types/fail/Fail;)V
 	public static final fun shouldBeException (Lio/github/airflux/commons/types/fail/Fail;Ljava/lang/Object;)V
-	public static final fun shouldContainErrorInstance (Lio/github/airflux/commons/types/fail/Fail;)Ljava/lang/Object;
-	public static final fun shouldContainExceptionInstance (Lio/github/airflux/commons/types/fail/Fail;)Ljava/lang/Object;
+}
+
+public final class io/github/airflux/commons/types/fail/matcher/TypeMatcher : io/kotest/matchers/Matcher {
+	public fun <init> (Lkotlin/reflect/KClass;Ljava/lang/String;)V
+	public fun compose (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun contramap (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun invert ()Lio/kotest/matchers/Matcher;
+	public fun invertIf (Lio/kotest/matchers/Matcher;Z)Lio/kotest/matchers/Matcher;
+	public fun test (Lio/github/airflux/commons/types/fail/Fail;)Lio/kotest/matchers/ComparableMatcherResult;
+	public synthetic fun test (Ljava/lang/Object;)Lio/kotest/matchers/MatcherResult;
+}
+
+public final class io/github/airflux/commons/types/fail/matcher/ValueMatcher : io/kotest/matchers/Matcher {
+	public fun <init> (Lio/github/airflux/commons/types/fail/Fail;)V
+	public fun compose (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun contramap (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun invert ()Lio/kotest/matchers/Matcher;
+	public fun invertIf (Lio/kotest/matchers/Matcher;Z)Lio/kotest/matchers/Matcher;
+	public fun test (Lio/github/airflux/commons/types/fail/Fail;)Lio/kotest/matchers/ComparableMatcherResult;
+	public synthetic fun test (Ljava/lang/Object;)Lio/kotest/matchers/MatcherResult;
 }
 
 public final class io/github/airflux/commons/types/resultk/matcher/ResultKMatchersKt {
-	public static final fun beFailure ()Lio/kotest/matchers/Matcher;
-	public static final fun beFailure (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;
-	public static final fun beSuccess ()Lio/kotest/matchers/Matcher;
-	public static final fun beSuccess (Ljava/lang/Object;)Lio/kotest/matchers/Matcher;
-	public static final fun shouldBeFailure (Lio/github/airflux/commons/types/resultk/ResultK;)V
 	public static final fun shouldBeFailure (Lio/github/airflux/commons/types/resultk/ResultK;Ljava/lang/Object;)V
-	public static final fun shouldBeSuccess (Lio/github/airflux/commons/types/resultk/ResultK;)V
 	public static final fun shouldBeSuccess (Lio/github/airflux/commons/types/resultk/ResultK;Ljava/lang/Object;)V
-	public static final fun shouldContainFailureInstance (Lio/github/airflux/commons/types/resultk/ResultK;)Ljava/lang/Object;
-	public static final fun shouldContainSuccessInstance (Lio/github/airflux/commons/types/resultk/ResultK;)Ljava/lang/Object;
+}
+
+public final class io/github/airflux/commons/types/resultk/matcher/TypeMatcher : io/kotest/matchers/Matcher {
+	public fun <init> (Lkotlin/reflect/KClass;Ljava/lang/String;)V
+	public fun compose (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun contramap (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun invert ()Lio/kotest/matchers/Matcher;
+	public fun invertIf (Lio/kotest/matchers/Matcher;Z)Lio/kotest/matchers/Matcher;
+	public fun test (Lio/github/airflux/commons/types/resultk/ResultK;)Lio/kotest/matchers/ComparableMatcherResult;
+	public synthetic fun test (Ljava/lang/Object;)Lio/kotest/matchers/MatcherResult;
+}
+
+public final class io/github/airflux/commons/types/resultk/matcher/ValueMatcher : io/kotest/matchers/Matcher {
+	public fun <init> (Lio/github/airflux/commons/types/resultk/ResultK;)V
+	public fun compose (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun contramap (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun invert ()Lio/kotest/matchers/Matcher;
+	public fun invertIf (Lio/kotest/matchers/Matcher;Z)Lio/kotest/matchers/Matcher;
+	public fun test (Lio/github/airflux/commons/types/resultk/ResultK;)Lio/kotest/matchers/ComparableMatcherResult;
+	public synthetic fun test (Ljava/lang/Object;)Lio/kotest/matchers/MatcherResult;
 }
 
