@@ -18,6 +18,7 @@ package io.github.airflux.commons.types.fail
 import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.fail.matcher.shouldBeError
 import io.github.airflux.commons.types.fail.matcher.shouldBeException
+import io.kotest.assertions.failure
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
@@ -40,6 +41,13 @@ internal class FailExtensionsTest : FreeSpec() {
 
                     "then this function should return the true value" {
                         original.isError() shouldBe true
+                    }
+
+                    "then this function should do a smart cast of receiver type" {
+                        if (original.isError())
+                            original.value shouldBe ORIGINAL_VALUE
+                        else
+                            failure("The result is not an error.")
                     }
                 }
 
@@ -99,6 +107,13 @@ internal class FailExtensionsTest : FreeSpec() {
 
                     "then this function should return the true value" {
                         original.isException() shouldBe true
+                    }
+
+                    "then this function should do a smart cast of receiver type" {
+                        if (original.isException())
+                            original.value shouldBe Errors.Empty
+                        else
+                            failure("The result is not an exception.")
                     }
                 }
             }

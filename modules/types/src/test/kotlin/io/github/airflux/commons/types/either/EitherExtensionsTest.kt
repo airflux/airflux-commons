@@ -18,6 +18,7 @@ package io.github.airflux.commons.types.either
 import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.either.matcher.shouldBeLeft
 import io.github.airflux.commons.types.either.matcher.shouldBeRight
+import io.kotest.assertions.failure
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
@@ -40,6 +41,13 @@ internal class EitherExtensionsTest : FreeSpec() {
 
                     "then this function should return the true value" {
                         original.isLeft() shouldBe true
+                    }
+
+                    "then this function should do a smart cast of receiver type" {
+                        if (original.isLeft())
+                            original.value shouldBe ORIGINAL_VALUE
+                        else
+                            failure("The result is not a left.")
                     }
                 }
 
@@ -99,6 +107,13 @@ internal class EitherExtensionsTest : FreeSpec() {
 
                     "then this function should return the true value" {
                         original.isRight() shouldBe true
+                    }
+
+                    "then this function should do a smart cast of receiver type" {
+                        if (original.isRight())
+                            original.value shouldBe Errors.Empty
+                        else
+                            failure("The result is not a right.")
                     }
                 }
             }
