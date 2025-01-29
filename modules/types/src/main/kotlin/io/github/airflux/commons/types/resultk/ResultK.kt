@@ -17,6 +17,10 @@
 package io.github.airflux.commons.types.resultk
 
 import io.github.airflux.commons.types.doRaise
+import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asEmptyList
+import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asNull
+import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asUnit
+import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.of
 
 public typealias Success<ValueT> = ResultK.Success<ValueT>
 public typealias Failure<FailureT> = ResultK.Failure<FailureT>
@@ -61,7 +65,15 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
 
     public companion object {
 
-        public fun <ValueT> success(value: ValueT): Success<ValueT> = Success(value)
+        @Suppress("UNCHECKED_CAST")
+        public fun <ValueT> success(value: ValueT): Success<ValueT> =
+            when (value) {
+                null -> asNull
+                is Unit -> asUnit
+                is Boolean -> of(value)
+                is List<*> -> if (value.isEmpty()) asEmptyList else Success(value)
+                else -> Success(value)
+            } as Success<ValueT>
 
         public fun <FailureT : Any> failure(cause: FailureT): Failure<FailureT> = Failure(cause)
     }
