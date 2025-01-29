@@ -26,9 +26,9 @@ import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 import kotlin.experimental.ExperimentalTypeInference
 
-public fun <ValueT> ValueT.asSuccess(): ResultK.Success<ValueT> = ResultK.success(this)
+public fun <ValueT> ValueT.asSuccess(): ResultK.Success<ValueT> = success(this)
 
-public fun <FailureT : Any> FailureT.asFailure(): ResultK.Failure<FailureT> = ResultK.failure(this)
+public fun <FailureT : Any> FailureT.asFailure(): ResultK.Failure<FailureT> = failure(this)
 
 public fun <ValueT> success(value: ValueT): ResultK.Success<ValueT> = ResultK.success(value)
 
@@ -386,8 +386,8 @@ public inline fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.filterOrEls
 
 public fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.liftToError():
     ResultK<ValueT, Fail<FailureT, Nothing>> =
-    if (isSuccess()) this else failure(Fail.error(cause))
+    if (isSuccess()) this else Fail.error(cause).asFailure()
 
 public fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.liftToException():
     ResultK<ValueT, Fail<Nothing, FailureT>> =
-    if (isSuccess()) this else failure(Fail.exception(cause))
+    if (isSuccess()) this else Fail.exception(cause).asFailure()

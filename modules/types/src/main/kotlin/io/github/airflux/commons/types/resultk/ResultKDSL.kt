@@ -42,5 +42,5 @@ public inline fun <ValueT, FailureT : Any> resultWith(
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
 
-    return withRaise(ResultK.Raise<FailureT>(), { failure(it) }, block)
+    return withRaise(ResultK.Raise<FailureT>(), { it.asFailure() }, block)
 }
