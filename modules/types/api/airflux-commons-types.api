@@ -155,6 +155,15 @@ public final class io/github/airflux/commons/types/fail/FailExtensionsKt {
 	public static final fun onException (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
 }
 
+public final class io/github/airflux/commons/types/resultk/BiFailureResultKExtensionsKt {
+	public static final fun fold (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun mapError (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun mapException (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun onError (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun onException (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun recover (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
+}
+
 public abstract interface class io/github/airflux/commons/types/resultk/ResultK {
 	public static final field Companion Lio/github/airflux/commons/types/resultk/ResultK$Companion;
 }

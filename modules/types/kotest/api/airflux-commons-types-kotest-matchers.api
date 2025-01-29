@@ -51,6 +51,31 @@ public final class io/github/airflux/commons/types/fail/matcher/ValueMatcher : i
 	public synthetic fun test (Ljava/lang/Object;)Lio/kotest/matchers/MatcherResult;
 }
 
+public final class io/github/airflux/commons/types/resultk/matcher/BiFailureResultKMatchersKt {
+	public static final fun shouldBeError (Lio/github/airflux/commons/types/resultk/ResultK;Ljava/lang/Object;)V
+	public static final fun shouldBeException (Lio/github/airflux/commons/types/resultk/ResultK;Ljava/lang/Object;)V
+}
+
+public final class io/github/airflux/commons/types/resultk/matcher/BiFailureResultKTypeMatcher : io/kotest/matchers/Matcher {
+	public fun <init> (Lkotlin/reflect/KClass;Ljava/lang/String;)V
+	public fun compose (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun contramap (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun invert ()Lio/kotest/matchers/Matcher;
+	public fun invertIf (Lio/kotest/matchers/Matcher;Z)Lio/kotest/matchers/Matcher;
+	public fun test (Lio/github/airflux/commons/types/resultk/ResultK;)Lio/kotest/matchers/ComparableMatcherResult;
+	public synthetic fun test (Ljava/lang/Object;)Lio/kotest/matchers/MatcherResult;
+}
+
+public final class io/github/airflux/commons/types/resultk/matcher/BiFailureResultKValueMatcher : io/kotest/matchers/Matcher {
+	public fun <init> (Lio/github/airflux/commons/types/resultk/ResultK;)V
+	public fun compose (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun contramap (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun invert ()Lio/kotest/matchers/Matcher;
+	public fun invertIf (Lio/kotest/matchers/Matcher;Z)Lio/kotest/matchers/Matcher;
+	public fun test (Lio/github/airflux/commons/types/resultk/ResultK;)Lio/kotest/matchers/ComparableMatcherResult;
+	public synthetic fun test (Ljava/lang/Object;)Lio/kotest/matchers/MatcherResult;
+}
+
 public final class io/github/airflux/commons/types/resultk/matcher/ResultKMatchersKt {
 	public static final fun shouldBeFailure (Lio/github/airflux/commons/types/resultk/ResultK;Ljava/lang/Object;)V
 	public static final fun shouldBeSuccess (Lio/github/airflux/commons/types/resultk/ResultK;Ljava/lang/Object;)V
