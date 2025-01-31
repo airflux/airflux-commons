@@ -65,6 +65,21 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
 
     public companion object {
 
+        /**
+         * Creates a new instance of the [Success] based on the given [value].
+         *
+         * The strategy is as follows:
+         * 1. If the value is null, it returns the value of the [asNull] property.
+         * 2. If the type of value is Unit, it returns the value of the [asUnit] property.
+         * 3. If the value is a boolean, it returns the value of the [asTrue] or [asFalse] property depending on
+         *    the value.
+         * 4. If the value is a list, it returns [asEmptyList] if the list is empty, or creates a new [Success] with
+         *    the list.
+         * 5. Otherwise, it creates a new [Success] with the given value.
+         *
+         * @param value the value to be wrapped in a [Success].
+         * @return a [Success] instance wrapping the given value.
+         */
         @Suppress("UNCHECKED_CAST")
         public fun <ValueT> success(value: ValueT): Success<ValueT> =
             when (value) {
