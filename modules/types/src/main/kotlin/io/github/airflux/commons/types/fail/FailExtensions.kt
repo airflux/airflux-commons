@@ -22,9 +22,9 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 
-public fun <ErrorT : Any> ErrorT.asError(): Fail.Error<ErrorT> = Fail.error(this)
+public fun <ErrorT : Any> ErrorT.asError(): Fail.Error<ErrorT> = error(this)
 
-public fun <ExceptionT : Any> ExceptionT.asException(): Fail.Exception<ExceptionT> = Fail.exception(this)
+public fun <ExceptionT : Any> ExceptionT.asException(): Fail.Exception<ExceptionT> = exception(this)
 
 public fun <ErrorT : Any> error(value: ErrorT): Fail.Error<ErrorT> = Fail.error(value)
 
