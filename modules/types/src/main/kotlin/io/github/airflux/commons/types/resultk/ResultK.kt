@@ -80,15 +80,18 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
          * @param value the value to be wrapped in a [Success].
          * @return a [Success] instance wrapping the given value.
          */
-        @Suppress("UNCHECKED_CAST")
-        public fun <ValueT> success(value: ValueT): Success<ValueT> =
-            when (value) {
-                null -> asNull
-                is Unit -> asUnit
-                is Boolean -> of(value)
-                is List<*> -> if (value.isEmpty()) asEmptyList else Success(value)
+        public fun <ValueT> success(value: ValueT): Success<ValueT> {
+            val result = when {
+                value == null -> asNull
+                value is Unit -> asUnit
+                value is Boolean -> of(value)
+                value is List<*> && value.isEmpty() -> asEmptyList
                 else -> Success(value)
-            } as Success<ValueT>
+            }
+
+            @Suppress("UNCHECKED_CAST")
+            return result as Success<ValueT>
+        }
 
         public fun <FailureT : Any> failure(cause: FailureT): Failure<FailureT> = Failure(cause)
     }
