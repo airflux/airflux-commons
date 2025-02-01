@@ -23,9 +23,9 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 
-public fun <LeftT> LeftT.asLeft(): Either.Left<LeftT> = Either.left(this)
+public fun <LeftT> LeftT.asLeft(): Either.Left<LeftT> = left(this)
 
-public fun <RightT> RightT.asRight(): Either.Right<RightT> = Either.right(this)
+public fun <RightT> RightT.asRight(): Either.Right<RightT> = right(this)
 
 public fun <LeftT> left(value: LeftT): Either.Left<LeftT> = Either.left(value)
 
