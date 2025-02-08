@@ -43,6 +43,10 @@ public infix fun <ValueT> ResultK<ValueT, *>.shouldBeSuccess(expected: ValueT) {
 }
 
 @AirfluxTypesExperimental
+public inline fun <reified ValueT> shouldBeSuccess(block: () -> ResultK<ValueT, *>): ValueT =
+    block().shouldContainSuccessInstance()
+
+@AirfluxTypesExperimental
 @OptIn(ExperimentalContracts::class)
 public inline fun <reified ValueT> ResultK<ValueT, *>.shouldContainSuccessInstance(): ValueT {
     contract {
@@ -68,6 +72,10 @@ public inline fun <reified FailureT : Any> ResultK<*, FailureT>.shouldBeFailure(
 public infix fun <FailureT : Any> ResultK<*, FailureT>.shouldBeFailure(expected: FailureT) {
     this should ValueMatcher(ResultK.Failure(expected))
 }
+
+@AirfluxTypesExperimental
+public inline fun <reified FailureT : Any> shouldBeFailure(block: () -> ResultK<*, FailureT>): FailureT =
+    block().shouldContainFailureInstance()
 
 @AirfluxTypesExperimental
 @OptIn(ExperimentalContracts::class)

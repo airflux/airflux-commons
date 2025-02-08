@@ -18,10 +18,12 @@ package io.github.airflux.commons.types.resultk.matcher
 
 import io.github.airflux.commons.assertionCorrect
 import io.github.airflux.commons.assertionIncorrect
+import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.resultk.ResultK
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
+@OptIn(AirfluxTypesExperimental::class)
 internal class ResultKMatchersTest : FreeSpec() {
 
     init {
@@ -40,6 +42,11 @@ internal class ResultKMatchersTest : FreeSpec() {
                     }
 
                     assertionCorrect {
+                        val success = shouldBeSuccess { result }
+                        success shouldBe SUCCESS_VALUE
+                    }
+
+                    assertionCorrect {
                         val success = result.shouldContainSuccessInstance()
                         success shouldBe SUCCESS_VALUE
                     }
@@ -52,6 +59,10 @@ internal class ResultKMatchersTest : FreeSpec() {
 
                     assertionIncorrect("expected:<$expectedFailureValue> but was:<$result>") {
                         result shouldBeFailure FAILURE_VALUE
+                    }
+
+                    assertionIncorrect("expected:<$EXPECTED_FAILURE_TYPE> but was:<$result>") {
+                        shouldBeFailure<String> { result }
                     }
 
                     assertionIncorrect("expected:<$EXPECTED_FAILURE_TYPE> but was:<$result>") {
@@ -84,6 +95,10 @@ internal class ResultKMatchersTest : FreeSpec() {
                     }
 
                     assertionIncorrect("expected:<$EXPECTED_SUCCESS_TYPE> but was:<$result>") {
+                        shouldBeSuccess<Int> { result }
+                    }
+
+                    assertionIncorrect("expected:<$EXPECTED_SUCCESS_TYPE> but was:<$result>") {
                         result.shouldContainSuccessInstance()
                     }
                 }
@@ -95,6 +110,11 @@ internal class ResultKMatchersTest : FreeSpec() {
 
                     assertionCorrect {
                         result shouldBeFailure FAILURE_VALUE
+                    }
+
+                    assertionCorrect {
+                        val failure = shouldBeFailure { result }
+                        failure shouldBe FAILURE_VALUE
                     }
 
                     assertionCorrect {
