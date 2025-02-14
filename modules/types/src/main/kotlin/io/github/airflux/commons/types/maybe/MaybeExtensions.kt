@@ -176,8 +176,8 @@ public inline fun <ValueT : Any> Maybe<ValueT>.toException(onNone: () -> ValueT)
     else
         Fail.exception(this.value)
 
-public inline fun <ValueT : Any> Maybe<ValueT>.toFailure(onNone: () -> ValueT): ResultK<Nothing, ValueT> =
+public inline fun <ValueT : Any, SuccessT> Maybe<ValueT>.toFailure(onNone: () -> SuccessT): ResultK<SuccessT, ValueT> =
     if (isNone())
-        ResultK.failure(onNone())
+        ResultK.success(onNone())
     else
         ResultK.failure(this.value)
