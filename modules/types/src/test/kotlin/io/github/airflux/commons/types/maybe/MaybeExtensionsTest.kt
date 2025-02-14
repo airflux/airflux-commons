@@ -18,6 +18,7 @@ package io.github.airflux.commons.types.maybe
 import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.fail.matcher.shouldBeError
 import io.github.airflux.commons.types.fail.matcher.shouldBeException
+import io.github.airflux.commons.types.maybe.matcher.shouldBeNone
 import io.github.airflux.commons.types.maybe.matcher.shouldBeSome
 import io.kotest.assertions.failure
 import io.kotest.assertions.throwables.shouldNotThrow
@@ -370,6 +371,53 @@ internal class MaybeExtensionsTest : FreeSpec() {
                     "then should not thrown exception" {
                         shouldNotThrow<IllegalStateException> {
                             original.forEach { throw IllegalStateException() }
+                        }
+                    }
+                }
+            }
+
+            "the `filter` function" - {
+
+                "when a variable has the `Success` type" - {
+                    val original: Maybe<String> = create(Maybe.Some(ORIGINAL_VALUE))
+
+                    "when predicate return the true value" - {
+                        val predicate: (String) -> Boolean = { true }
+
+                        "then this function should return the `Some` type with the value" {
+                            val result = original.filter(predicate)
+                            result shouldBeSome ORIGINAL_VALUE
+                        }
+                    }
+
+                    "when predicate return the false value" - {
+                        val predicate: (String) -> Boolean = { false }
+
+                        "then this function should return the `None` type" {
+                            val result = original.filter(predicate)
+                            result.shouldBeNone()
+                        }
+                    }
+                }
+
+                "when a variable has the `Failure` type" - {
+                    val original: Maybe<String> = create(Maybe.None)
+
+                    "when predicate return the true value" - {
+                        val predicate: (String) -> Boolean = { true }
+
+                        "then this function should return original value" {
+                            val result = original.filter(predicate)
+                            result.shouldBeSameInstanceAs(original)
+                        }
+                    }
+
+                    "when predicate return the false value" - {
+                        val predicate: (String) -> Boolean = { false }
+
+                        "then this function should return original value" {
+                            val result = original.filter(predicate)
+                            result.shouldBeSameInstanceAs(original)
                         }
                     }
                 }

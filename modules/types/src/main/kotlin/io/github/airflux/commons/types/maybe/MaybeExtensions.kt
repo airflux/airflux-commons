@@ -163,6 +163,14 @@ public inline infix fun <ValueT : Any> Maybe<ValueT>.forEach(block: (ValueT) -> 
     return if (isSome()) block(value) else Unit
 }
 
+@OptIn(ExperimentalContracts::class)
+public inline fun <ValueT : Any> Maybe<ValueT>.filter(predicate: (ValueT) -> Boolean): Maybe<ValueT> {
+    contract {
+        callsInPlace(predicate, AT_MOST_ONCE)
+    }
+    return if (this.isSome() && predicate(this.value)) this else None
+}
+
 public fun <ValueT : Any> Maybe<ValueT>.liftToError(): Maybe<Fail.Error<ValueT>> =
     map { Fail.error(it) }
 
