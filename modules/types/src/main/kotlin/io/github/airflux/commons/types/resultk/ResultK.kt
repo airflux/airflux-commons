@@ -17,6 +17,8 @@
 package io.github.airflux.commons.types.resultk
 
 import io.github.airflux.commons.types.doRaise
+import io.github.airflux.commons.types.maybe.Maybe
+import io.github.airflux.commons.types.maybe.isSome
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asEmptyList
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asNull
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asUnit
@@ -33,6 +35,10 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
         public operator fun <ValueT> ResultK<ValueT, FailureT>.component1(): ValueT = bind()
 
         public fun <ValueT> ResultK<ValueT, FailureT>.bind(): ValueT = if (isSuccess()) value else raise(cause)
+
+        public fun Maybe<FailureT>.raise() {
+            if (isSome()) raise(value)
+        }
 
         public fun <ValueT> ResultK<ValueT, FailureT>.raise() {
             if (isFailure()) raise(cause)

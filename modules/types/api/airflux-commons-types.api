@@ -243,6 +243,7 @@ public final class io/github/airflux/commons/types/resultk/ResultK$Raise : io/gi
 	public fun <init> ()V
 	public final fun bind (Lio/github/airflux/commons/types/resultk/ResultK;)Ljava/lang/Object;
 	public final fun component1 (Lio/github/airflux/commons/types/resultk/ResultK;)Ljava/lang/Object;
+	public final fun raise (Lio/github/airflux/commons/types/maybe/Maybe;)V
 	public final fun raise (Lio/github/airflux/commons/types/resultk/ResultK;)V
 	public fun raise (Ljava/lang/Object;)Ljava/lang/Void;
 }
