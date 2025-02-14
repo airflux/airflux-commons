@@ -19,6 +19,7 @@ import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.fail.matcher.shouldBeError
 import io.github.airflux.commons.types.fail.matcher.shouldBeException
 import io.github.airflux.commons.types.maybe.matcher.shouldBeSome
+import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
 import io.kotest.assertions.failure
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
@@ -395,7 +396,7 @@ internal class MaybeExtensionsTest : FreeSpec() {
                 }
             }
 
-            "the `liftToException` function" - {
+            "the `toException` function" - {
 
                 "when a variable has the `Some` type" - {
                     val original: Maybe<String> = create(Maybe.Some(ORIGINAL_VALUE))
@@ -412,6 +413,27 @@ internal class MaybeExtensionsTest : FreeSpec() {
                     "then this function should return the `Fail.Exception` type with value from the `onNone` lambda" {
                         val result = original.toException(onNone = { ALTERNATIVE_VALUE })
                         result shouldBeException ALTERNATIVE_VALUE
+                    }
+                }
+            }
+
+            "the `toFailure` function" - {
+
+                "when a variable has the `Some` type" - {
+                    val original: Maybe<String> = create(Maybe.Some(ORIGINAL_VALUE))
+
+                    "then this function should return the `ResultK.Failure` type with the value of the `Some` type" {
+                        val result = original.toFailure(onNone = { ALTERNATIVE_VALUE })
+                        result shouldBeFailure ORIGINAL_VALUE
+                    }
+                }
+
+                "when a variable has the `None` type" - {
+                    val original: Maybe<String> = create(Maybe.None)
+
+                    "then this function should return the `ResultK.Failure` type with value from the `onNone` lambda" {
+                        val result = original.toFailure(onNone = { ALTERNATIVE_VALUE })
+                        result shouldBeFailure ALTERNATIVE_VALUE
                     }
                 }
             }

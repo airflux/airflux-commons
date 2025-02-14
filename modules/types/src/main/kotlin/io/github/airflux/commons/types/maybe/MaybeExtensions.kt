@@ -19,6 +19,7 @@
 package io.github.airflux.commons.types.maybe
 
 import io.github.airflux.commons.types.fail.Fail
+import io.github.airflux.commons.types.resultk.ResultK
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
@@ -174,3 +175,9 @@ public inline fun <ValueT : Any> Maybe<ValueT>.toException(onNone: () -> ValueT)
         Fail.exception(onNone())
     else
         Fail.exception(this.value)
+
+public inline fun <ValueT : Any> Maybe<ValueT>.toFailure(onNone: () -> ValueT): ResultK<Nothing, ValueT> =
+    if (isNone())
+        ResultK.failure(onNone())
+    else
+        ResultK.failure(this.value)
