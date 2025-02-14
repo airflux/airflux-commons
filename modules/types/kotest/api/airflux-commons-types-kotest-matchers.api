@@ -51,6 +51,31 @@ public final class io/github/airflux/commons/types/fail/matcher/ValueMatcher : i
 	public synthetic fun test (Ljava/lang/Object;)Lio/kotest/matchers/MatcherResult;
 }
 
+public final class io/github/airflux/commons/types/maybe/matcher/MaybeMatchersKt {
+	public static final fun shouldBeNone (Lio/github/airflux/commons/types/maybe/Maybe;)V
+	public static final fun shouldBeSome (Lio/github/airflux/commons/types/maybe/Maybe;Ljava/lang/Object;)V
+}
+
+public final class io/github/airflux/commons/types/maybe/matcher/TypeMatcher : io/kotest/matchers/Matcher {
+	public fun <init> (Lkotlin/reflect/KClass;Ljava/lang/String;)V
+	public fun compose (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun contramap (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun invert ()Lio/kotest/matchers/Matcher;
+	public fun invertIf (Lio/kotest/matchers/Matcher;Z)Lio/kotest/matchers/Matcher;
+	public fun test (Lio/github/airflux/commons/types/maybe/Maybe;)Lio/kotest/matchers/MatcherResult;
+	public synthetic fun test (Ljava/lang/Object;)Lio/kotest/matchers/MatcherResult;
+}
+
+public final class io/github/airflux/commons/types/maybe/matcher/ValueMatcher : io/kotest/matchers/Matcher {
+	public fun <init> (Lio/github/airflux/commons/types/maybe/Maybe;)V
+	public fun compose (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun contramap (Lkotlin/jvm/functions/Function1;)Lio/kotest/matchers/Matcher;
+	public fun invert ()Lio/kotest/matchers/Matcher;
+	public fun invertIf (Lio/kotest/matchers/Matcher;Z)Lio/kotest/matchers/Matcher;
+	public fun test (Lio/github/airflux/commons/types/maybe/Maybe;)Lio/kotest/matchers/ComparableMatcherResult;
+	public synthetic fun test (Ljava/lang/Object;)Lio/kotest/matchers/MatcherResult;
+}
+
 public final class io/github/airflux/commons/types/resultk/matcher/BiFailureResultKMatchersKt {
 	public static final fun shouldBeError (Lio/github/airflux/commons/types/resultk/ResultK;Ljava/lang/Object;)V
 	public static final fun shouldBeException (Lio/github/airflux/commons/types/resultk/ResultK;Ljava/lang/Object;)V
