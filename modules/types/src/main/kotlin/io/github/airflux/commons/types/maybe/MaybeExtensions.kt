@@ -18,6 +18,7 @@
 
 package io.github.airflux.commons.types.maybe
 
+import io.github.airflux.commons.types.fail.Fail
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
@@ -161,3 +162,9 @@ public inline infix fun <ValueT : Any> Maybe<ValueT>.forEach(block: (ValueT) -> 
     }
     return if (isSome()) block(value) else Unit
 }
+
+public fun <ValueT : Any> Maybe<ValueT>.liftToError(): Maybe<Fail.Error<ValueT>> =
+    map { Fail.error(it) }
+
+public fun <ValueT : Any> Maybe<ValueT>.liftToException(): Maybe<Fail.Exception<ValueT>> =
+    map { Fail.exception(it) }

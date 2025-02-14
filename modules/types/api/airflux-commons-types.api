@@ -194,6 +194,8 @@ public final class io/github/airflux/commons/types/maybe/MaybeExtensionsKt {
 	public static final fun isNone (Lio/github/airflux/commons/types/maybe/Maybe;)Z
 	public static final fun isSome (Lio/github/airflux/commons/types/maybe/Maybe;)Z
 	public static final fun isSome (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Z
+	public static final fun liftToError (Lio/github/airflux/commons/types/maybe/Maybe;)Lio/github/airflux/commons/types/maybe/Maybe;
+	public static final fun liftToException (Lio/github/airflux/commons/types/maybe/Maybe;)Lio/github/airflux/commons/types/maybe/Maybe;
 	public static final fun map (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
 	public static final fun onNone (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/maybe/Maybe;
 	public static final fun onSome (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;

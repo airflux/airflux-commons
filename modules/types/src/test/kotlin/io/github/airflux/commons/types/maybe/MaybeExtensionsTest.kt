@@ -16,6 +16,8 @@
 package io.github.airflux.commons.types.maybe
 
 import io.github.airflux.commons.types.AirfluxTypesExperimental
+import io.github.airflux.commons.types.fail.matcher.shouldBeError
+import io.github.airflux.commons.types.fail.matcher.shouldBeException
 import io.github.airflux.commons.types.maybe.matcher.shouldBeSome
 import io.kotest.assertions.failure
 import io.kotest.assertions.throwables.shouldNotThrow
@@ -23,6 +25,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeSameInstanceAs
 
 @OptIn(AirfluxTypesExperimental::class)
 @Suppress("LargeClass")
@@ -368,6 +371,50 @@ internal class MaybeExtensionsTest : FreeSpec() {
                         shouldNotThrow<IllegalStateException> {
                             original.forEach { throw IllegalStateException() }
                         }
+                    }
+                }
+            }
+
+            "the `liftToError` function" - {
+
+                "when a variable has the `Some` type" - {
+                    val original: Maybe<String> = create(Maybe.Some(ORIGINAL_VALUE))
+
+                    "then this function should return the `Some` type with the value of the `Fail.Error` type" {
+                        val result = original.liftToError()
+                        result.shouldBeSome()
+                        result.value shouldBeError ORIGINAL_VALUE
+                    }
+                }
+
+                "when a variable has the `None` type" - {
+                    val original: Maybe<String> = create(Maybe.None)
+
+                    "then this function should return original value" {
+                        val result = original.liftToError()
+                        result.shouldBeSameInstanceAs(original)
+                    }
+                }
+            }
+
+            "the `liftToException` function" - {
+
+                "when a variable has the `Some` type" - {
+                    val original: Maybe<String> = create(Maybe.Some(ORIGINAL_VALUE))
+
+                    "then this function should return the `Some` type with the value of the `Fail.Exception` type" {
+                        val result = original.liftToException()
+                        result.shouldBeSome()
+                        result.value shouldBeException ORIGINAL_VALUE
+                    }
+                }
+
+                "when a variable has the `None` type" - {
+                    val original: Maybe<String> = create(Maybe.None)
+
+                    "then this function should return original value" {
+                        val result = original.liftToException()
+                        result.shouldBeSameInstanceAs(original)
                     }
                 }
             }
