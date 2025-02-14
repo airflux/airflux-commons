@@ -18,6 +18,7 @@ package io.github.airflux.commons.types.fail
 import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.fail.matcher.shouldBeError
 import io.github.airflux.commons.types.fail.matcher.shouldBeException
+import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
 import io.kotest.assertions.failure
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
@@ -471,6 +472,29 @@ internal class FailExtensionsTest : FreeSpec() {
                     "then this function should return a value" {
                         val result = original.exceptionOrThrow { throw IllegalStateException() }
                         result shouldBe ORIGINAL_VALUE
+                    }
+                }
+            }
+
+            "the `toBiFailureResult` function" - {
+
+                "when a variable has the `Error` type" - {
+                    val original: Fail<String, String> = createFail(Fail.error(ORIGINAL_VALUE))
+
+                    "then this function should return the `ResultK.Failure` type with value of the `Error` type" {
+                        val result = original.toBiFailureResult()
+                        result.shouldBeFailure()
+                        result.cause shouldBeError ORIGINAL_VALUE
+                    }
+                }
+
+                "when a variable has the `Exception` type" - {
+                    val original: Fail<String, String> = createFail(Fail.exception(ORIGINAL_VALUE))
+
+                    "then this function should return the `ResultK.Failure` type with value of the `Exception` type" {
+                        val result = original.toBiFailureResult()
+                        result.shouldBeFailure()
+                        result.cause shouldBeException ORIGINAL_VALUE
                     }
                 }
             }
