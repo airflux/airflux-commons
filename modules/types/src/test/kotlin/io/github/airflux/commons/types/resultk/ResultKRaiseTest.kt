@@ -16,9 +16,12 @@
 
 package io.github.airflux.commons.types.resultk
 
+import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.RaiseException
 import io.github.airflux.commons.types.ensure
 import io.github.airflux.commons.types.ensureNotNull
+import io.github.airflux.commons.types.maybe.Maybe
+import io.github.airflux.commons.types.maybe.asSome
 import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
 import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
 import io.kotest.assertions.throwables.shouldNotThrow
@@ -26,160 +29,199 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
+@OptIn(AirfluxTypesExperimental::class)
 internal class ResultKRaiseTest : FreeSpec() {
 
     init {
 
         "The Result#Raise type" - {
 
-            "the `component1` function" - {
+            "the extension functions for the `ResultK` type" - {
 
-                "when the result is successful" - {
-                    val raise = ResultK.Raise<Error>()
-                    val result: ResultK<Int, Error> = FIRST_VALUE.asSuccess()
+                "the `component1` function" - {
 
-                    "then should return the value" {
-                        val result = with(raise) {
-                            val (bindValue: Int) = result
-                            bindValue
-                        }
+                    "when the result is successful" - {
+                        val raise = ResultK.Raise<Error>()
+                        val result: ResultK<Int, Error> = FIRST_VALUE.asSuccess()
 
-                        result shouldBe FIRST_VALUE
-                    }
-                }
-
-                "when the result is failure" - {
-                    val raise = ResultK.Raise<Error>()
-                    val result: ResultK<Int, Error> = Error.First.asFailure()
-
-                    "then should raise an exception" {
-                        val exception = shouldThrow<RaiseException> {
-                            with(raise) {
-                                val (bindValue) = result
+                        "then should return the value" {
+                            val result = with(raise) {
+                                val (bindValue: Int) = result
                                 bindValue
                             }
-                        }
 
-                        exception.raise shouldBe raise
-                        exception.failure shouldBe Error.First
+                            result shouldBe FIRST_VALUE
+                        }
+                    }
+
+                    "when the result is failure" - {
+                        val raise = ResultK.Raise<Error>()
+                        val result: ResultK<Int, Error> = Error.First.asFailure()
+
+                        "then should raise an exception" {
+                            val exception = shouldThrow<RaiseException> {
+                                with(raise) {
+                                    val (bindValue) = result
+                                    bindValue
+                                }
+                            }
+
+                            exception.raise shouldBe raise
+                            exception.failure shouldBe Error.First
+                        }
                     }
                 }
-            }
 
-            "the `bind` function" - {
+                "the `bind` function" - {
 
-                "when the result is successful" - {
-                    val raise = ResultK.Raise<Error>()
-                    val result: ResultK<Int, Error> = FIRST_VALUE.asSuccess()
+                    "when the result is successful" - {
+                        val raise = ResultK.Raise<Error>()
+                        val result: ResultK<Int, Error> = FIRST_VALUE.asSuccess()
 
-                    "then should return the value" {
-                        val result = with(raise) {
-                            result.bind()
-                        }
-
-                        result shouldBe FIRST_VALUE
-                    }
-                }
-
-                "when the result is failure" - {
-                    val raise = ResultK.Raise<Error>()
-                    val result: ResultK<Int, Error> = Error.First.asFailure()
-
-                    "then should raise an exception" {
-                        val exception = shouldThrow<RaiseException> {
-                            with(raise) {
+                        "then should return the value" {
+                            val result = with(raise) {
                                 result.bind()
                             }
-                        }
 
-                        exception.raise shouldBe raise
-                        exception.failure shouldBe Error.First
+                            result shouldBe FIRST_VALUE
+                        }
+                    }
+
+                    "when the result is failure" - {
+                        val raise = ResultK.Raise<Error>()
+                        val result: ResultK<Int, Error> = Error.First.asFailure()
+
+                        "then should raise an exception" {
+                            val exception = shouldThrow<RaiseException> {
+                                with(raise) {
+                                    result.bind()
+                                }
+                            }
+
+                            exception.raise shouldBe raise
+                            exception.failure shouldBe Error.First
+                        }
                     }
                 }
-            }
 
-            "the `raise` function" - {
+                "the `raise` function" - {
 
-                "when the result is successful" - {
-                    val raise = ResultK.Raise<Error>()
-                    val result: ResultK<Int, Error> = FIRST_VALUE.asSuccess()
+                    "when the result is successful" - {
+                        val raise = ResultK.Raise<Error>()
+                        val result: ResultK<Int, Error> = FIRST_VALUE.asSuccess()
 
-                    "then should not raise an exception" {
-                        shouldNotThrow<RaiseException> {
-                            with(raise) {
-                                result.raise()
+                        "then should not raise an exception" {
+                            shouldNotThrow<RaiseException> {
+                                with(raise) {
+                                    result.raise()
+                                }
                             }
                         }
                     }
+
+                    "when the result is failure" - {
+                        val raise = ResultK.Raise<Error>()
+                        val result: ResultK<Int, Error> = Error.First.asFailure()
+
+                        "then should raise an exception" {
+                            val exception = shouldThrow<RaiseException> {
+                                with(raise) {
+                                    result.raise()
+                                }
+                            }
+
+                            exception.raise shouldBe raise
+                            exception.failure shouldBe Error.First
+                        }
+                    }
                 }
 
-                "when the result is failure" - {
-                    val raise = ResultK.Raise<Error>()
-                    val result: ResultK<Int, Error> = Error.First.asFailure()
+                "the `ensure` function" - {
 
-                    "then should raise an exception" {
-                        val exception = shouldThrow<RaiseException> {
-                            with(raise) {
-                                result.raise()
+                    "when condition is true" - {
+                        val condition = true
+
+                        "then should return a successful value" {
+                            val result: ResultK<Unit, Error> = result {
+                                ensure(condition) { Error.First }
+                            }
+
+                            result shouldBeSuccess Unit
+                        }
+                    }
+
+                    "when condition is false" - {
+                        val condition = false
+
+                        "then should return a failure value" {
+                            val result: ResultK<Unit, Error> = result {
+                                ensure(condition) { Error.First }
+                            }
+
+                            result shouldBeFailure Error.First
+                        }
+                    }
+                }
+
+                "the `ensureNotNull` function" - {
+
+                    "when value is not null" - {
+                        val value: Int? = createValue(FIRST_VALUE)
+
+                        "then should return a successful value" {
+                            val result: ResultK<Int, Error> = result {
+                                ensureNotNull(value) { Error.First }
+                            }
+
+                            result shouldBeSuccess value
+                        }
+                    }
+
+                    "when value is null" - {
+                        val value: Int? = createValue(null)
+
+                        "then should return a failure value" {
+                            val result: ResultK<Int, Error> = result {
+                                ensureNotNull(value) { Error.First }
+                            }
+
+                            result shouldBeFailure Error.First
+                        }
+                    }
+                }
+            }
+
+            "the extension functions for the `Maybe` type" - {
+
+                "the `raise` function" - {
+
+                    "when the result contains a value" - {
+                        val raise = ResultK.Raise<Error>()
+                        val result: Maybe<Error> = Error.First.asSome()
+
+                        "then should raise an exception" {
+                            val exception = shouldThrow<RaiseException> {
+                                with(raise) {
+                                    result.raise()
+                                }
+                            }
+
+                            exception.raise shouldBe raise
+                            exception.failure shouldBe Error.First
+                        }
+                    }
+
+                    "when the result does not contain a value" - {
+                        val raise = ResultK.Raise<Error>()
+                        val result: Maybe<Error> = Maybe.None
+
+                        "then should not raise an exception" {
+                            shouldNotThrow<RaiseException> {
+                                with(raise) {
+                                    result.raise()
+                                }
                             }
                         }
-
-                        exception.raise shouldBe raise
-                        exception.failure shouldBe Error.First
-                    }
-                }
-            }
-
-            "the `ensure` function" - {
-
-                "when condition is true" - {
-                    val condition = true
-
-                    "then should return a successful value" {
-                        val result: ResultK<Unit, Error> = result {
-                            ensure(condition) { Error.First }
-                        }
-
-                        result shouldBeSuccess Unit
-                    }
-                }
-
-                "when condition is false" - {
-                    val condition = false
-
-                    "then should return a failure value" {
-                        val result: ResultK<Unit, Error> = result {
-                            ensure(condition) { Error.First }
-                        }
-
-                        result shouldBeFailure Error.First
-                    }
-                }
-            }
-
-            "the `ensureNotNull` function" - {
-
-                "when value is not null" - {
-                    val value: Int? = createValue(FIRST_VALUE)
-
-                    "then should return a successful value" {
-                        val result: ResultK<Int, Error> = result {
-                            ensureNotNull(value) { Error.First }
-                        }
-
-                        result shouldBeSuccess value
-                    }
-                }
-
-                "when value is null" - {
-                    val value: Int? = createValue(null)
-
-                    "then should return a failure value" {
-                        val result: ResultK<Int, Error> = result {
-                            ensureNotNull(value) { Error.First }
-                        }
-
-                        result shouldBeFailure Error.First
                     }
                 }
             }

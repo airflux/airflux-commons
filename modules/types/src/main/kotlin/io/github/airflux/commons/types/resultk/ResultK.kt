@@ -36,12 +36,12 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
 
         public fun <ValueT> ResultK<ValueT, FailureT>.bind(): ValueT = if (isSuccess()) value else raise(cause)
 
-        public fun Maybe<FailureT>.raise() {
-            if (isSome()) raise(value)
-        }
-
         public fun <ValueT> ResultK<ValueT, FailureT>.raise() {
             if (isFailure()) raise(cause)
+        }
+
+        public fun Maybe<FailureT>.raise() {
+            if (isSome()) raise(value)
         }
 
         public override fun raise(error: FailureT): Nothing {
