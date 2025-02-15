@@ -60,7 +60,7 @@ object Configuration {
                     project.uri(System.getenv("REPOSITORY_SNAPSHOTS_URL") ?: DEFAULT_REPOSITORY_URL)
 
                 val uname = System.getenv("REPOSITORY_USERNAME")
-                println(">> REPOSITORY_USERNAME: $uname")
+                println(">> REPOSITORY_USERNAME: `$uname`")
                 credentials {
                     username = uname
                     password = System.getenv("REPOSITORY_PASSWORD")
