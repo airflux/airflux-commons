@@ -9,7 +9,12 @@ val gitDetails = versionDetails()
 
 tasks.register("printGitCommitTag") {
     doLast {
-        val abbrev = gitDetails.gitHash.substring(0, 7)
+        val hash = gitDetails.gitHash
+        println(">> HASH $hash")
+
+        val abbrev = hash.substring(0, 7)
+        println(">> ABBREV $abbrev")
+
         val artifactTag = "${gitDetails.branchName}-$abbrev"
         println(artifactTag)
     }
