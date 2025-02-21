@@ -224,6 +224,8 @@ public abstract interface class io/github/airflux/commons/types/resultk/ResultK 
 }
 
 public final class io/github/airflux/commons/types/resultk/ResultK$Companion {
+	public final fun catch (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public final fun catchWith (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public final fun failure (Ljava/lang/Object;)Lio/github/airflux/commons/types/resultk/ResultK$Failure;
 	public final fun success (Ljava/lang/Object;)Lio/github/airflux/commons/types/resultk/ResultK$Success;
 }

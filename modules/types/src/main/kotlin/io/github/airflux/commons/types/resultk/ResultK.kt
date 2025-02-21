@@ -100,5 +100,29 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
         }
 
         public fun <FailureT : Any> failure(cause: FailureT): Failure<FailureT> = Failure(cause)
+
+        public inline fun <SuccessT, FailureT : Any> catch(
+            catch: (Throwable) -> FailureT,
+            block: Raise<FailureT>.() -> SuccessT
+        ): ResultK<SuccessT, FailureT> =
+            try {
+                result {
+                    block()
+                }
+            } catch (expected: Throwable) {
+                failure(catch(expected))
+            }
+
+        public inline fun <SuccessT, FailureT : Any> catchWith(
+            catch: (Throwable) -> FailureT,
+            block: Raise<FailureT>.() -> ResultK<SuccessT, FailureT>
+        ): ResultK<SuccessT, FailureT> =
+            try {
+                resultWith {
+                    block()
+                }
+            } catch (expected: Throwable) {
+                failure(catch(expected))
+            }
     }
 }

@@ -16,6 +16,7 @@
 package io.github.airflux.commons.types.resultk
 
 import io.github.airflux.commons.types.AirfluxTypesExperimental
+import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
 import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.types.shouldBeSameInstanceAs
@@ -94,11 +95,82 @@ internal class ResultKTest : FreeSpec() {
                     }
                 }
             }
+
+            "the `catch` function" - {
+
+                "when a block throws an exception" - {
+                    val result: ResultK<String, Error> = ResultK.catch<String, Error>({ Error.ExceptionWrapper }) {
+                        error("Error")
+                    }
+
+                    "then this function should return a failure value" {
+                        result shouldBeFailure Error.ExceptionWrapper
+                    }
+                }
+
+                "when a block raise an error" - {
+                    val result = ResultK.catch<String, Error>({ Error.ExceptionWrapper }) {
+                        raise(Error.Other)
+                    }
+
+                    "then this function should return a failure value" {
+                        result shouldBeFailure Error.Other
+                    }
+                }
+
+                "when a block does not throw an exception" - {
+                    val result: ResultK<String, Error> = ResultK.catch({ Error.ExceptionWrapper }) {
+                        FIRST_VALUE
+                    }
+
+                    "then this function should return a successful value" {
+                        result shouldBeSuccess FIRST_VALUE
+                    }
+                }
+            }
+
+            "the `catchWith` function" - {
+
+                "when a block throws an exception" - {
+                    val result: ResultK<String, Error> = ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
+                        error("Error")
+                    }
+
+                    "then this function should return a failure value" {
+                        result shouldBeFailure Error.ExceptionWrapper
+                    }
+                }
+
+                "when a block raise an error" - {
+                    val result: ResultK<String, Error> = ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
+                        raise(Error.Other)
+                    }
+
+                    "then this function should return a failure value" {
+                        result shouldBeFailure Error.Other
+                    }
+                }
+
+                "when a block does not throw an exception" - {
+                    val result: ResultK<String, Error> = ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
+                        FIRST_VALUE.asSuccess()
+                    }
+
+                    "then this function should return a successful value" {
+                        result shouldBeSuccess FIRST_VALUE
+                    }
+                }
+            }
         }
     }
 
     companion object {
         private const val FIRST_VALUE = "10"
         private const val SECOND_VALUE = "20"
+    }
+
+    private sealed interface Error {
+        data object ExceptionWrapper : Error
+        data object Other : Error
     }
 }
