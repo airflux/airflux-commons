@@ -23,6 +23,9 @@ import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asEmpty
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asNull
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asUnit
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.of
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 public typealias Success<ValueT> = ResultK.Success<ValueT>
 public typealias Failure<FailureT> = ResultK.Failure<FailureT>
@@ -101,28 +104,40 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
 
         public fun <FailureT : Any> failure(cause: FailureT): Failure<FailureT> = Failure(cause)
 
+        @OptIn(ExperimentalContracts::class)
         public inline fun <SuccessT, FailureT : Any> catch(
             catch: (Throwable) -> FailureT,
             block: Raise<FailureT>.() -> SuccessT
-        ): ResultK<SuccessT, FailureT> =
-            try {
+        ): ResultK<SuccessT, FailureT> {
+            contract {
+                callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+                callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
+            }
+            return try {
                 result {
                     block()
                 }
             } catch (expected: Throwable) {
                 failure(catch(expected))
             }
+        }
 
+        @OptIn(ExperimentalContracts::class)
         public inline fun <SuccessT, FailureT : Any> catchWith(
             catch: (Throwable) -> FailureT,
             block: Raise<FailureT>.() -> ResultK<SuccessT, FailureT>
-        ): ResultK<SuccessT, FailureT> =
-            try {
+        ): ResultK<SuccessT, FailureT> {
+            contract {
+                callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+                callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
+            }
+            return try {
                 resultWith {
                     block()
                 }
             } catch (expected: Throwable) {
                 failure(catch(expected))
             }
+        }
     }
 }
