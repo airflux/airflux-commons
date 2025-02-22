@@ -61,21 +61,24 @@ internal class MaybeTest : FreeSpec() {
                 "when a block throws an exception" - {
 
                     "when an exception is non fatal" - {
-                        val result = Maybe.catch<Error>({ Error.ExceptionWrapper }) {
-                            error("Error")
-                        }
+                        val exception = IllegalStateException()
 
                         "then this function should return a failure value" {
+                            val result = Maybe.catch<Error>({ Error.ExceptionWrapper }) {
+                                throw exception
+                            }
+
                             result shouldBeSome Error.ExceptionWrapper
                         }
                     }
 
                     "when an exception is fatal" - {
+                        val exception = StackOverflowError()
 
                         "then this function should throw the same exception" {
                             shouldThrow<StackOverflowError> {
                                 Maybe.catch<Error>({ Error.ExceptionWrapper }) {
-                                    throw StackOverflowError()
+                                    throw exception
                                 }
                             }
                         }
@@ -98,21 +101,24 @@ internal class MaybeTest : FreeSpec() {
                 "when a block throws an exception" - {
 
                     "when an exception is non fatal" - {
-                        val result = Maybe.catchWith<Error>({ Error.ExceptionWrapper }) {
-                            error("Error")
-                        }
+                        val exception = IllegalStateException()
 
                         "then this function should return a failure value" {
+                            val result = Maybe.catchWith<Error>({ Error.ExceptionWrapper }) {
+                                throw exception
+                            }
+
                             result shouldBeSome Error.ExceptionWrapper
                         }
                     }
 
                     "when an exception is fatal" - {
+                        val exception = StackOverflowError()
 
                         "then this function should throw the same exception" {
                             shouldThrow<StackOverflowError> {
                                 Maybe.catchWith<Error>({ Error.ExceptionWrapper }) {
-                                    throw StackOverflowError()
+                                    throw exception
                                 }
                             }
                         }
