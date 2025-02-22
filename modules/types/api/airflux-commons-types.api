@@ -161,6 +161,8 @@ public abstract interface class io/github/airflux/commons/types/maybe/Maybe {
 }
 
 public final class io/github/airflux/commons/types/maybe/Maybe$Companion {
+	public final fun catch (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/maybe/Maybe;
+	public final fun catchWith (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/maybe/Maybe;
 	public final fun none ()Lio/github/airflux/commons/types/maybe/Maybe$None;
 	public final fun some (Ljava/lang/Object;)Lio/github/airflux/commons/types/maybe/Maybe;
 }

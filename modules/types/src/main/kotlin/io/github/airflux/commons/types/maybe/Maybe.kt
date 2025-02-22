@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-@file:Suppress("TooManyFunctions")
-
 package io.github.airflux.commons.types.maybe
+
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 public typealias Some<ValueT> = Maybe.Some<ValueT>
 public typealias None = Maybe.None
@@ -32,6 +34,39 @@ public sealed interface Maybe<out ValueT : Any> {
         public fun none(): None = None
 
         public fun <ValueT> some(value: ValueT): Maybe<ValueT & Any> = if (value == null) None else Some(value)
+
+        @OptIn(ExperimentalContracts::class)
+        public inline fun <ErrorT : Any> catch(
+            catch: (Throwable) -> ErrorT,
+            block: () -> Unit
+        ): Maybe<ErrorT> {
+            contract {
+                callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+                callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
+            }
+            return try {
+                block()
+                none()
+            } catch (expected: Throwable) {
+                some(catch(expected))
+            }
+        }
+
+        @OptIn(ExperimentalContracts::class)
+        public inline fun <ErrorT : Any> catchWith(
+            catch: (Throwable) -> ErrorT,
+            block: () -> Maybe<ErrorT>
+        ): Maybe<ErrorT> {
+            contract {
+                callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+                callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
+            }
+            return try {
+                block()
+            } catch (expected: Throwable) {
+                some(catch(expected))
+            }
+        }
     }
 }
 

@@ -54,10 +54,61 @@ internal class MaybeTest : FreeSpec() {
                     result.shouldBeInstanceOf<Maybe.None>()
                 }
             }
+
+            "the `catch` function" - {
+
+                "when a block throws an exception" - {
+                    val result: Maybe<Error> = Maybe.catch<Error>({ Error.ExceptionWrapper }) {
+                        error("Error")
+                    }
+
+                    "then this function should return a failure value" {
+                        result shouldBeSome Error.ExceptionWrapper
+                    }
+                }
+
+                "when a block does not throw an exception" - {
+                    val result: Maybe<Error> = Maybe.catch({ Error.ExceptionWrapper }) {
+                        VALUE
+                    }
+
+                    "then this function should return a successful value" {
+                        result.shouldBeNone()
+                    }
+                }
+            }
+
+            "the `catchWith` function" - {
+
+                "when a block throws an exception" - {
+                    val result: Maybe<Error> = Maybe.catchWith<Error>({ Error.ExceptionWrapper }) {
+                        error("Error")
+                    }
+
+                    "then this function should return a failure value" {
+                        result shouldBeSome Error.ExceptionWrapper
+                    }
+                }
+
+                "when a block does not throw an exception" - {
+                    val result: Maybe<Error> = Maybe.catchWith<Error>({ Error.ExceptionWrapper }) {
+                        none()
+                    }
+
+                    "then this function should return a successful value" {
+                        result.shouldBeNone()
+                    }
+                }
+            }
         }
     }
 
     companion object {
         private const val VALUE = "10"
+    }
+
+    private sealed interface Error {
+        data object ExceptionWrapper : Error
+        data object Other : Error
     }
 }
