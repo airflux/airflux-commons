@@ -17,6 +17,7 @@
 package io.github.airflux.commons.types.resultk
 
 import io.github.airflux.commons.types.doRaise
+import io.github.airflux.commons.types.isFatal
 import io.github.airflux.commons.types.maybe.Maybe
 import io.github.airflux.commons.types.maybe.isSome
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asEmptyList
@@ -118,7 +119,10 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
                     block()
                 }
             } catch (expected: Throwable) {
-                failure(catch(expected))
+                if (expected.isFatal())
+                    throw expected
+                else
+                    failure(catch(expected))
             }
         }
 
@@ -136,7 +140,10 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
                     block()
                 }
             } catch (expected: Throwable) {
-                failure(catch(expected))
+                if (expected.isFatal())
+                    throw expected
+                else
+                    failure(catch(expected))
             }
         }
     }

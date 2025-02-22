@@ -18,6 +18,7 @@ package io.github.airflux.commons.types.resultk
 import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
 import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
@@ -99,12 +100,26 @@ internal class ResultKTest : FreeSpec() {
             "the `catch` function" - {
 
                 "when a block throws an exception" - {
-                    val result: ResultK<String, Error> = ResultK.catch<String, Error>({ Error.ExceptionWrapper }) {
-                        error("Error")
+
+                    "when an exception is non fatal" - {
+                        val result = ResultK.catch<String, Error>({ Error.ExceptionWrapper }) {
+                            error("Error")
+                        }
+
+                        "then this function should return a failure value" {
+                            result shouldBeFailure Error.ExceptionWrapper
+                        }
                     }
 
-                    "then this function should return a failure value" {
-                        result shouldBeFailure Error.ExceptionWrapper
+                    "when an exception is fatal" - {
+
+                        "then this function should throw the same exception" {
+                            shouldThrow<StackOverflowError> {
+                                ResultK.catch<String, Error>({ Error.ExceptionWrapper }) {
+                                    throw StackOverflowError()
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -119,7 +134,7 @@ internal class ResultKTest : FreeSpec() {
                 }
 
                 "when a block does not throw an exception" - {
-                    val result: ResultK<String, Error> = ResultK.catch({ Error.ExceptionWrapper }) {
+                    val result = ResultK.catch<String, Error>({ Error.ExceptionWrapper }) {
                         FIRST_VALUE
                     }
 
@@ -132,17 +147,31 @@ internal class ResultKTest : FreeSpec() {
             "the `catchWith` function" - {
 
                 "when a block throws an exception" - {
-                    val result: ResultK<String, Error> = ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
-                        error("Error")
+
+                    "when an exception is non fatal" - {
+                        val result = ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
+                            error("Error")
+                        }
+
+                        "then this function should return a failure value" {
+                            result shouldBeFailure Error.ExceptionWrapper
+                        }
                     }
 
-                    "then this function should return a failure value" {
-                        result shouldBeFailure Error.ExceptionWrapper
+                    "when an exception is fatal" - {
+
+                        "then this function should throw the same exception" {
+                            shouldThrow<StackOverflowError> {
+                                ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
+                                    throw StackOverflowError()
+                                }
+                            }
+                        }
                     }
                 }
 
                 "when a block raise an error" - {
-                    val result: ResultK<String, Error> = ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
+                    val result = ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
                         raise(Error.Other)
                     }
 
@@ -152,7 +181,7 @@ internal class ResultKTest : FreeSpec() {
                 }
 
                 "when a block does not throw an exception" - {
-                    val result: ResultK<String, Error> = ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
+                    val result = ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
                         FIRST_VALUE.asSuccess()
                     }
 
