@@ -16,6 +16,7 @@
 
 package io.github.airflux.commons.types.maybe
 
+import io.github.airflux.commons.types.isFatal
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -48,7 +49,10 @@ public sealed interface Maybe<out ValueT : Any> {
                 block()
                 none()
             } catch (expected: Throwable) {
-                some(catch(expected))
+                if (expected.isFatal())
+                    throw expected
+                else
+                    some(catch(expected))
             }
         }
 
@@ -64,7 +68,10 @@ public sealed interface Maybe<out ValueT : Any> {
             return try {
                 block()
             } catch (expected: Throwable) {
-                some(catch(expected))
+                if (expected.isFatal())
+                    throw expected
+                else
+                    some(catch(expected))
             }
         }
     }

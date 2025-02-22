@@ -18,6 +18,7 @@ package io.github.airflux.commons.types.maybe
 import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.maybe.matcher.shouldBeNone
 import io.github.airflux.commons.types.maybe.matcher.shouldBeSome
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.types.shouldBeInstanceOf
 
@@ -58,17 +59,31 @@ internal class MaybeTest : FreeSpec() {
             "the `catch` function" - {
 
                 "when a block throws an exception" - {
-                    val result: Maybe<Error> = Maybe.catch<Error>({ Error.ExceptionWrapper }) {
-                        error("Error")
+
+                    "when an exception is non fatal" - {
+                        val result = Maybe.catch<Error>({ Error.ExceptionWrapper }) {
+                            error("Error")
+                        }
+
+                        "then this function should return a failure value" {
+                            result shouldBeSome Error.ExceptionWrapper
+                        }
                     }
 
-                    "then this function should return a failure value" {
-                        result shouldBeSome Error.ExceptionWrapper
+                    "when an exception is fatal" - {
+
+                        "then this function should throw the same exception" {
+                            shouldThrow<StackOverflowError> {
+                                Maybe.catch<Error>({ Error.ExceptionWrapper }) {
+                                    throw StackOverflowError()
+                                }
+                            }
+                        }
                     }
                 }
 
                 "when a block does not throw an exception" - {
-                    val result: Maybe<Error> = Maybe.catch({ Error.ExceptionWrapper }) {
+                    val result = Maybe.catch<Error>({ Error.ExceptionWrapper }) {
                         VALUE
                     }
 
@@ -81,17 +96,31 @@ internal class MaybeTest : FreeSpec() {
             "the `catchWith` function" - {
 
                 "when a block throws an exception" - {
-                    val result: Maybe<Error> = Maybe.catchWith<Error>({ Error.ExceptionWrapper }) {
-                        error("Error")
+
+                    "when an exception is non fatal" - {
+                        val result = Maybe.catchWith<Error>({ Error.ExceptionWrapper }) {
+                            error("Error")
+                        }
+
+                        "then this function should return a failure value" {
+                            result shouldBeSome Error.ExceptionWrapper
+                        }
                     }
 
-                    "then this function should return a failure value" {
-                        result shouldBeSome Error.ExceptionWrapper
+                    "when an exception is fatal" - {
+
+                        "then this function should throw the same exception" {
+                            shouldThrow<StackOverflowError> {
+                                Maybe.catchWith<Error>({ Error.ExceptionWrapper }) {
+                                    throw StackOverflowError()
+                                }
+                            }
+                        }
                     }
                 }
 
                 "when a block does not throw an exception" - {
-                    val result: Maybe<Error> = Maybe.catchWith<Error>({ Error.ExceptionWrapper }) {
+                    val result = Maybe.catchWith<Error>({ Error.ExceptionWrapper }) {
                         none()
                     }
 
