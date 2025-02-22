@@ -102,21 +102,24 @@ internal class ResultKTest : FreeSpec() {
                 "when a block throws an exception" - {
 
                     "when an exception is non fatal" - {
-                        val result = ResultK.catch<String, Error>({ Error.ExceptionWrapper }) {
-                            error("Error")
-                        }
+                        val exception = IllegalStateException()
 
                         "then this function should return a failure value" {
+                            val result = ResultK.catch<String, Error>({ Error.ExceptionWrapper }) {
+                                throw exception
+                            }
+
                             result shouldBeFailure Error.ExceptionWrapper
                         }
                     }
 
                     "when an exception is fatal" - {
+                        val exception = StackOverflowError()
 
                         "then this function should throw the same exception" {
                             shouldThrow<StackOverflowError> {
                                 ResultK.catch<String, Error>({ Error.ExceptionWrapper }) {
-                                    throw StackOverflowError()
+                                    throw exception
                                 }
                             }
                         }
@@ -149,21 +152,24 @@ internal class ResultKTest : FreeSpec() {
                 "when a block throws an exception" - {
 
                     "when an exception is non fatal" - {
-                        val result = ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
-                            error("Error")
-                        }
+                        val exception = IllegalStateException()
 
                         "then this function should return a failure value" {
+                            val result = ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
+                                throw exception
+                            }
+
                             result shouldBeFailure Error.ExceptionWrapper
                         }
                     }
 
                     "when an exception is fatal" - {
+                        val exception = StackOverflowError()
 
                         "then this function should throw the same exception" {
                             shouldThrow<StackOverflowError> {
                                 ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
-                                    throw StackOverflowError()
+                                    throw exception
                                 }
                             }
                         }
