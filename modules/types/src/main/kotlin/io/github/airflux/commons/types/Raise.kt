@@ -17,7 +17,6 @@
 package io.github.airflux.commons.types
 
 import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
 import kotlin.coroutines.cancellation.CancellationException
@@ -27,7 +26,7 @@ public interface Raise<in ErrorT : Any> {
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ErrorT, RaiseT : Raise<ErrorT>> RaiseT.ensure(condition: Boolean, error: () -> ErrorT) {
+public inline fun <ErrorT: Any, RaiseT : Raise<ErrorT>> RaiseT.ensure(condition: Boolean, error: () -> ErrorT) {
     contract {
         callsInPlace(error, AT_MOST_ONCE)
     }
@@ -35,7 +34,7 @@ public inline fun <ErrorT, RaiseT : Raise<ErrorT>> RaiseT.ensure(condition: Bool
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ValueT : Any, ErrorT, RaiseT : Raise<ErrorT>> RaiseT.ensureNotNull(
+public inline fun <ValueT : Any, ErrorT : Any, RaiseT : Raise<ErrorT>> RaiseT.ensureNotNull(
     value: ValueT?,
     error: () -> ErrorT
 ): ValueT {
@@ -48,13 +47,13 @@ public inline fun <ValueT : Any, ErrorT, RaiseT : Raise<ErrorT>> RaiseT.ensureNo
 
 @Suppress("FunctionNaming")
 @OptIn(ExperimentalContracts::class)
-public inline fun <RaiseT : Raise<ErrorT>, ErrorT, ResultT> withRaise(
+public inline fun <RaiseT : Raise<ErrorT>, ErrorT : Any, ResultT> withRaise(
     raise: RaiseT,
     wrap: (ErrorT) -> ResultT,
     block: RaiseT.() -> ResultT
 ): ResultT {
     contract {
-        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+        callsInPlace(block, AT_MOST_ONCE)
     }
     return try {
         block(raise)

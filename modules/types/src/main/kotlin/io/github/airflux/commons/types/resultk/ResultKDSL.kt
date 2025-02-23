@@ -27,7 +27,7 @@ public inline fun <ValueT, FailureT : Any> result(
     block: ResultK.Raise<FailureT>.() -> ValueT
 ): ResultK<ValueT, FailureT> {
     contract {
-        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
     }
 
     return resultWith { block().asSuccess() }
@@ -39,7 +39,7 @@ public inline fun <ValueT, FailureT : Any> resultWith(
     block: ResultK.Raise<FailureT>.() -> ResultK<ValueT, FailureT>
 ): ResultK<ValueT, FailureT> {
     contract {
-        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
     }
 
     return withRaise(ResultK.Raise<FailureT>(), { it.asFailure() }, block)
