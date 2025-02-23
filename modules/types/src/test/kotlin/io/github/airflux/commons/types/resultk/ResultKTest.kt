@@ -126,16 +126,6 @@ internal class ResultKTest : FreeSpec() {
                     }
                 }
 
-                "when a block raise an error" - {
-                    val result = ResultK.catch<String, Error>({ Error.ExceptionWrapper }) {
-                        raise(Error.Other)
-                    }
-
-                    "then this function should return a failure value" {
-                        result shouldBeFailure Error.Other
-                    }
-                }
-
                 "when a block does not throw an exception" - {
                     val result = ResultK.catch<String, Error>({ Error.ExceptionWrapper }) {
                         FIRST_VALUE
@@ -173,16 +163,6 @@ internal class ResultKTest : FreeSpec() {
                                 }
                             }
                         }
-                    }
-                }
-
-                "when a block raise an error" - {
-                    val result = ResultK.catchWith<String, Error>({ Error.ExceptionWrapper }) {
-                        raise(Error.Other)
-                    }
-
-                    "then this function should return a failure value" {
-                        result shouldBeFailure Error.Other
                     }
                 }
 

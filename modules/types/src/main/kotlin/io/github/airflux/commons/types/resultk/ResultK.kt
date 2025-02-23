@@ -111,23 +111,20 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
         @JvmStatic
         public inline fun <SuccessT, FailureT : Any> catch(
             catch: (Throwable) -> FailureT,
-            block: Raise<FailureT>.() -> SuccessT
+            block: () -> SuccessT
         ): ResultK<SuccessT, FailureT> {
             contract {
                 callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
                 callsInPlace(block, InvocationKind.AT_MOST_ONCE)
             }
-            return io.github.airflux.commons.types.catch(
-                catch = { failure(catch(it)) },
-                block = { result { block() } }
-            )
+            return catchWith(catch = catch, block = { block().asSuccess() })
         }
 
         @OptIn(ExperimentalContracts::class)
         @JvmStatic
         public inline fun <SuccessT, FailureT : Any> catchWith(
             catch: (Throwable) -> FailureT,
-            block: Raise<FailureT>.() -> ResultK<SuccessT, FailureT>
+            block: () -> ResultK<SuccessT, FailureT>
         ): ResultK<SuccessT, FailureT> {
             contract {
                 callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
@@ -135,7 +132,7 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
             }
             return io.github.airflux.commons.types.catch(
                 catch = { failure(catch(it)) },
-                block = { resultWith { block() } }
+                block = { block() }
             )
         }
     }
