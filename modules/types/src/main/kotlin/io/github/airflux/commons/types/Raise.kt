@@ -47,7 +47,7 @@ public inline fun <ValueT : Any, ErrorT : Any, RaiseT : Raise<ErrorT>> RaiseT.en
 
 @Suppress("FunctionNaming")
 @OptIn(ExperimentalContracts::class)
-public inline fun <RaiseT : Raise<ErrorT>, ErrorT : Any, ResultT> withRaise(
+public inline fun <ResultT, ErrorT : Any, RaiseT : Raise<ErrorT>> withRaise(
     raise: RaiseT,
     wrap: (ErrorT) -> ResultT,
     block: RaiseT.() -> ResultT
@@ -62,7 +62,7 @@ public inline fun <RaiseT : Raise<ErrorT>, ErrorT : Any, ResultT> withRaise(
     }
 }
 
-public fun <RaiseT : Raise<ErrorT>, ErrorT : Any> RaiseT.doRaise(error: ErrorT): Nothing =
+public fun <ErrorT : Any, RaiseT : Raise<ErrorT>> RaiseT.doRaise(error: ErrorT): Nothing =
     throw RaiseException(error, this)
 
 @OptIn(ExperimentalContracts::class)
@@ -84,7 +84,7 @@ public inline fun <ValueT> catch(catch: (Throwable) -> ValueT, block: () -> Valu
 internal class RaiseException(val failure: Any, val raise: Raise<*>) : CancellationException()
 
 @PublishedApi
-internal fun <ErrorT> Exception.failureOrRethrow(raise: Raise<*>): ErrorT =
+internal fun <ErrorT : Any> Exception.failureOrRethrow(raise: Raise<*>): ErrorT =
     if (this is RaiseException && this.raise === raise)
         @Suppress("UNCHECKED_CAST")
         failure as ErrorT
