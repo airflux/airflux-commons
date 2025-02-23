@@ -21,6 +21,8 @@ public final class io/github/airflux/commons/types/RaiseKt {
 
 public abstract interface class io/github/airflux/commons/types/either/Either {
 	public static final field Companion Lio/github/airflux/commons/types/either/Either$Companion;
+	public static fun left (Ljava/lang/Object;)Lio/github/airflux/commons/types/either/Either$Left;
+	public static fun right (Ljava/lang/Object;)Lio/github/airflux/commons/types/either/Either$Right;
 }
 
 public final class io/github/airflux/commons/types/either/Either$Companion {
@@ -37,6 +39,7 @@ public final class io/github/airflux/commons/types/either/Either$Left : io/githu
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getValue ()Ljava/lang/Object;
 	public fun hashCode ()I
+	public static final fun of (Z)Lio/github/airflux/commons/types/either/Either$Left;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -58,6 +61,7 @@ public final class io/github/airflux/commons/types/either/Either$Right : io/gith
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getValue ()Ljava/lang/Object;
 	public fun hashCode ()I
+	public static final fun of (Z)Lio/github/airflux/commons/types/either/Either$Right;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -101,6 +105,8 @@ public final class io/github/airflux/commons/types/either/EitherExtensionsKt {
 
 public abstract interface class io/github/airflux/commons/types/fail/Fail {
 	public static final field Companion Lio/github/airflux/commons/types/fail/Fail$Companion;
+	public static fun error (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Error;
+	public static fun exception (Ljava/lang/Object;)Lio/github/airflux/commons/types/fail/Fail$Exception;
 }
 
 public final class io/github/airflux/commons/types/fail/Fail$Companion {
@@ -159,6 +165,10 @@ public final class io/github/airflux/commons/types/fail/FailExtensionsKt {
 
 public abstract interface class io/github/airflux/commons/types/maybe/Maybe {
 	public static final field Companion Lio/github/airflux/commons/types/maybe/Maybe$Companion;
+	public static fun catch (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/maybe/Maybe;
+	public static fun catchWith (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/maybe/Maybe;
+	public static fun none ()Lio/github/airflux/commons/types/maybe/Maybe$None;
+	public static fun some (Ljava/lang/Object;)Lio/github/airflux/commons/types/maybe/Maybe;
 }
 
 public final class io/github/airflux/commons/types/maybe/Maybe$Companion {
@@ -224,6 +234,10 @@ public final class io/github/airflux/commons/types/resultk/BiFailureResultKExten
 
 public abstract interface class io/github/airflux/commons/types/resultk/ResultK {
 	public static final field Companion Lio/github/airflux/commons/types/resultk/ResultK$Companion;
+	public static fun catch (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static fun catchWith (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static fun failure (Ljava/lang/Object;)Lio/github/airflux/commons/types/resultk/ResultK$Failure;
+	public static fun success (Ljava/lang/Object;)Lio/github/airflux/commons/types/resultk/ResultK$Success;
 }
 
 public final class io/github/airflux/commons/types/resultk/ResultK$Companion {
@@ -262,6 +276,7 @@ public final class io/github/airflux/commons/types/resultk/ResultK$Success : io/
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getValue ()Ljava/lang/Object;
 	public fun hashCode ()I
+	public static final fun of (Z)Lio/github/airflux/commons/types/resultk/ResultK$Success;
 	public fun toString ()Ljava/lang/String;
 }
 

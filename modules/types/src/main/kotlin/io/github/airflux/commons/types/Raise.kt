@@ -26,7 +26,7 @@ public interface Raise<in ErrorT : Any> {
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ErrorT: Any, RaiseT : Raise<ErrorT>> RaiseT.ensure(condition: Boolean, error: () -> ErrorT) {
+public inline fun <ErrorT : Any, RaiseT : Raise<ErrorT>> RaiseT.ensure(condition: Boolean, error: () -> ErrorT) {
     contract {
         callsInPlace(error, AT_MOST_ONCE)
     }

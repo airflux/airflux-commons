@@ -33,8 +33,10 @@ public sealed interface Fail<out ErrorT : Any, out ExceptionT : Any> {
 
     public companion object {
 
+        @JvmStatic
         public fun <ErrorT : Any> error(value: ErrorT): Error<ErrorT> = Error(value)
 
+        @JvmStatic
         public fun <ExceptionT : Any> exception(value: ExceptionT): Exception<ExceptionT> = Exception(value)
     }
 }

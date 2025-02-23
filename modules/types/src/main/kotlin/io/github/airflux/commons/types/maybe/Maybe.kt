@@ -32,11 +32,14 @@ public sealed interface Maybe<out ValueT : Any> {
 
     public companion object {
 
+        @JvmStatic
         public fun none(): None = None
 
+        @JvmStatic
         public fun <ValueT> some(value: ValueT): Maybe<ValueT & Any> = if (value == null) None else Some(value)
 
         @OptIn(ExperimentalContracts::class)
+        @JvmStatic
         public inline fun <ErrorT : Any> catch(
             catch: (Throwable) -> ErrorT,
             block: () -> Unit
@@ -55,6 +58,7 @@ public sealed interface Maybe<out ValueT : Any> {
         }
 
         @OptIn(ExperimentalContracts::class)
+        @JvmStatic
         public inline fun <ErrorT : Any> catchWith(
             catch: (Throwable) -> ErrorT,
             block: () -> Maybe<ErrorT>

@@ -15,9 +15,11 @@
  */
 package io.github.airflux.commons.types.resultk
 
+import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 
+@OptIn(AirfluxTypesExperimental::class)
 internal class SuccessTest : FreeSpec() {
 
     init {

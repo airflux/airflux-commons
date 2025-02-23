@@ -67,6 +67,7 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
 
             public val asEmptyList: Success<List<Nothing>> = Success(emptyList())
 
+            @JvmStatic
             public fun of(value: Boolean): Success<Boolean> = if (value) asTrue else asFalse
         }
     }
@@ -81,15 +82,16 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
          * The strategy is as follows:
          * 1. If the value is null, it returns the value of the [asNull] property.
          * 2. If the type of value is Unit, it returns the value of the [asUnit] property.
-         * 3. If the value is a boolean, it returns the value of the [asTrue] or [asFalse] property depending on
-         *    the value.
+         * 3. If the value is a boolean, it returns the value of the [ResultK.Success.asTrue] or
+         * [ResultK.Success.asFalse] property depending on the value.
          * 4. If the value is a list, it returns [asEmptyList] if the list is empty, or creates a new [Success] with
-         *    the list.
+         * the list.
          * 5. Otherwise, it creates a new [Success] with the given value.
          *
          * @param value the value to be wrapped in a [Success].
          * @return a [Success] instance wrapping the given value.
          */
+        @JvmStatic
         public fun <ValueT> success(value: ValueT): Success<ValueT> {
             val result = when {
                 value == null -> asNull
@@ -103,9 +105,11 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
             return result as Success<ValueT>
         }
 
+        @JvmStatic
         public fun <FailureT : Any> failure(cause: FailureT): Failure<FailureT> = Failure(cause)
 
         @OptIn(ExperimentalContracts::class)
+        @JvmStatic
         public inline fun <SuccessT, FailureT : Any> catch(
             catch: (Throwable) -> FailureT,
             block: Raise<FailureT>.() -> SuccessT
@@ -121,6 +125,7 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
         }
 
         @OptIn(ExperimentalContracts::class)
+        @JvmStatic
         public inline fun <SuccessT, FailureT : Any> catchWith(
             catch: (Throwable) -> FailureT,
             block: Raise<FailureT>.() -> ResultK<SuccessT, FailureT>

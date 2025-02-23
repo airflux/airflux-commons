@@ -37,6 +37,7 @@ public sealed interface Either<out LeftT, out RightT> {
 
             public val asEmptyList: Left<List<Nothing>> = Left(emptyList())
 
+            @JvmStatic
             public fun of(value: Boolean): Left<Boolean> = if (value) asTrue else asFalse
         }
     }
@@ -55,14 +56,17 @@ public sealed interface Either<out LeftT, out RightT> {
 
             public val asEmptyList: Right<List<Nothing>> = Right(emptyList())
 
+            @JvmStatic
             public fun of(value: Boolean): Right<Boolean> = if (value) asTrue else asFalse
         }
     }
 
     public companion object {
 
+        @JvmStatic
         public fun <LeftT> left(value: LeftT): Left<LeftT> = Left(value)
 
+        @JvmStatic
         public fun <RightT> right(cause: RightT): Right<RightT> = Right(cause)
     }
 }
