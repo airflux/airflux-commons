@@ -16,7 +16,7 @@
 
 package io.github.airflux.commons.types.maybe
 
-import io.github.airflux.commons.types.isFatal
+import io.github.airflux.commons.types.tryCatch
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -45,15 +45,13 @@ public sealed interface Maybe<out ValueT : Any> {
                 callsInPlace(block, InvocationKind.AT_MOST_ONCE)
                 callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
             }
-            return try {
-                block()
-                none()
-            } catch (expected: Throwable) {
-                if (expected.isFatal())
-                    throw expected
-                else
-                    some(catch(expected))
-            }
+            return tryCatch(
+                catch = { some(catch(it)) },
+                block = {
+                    block()
+                    none()
+                }
+            )
         }
 
         @OptIn(ExperimentalContracts::class)
@@ -65,14 +63,10 @@ public sealed interface Maybe<out ValueT : Any> {
                 callsInPlace(block, InvocationKind.AT_MOST_ONCE)
                 callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
             }
-            return try {
-                block()
-            } catch (expected: Throwable) {
-                if (expected.isFatal())
-                    throw expected
-                else
-                    some(catch(expected))
-            }
+            return tryCatch(
+                catch = { some(catch(it)) },
+                block = { block() }
+            )
         }
     }
 }

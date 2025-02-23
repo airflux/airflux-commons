@@ -66,6 +66,22 @@ public inline fun <RaiseT : Raise<ErrorT>, ErrorT, ResultT> withRaise(
 public fun <RaiseT : Raise<ErrorT>, ErrorT : Any> RaiseT.doRaise(error: ErrorT): Nothing =
     throw RaiseException(error, this)
 
+@OptIn(ExperimentalContracts::class)
+public inline fun <ValueT> tryCatch(catch: (Throwable) -> ValueT, block: () -> ValueT): ValueT {
+    contract {
+        callsInPlace(block, AT_MOST_ONCE)
+        callsInPlace(catch, AT_MOST_ONCE)
+    }
+    return try {
+        block()
+    } catch (expected: Throwable) {
+        if (expected.isFatal())
+            throw expected
+        else
+            catch(expected)
+    }
+}
+
 internal class RaiseException(val failure: Any, val raise: Raise<*>) : CancellationException()
 
 @PublishedApi

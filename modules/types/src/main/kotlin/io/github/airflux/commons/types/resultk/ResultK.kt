@@ -17,13 +17,13 @@
 package io.github.airflux.commons.types.resultk
 
 import io.github.airflux.commons.types.doRaise
-import io.github.airflux.commons.types.isFatal
 import io.github.airflux.commons.types.maybe.Maybe
 import io.github.airflux.commons.types.maybe.isSome
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asEmptyList
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asNull
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asUnit
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.of
+import io.github.airflux.commons.types.tryCatch
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -111,19 +111,13 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
             block: Raise<FailureT>.() -> SuccessT
         ): ResultK<SuccessT, FailureT> {
             contract {
-                callsInPlace(block, InvocationKind.AT_MOST_ONCE)
                 callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
+                callsInPlace(block, InvocationKind.AT_MOST_ONCE)
             }
-            return try {
-                result {
-                    block()
-                }
-            } catch (expected: Throwable) {
-                if (expected.isFatal())
-                    throw expected
-                else
-                    failure(catch(expected))
-            }
+            return tryCatch(
+                catch = { failure(catch(it)) },
+                block = { result { block() } }
+            )
         }
 
         @OptIn(ExperimentalContracts::class)
@@ -132,19 +126,13 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
             block: Raise<FailureT>.() -> ResultK<SuccessT, FailureT>
         ): ResultK<SuccessT, FailureT> {
             contract {
-                callsInPlace(block, InvocationKind.AT_MOST_ONCE)
                 callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
+                callsInPlace(block, InvocationKind.AT_MOST_ONCE)
             }
-            return try {
-                resultWith {
-                    block()
-                }
-            } catch (expected: Throwable) {
-                if (expected.isFatal())
-                    throw expected
-                else
-                    failure(catch(expected))
-            }
+            return tryCatch(
+                catch = { failure(catch(it)) },
+                block = { resultWith { block() } }
+            )
         }
     }
 }
