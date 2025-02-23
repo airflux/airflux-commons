@@ -23,7 +23,6 @@ import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asEmpty
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asNull
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asUnit
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.of
-import io.github.airflux.commons.types.tryCatch
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -118,7 +117,7 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
                 callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
                 callsInPlace(block, InvocationKind.AT_MOST_ONCE)
             }
-            return tryCatch(
+            return io.github.airflux.commons.types.catch(
                 catch = { failure(catch(it)) },
                 block = { result { block() } }
             )
@@ -134,7 +133,7 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
                 callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
                 callsInPlace(block, InvocationKind.AT_MOST_ONCE)
             }
-            return tryCatch(
+            return io.github.airflux.commons.types.catch(
                 catch = { failure(catch(it)) },
                 block = { resultWith { block() } }
             )

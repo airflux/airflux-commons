@@ -15,19 +15,19 @@
  */
 package io.github.airflux.commons.types.raise
 
-import io.github.airflux.commons.types.tryCatch
+import io.github.airflux.commons.types.catch
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class TryCatchTest : FreeSpec() {
+internal class CatchTest : FreeSpec() {
 
     init {
 
-        "The `tryCatch` function" - {
+        "The `catch` function" - {
 
             "when a block does not throw an exception" - {
-                val result = tryCatch({ ALTERNATIVE_VALUE }) {
+                val result = catch({ ALTERNATIVE_VALUE }) {
                     VALUE
                 }
 
@@ -42,7 +42,7 @@ internal class TryCatchTest : FreeSpec() {
                     val exception = IllegalStateException()
 
                     "then this function should return a value after handling an exception" {
-                        val result = tryCatch({ ALTERNATIVE_VALUE }) {
+                        val result = catch({ ALTERNATIVE_VALUE }) {
                             throw exception
                         }
 
@@ -55,7 +55,7 @@ internal class TryCatchTest : FreeSpec() {
 
                     "then this function should throw the same exception" {
                         shouldThrow<StackOverflowError> {
-                            tryCatch({ ALTERNATIVE_VALUE }) {
+                            catch({ ALTERNATIVE_VALUE }) {
                                 throw exception
                             }
                         }

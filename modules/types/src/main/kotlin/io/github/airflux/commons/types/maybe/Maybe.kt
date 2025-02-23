@@ -16,7 +16,6 @@
 
 package io.github.airflux.commons.types.maybe
 
-import io.github.airflux.commons.types.tryCatch
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -48,7 +47,7 @@ public sealed interface Maybe<out ValueT : Any> {
                 callsInPlace(block, InvocationKind.AT_MOST_ONCE)
                 callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
             }
-            return tryCatch(
+            return io.github.airflux.commons.types.catch(
                 catch = { some(catch(it)) },
                 block = {
                     block()
@@ -67,7 +66,7 @@ public sealed interface Maybe<out ValueT : Any> {
                 callsInPlace(block, InvocationKind.AT_MOST_ONCE)
                 callsInPlace(catch, InvocationKind.AT_MOST_ONCE)
             }
-            return tryCatch(
+            return io.github.airflux.commons.types.catch(
                 catch = { some(catch(it)) },
                 block = { block() }
             )

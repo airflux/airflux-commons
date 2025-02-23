@@ -11,11 +11,11 @@ public abstract interface class io/github/airflux/commons/types/Raise {
 }
 
 public final class io/github/airflux/commons/types/RaiseKt {
+	public static final fun catch (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
 	public static final fun doRaise (Lio/github/airflux/commons/types/Raise;Ljava/lang/Object;)Ljava/lang/Void;
 	public static final fun ensure (Lio/github/airflux/commons/types/Raise;ZLkotlin/jvm/functions/Function0;)V
 	public static final fun ensureNotNull (Lio/github/airflux/commons/types/Raise;Ljava/lang/Object;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
 	public static final fun failureOrRethrow (Ljava/lang/Exception;Lio/github/airflux/commons/types/Raise;)Ljava/lang/Object;
-	public static final fun tryCatch (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
 	public static final fun withRaise (Lio/github/airflux/commons/types/Raise;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 }
 

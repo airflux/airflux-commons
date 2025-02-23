@@ -66,7 +66,7 @@ public fun <RaiseT : Raise<ErrorT>, ErrorT : Any> RaiseT.doRaise(error: ErrorT):
     throw RaiseException(error, this)
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ValueT> tryCatch(catch: (Throwable) -> ValueT, block: () -> ValueT): ValueT {
+public inline fun <ValueT> catch(catch: (Throwable) -> ValueT, block: () -> ValueT): ValueT {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
         callsInPlace(catch, AT_MOST_ONCE)
