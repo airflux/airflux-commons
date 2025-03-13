@@ -185,6 +185,15 @@ public final class io/github/airflux/commons/types/maybe/Maybe$None : io/github/
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/airflux/commons/types/maybe/Maybe$Raise : io/github/airflux/commons/types/Raise {
+	public fun <init> ()V
+	public final fun bind (Lio/github/airflux/commons/types/resultk/ResultK;)Ljava/lang/Object;
+	public final fun component1 (Lio/github/airflux/commons/types/resultk/ResultK;)Ljava/lang/Object;
+	public final fun raise (Lio/github/airflux/commons/types/maybe/Maybe;)V
+	public final fun raise (Lio/github/airflux/commons/types/resultk/ResultK;)V
+	public fun raise (Ljava/lang/Object;)Ljava/lang/Void;
+}
+
 public final class io/github/airflux/commons/types/maybe/Maybe$Some : io/github/airflux/commons/types/maybe/Maybe {
 	public fun <init> (Ljava/lang/Object;)V
 	public final fun component1 ()Ljava/lang/Object;
@@ -215,6 +224,10 @@ public final class io/github/airflux/commons/types/maybe/MaybeExtensionsKt {
 	public static final fun onSome (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
 	public static final fun orElse (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/maybe/Maybe;
 	public static final fun orThrow (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+}
+
+public final class io/github/airflux/commons/types/maybe/MaybeFailureDSLKt {
+	public static final fun maybeFailure (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
 }
 
 public final class io/github/airflux/commons/types/maybe/MaybeKt {
