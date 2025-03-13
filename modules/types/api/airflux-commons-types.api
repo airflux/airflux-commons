@@ -185,12 +185,8 @@ public final class io/github/airflux/commons/types/maybe/Maybe$None : io/github/
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/commons/types/maybe/Maybe$Raise : io/github/airflux/commons/types/Raise {
+public final class io/github/airflux/commons/types/maybe/Maybe$Raise : io/github/airflux/commons/types/DefaultRaise {
 	public fun <init> ()V
-	public final fun bind (Lio/github/airflux/commons/types/resultk/ResultK;)Ljava/lang/Object;
-	public final fun component1 (Lio/github/airflux/commons/types/resultk/ResultK;)Ljava/lang/Object;
-	public final fun raise (Lio/github/airflux/commons/types/maybe/Maybe;)V
-	public final fun raise (Lio/github/airflux/commons/types/resultk/ResultK;)V
 	public fun raise (Ljava/lang/Object;)Ljava/lang/Void;
 }
 
@@ -271,12 +267,8 @@ public final class io/github/airflux/commons/types/resultk/ResultK$Failure : io/
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/commons/types/resultk/ResultK$Raise : io/github/airflux/commons/types/Raise {
+public final class io/github/airflux/commons/types/resultk/ResultK$Raise : io/github/airflux/commons/types/DefaultRaise {
 	public fun <init> ()V
-	public final fun bind (Lio/github/airflux/commons/types/resultk/ResultK;)Ljava/lang/Object;
-	public final fun component1 (Lio/github/airflux/commons/types/resultk/ResultK;)Ljava/lang/Object;
-	public final fun raise (Lio/github/airflux/commons/types/maybe/Maybe;)V
-	public final fun raise (Lio/github/airflux/commons/types/resultk/ResultK;)V
 	public fun raise (Ljava/lang/Object;)Ljava/lang/Void;
 }
 

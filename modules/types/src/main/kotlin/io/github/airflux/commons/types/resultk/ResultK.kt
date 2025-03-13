@@ -16,9 +16,8 @@
 
 package io.github.airflux.commons.types.resultk
 
+import io.github.airflux.commons.types.DefaultRaise
 import io.github.airflux.commons.types.doRaise
-import io.github.airflux.commons.types.maybe.Maybe
-import io.github.airflux.commons.types.maybe.isSome
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asEmptyList
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asNull
 import io.github.airflux.commons.types.resultk.ResultK.Success.Companion.asUnit
@@ -32,20 +31,7 @@ public typealias Failure<FailureT> = ResultK.Failure<FailureT>
 
 public sealed interface ResultK<out ValueT, out FailureT : Any> {
 
-    @Suppress("MemberNameEqualsClassName")
-    public class Raise<in FailureT : Any> : io.github.airflux.commons.types.Raise<FailureT> {
-
-        public operator fun <ValueT> ResultK<ValueT, FailureT>.component1(): ValueT = bind()
-
-        public fun <ValueT> ResultK<ValueT, FailureT>.bind(): ValueT = if (isSuccess()) value else raise(cause)
-
-        public fun <ValueT> ResultK<ValueT, FailureT>.raise() {
-            if (isFailure()) raise(cause)
-        }
-
-        public fun Maybe<FailureT>.raise() {
-            if (isSome()) raise(value)
-        }
+    public class Raise<in FailureT : Any> : DefaultRaise<FailureT> {
 
         public override fun raise(error: FailureT): Nothing {
             doRaise(error)
