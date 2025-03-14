@@ -16,10 +16,17 @@
 package io.github.airflux.commons.types.maybe
 
 import io.github.airflux.commons.types.AirfluxTypesExperimental
+import io.github.airflux.commons.types.fail.Fail
 import io.github.airflux.commons.types.fail.matcher.shouldBeError
 import io.github.airflux.commons.types.fail.matcher.shouldBeException
 import io.github.airflux.commons.types.maybe.matcher.shouldBeNone
 import io.github.airflux.commons.types.maybe.matcher.shouldBeSome
+import io.github.airflux.commons.types.resultk.ResultK
+import io.github.airflux.commons.types.resultk.asFailure
+import io.github.airflux.commons.types.resultk.asSuccess
+import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
+import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
+import io.github.airflux.commons.types.resultk.matcher.shouldContainFailureInstance
 import io.kotest.assertions.failure
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
@@ -287,7 +294,7 @@ internal class MaybeExtensionsTest : FreeSpec() {
                 }
             }
 
-            "the `getOrElse` function with a predicate" - {
+            "the `getOrElse` function with lambda `default`" - {
 
                 "when a variable has the `Some` type" - {
                     val original: Maybe<String> = create(Maybe.Some(ORIGINAL_VALUE))
@@ -466,6 +473,206 @@ internal class MaybeExtensionsTest : FreeSpec() {
                     }
                 }
             }
+
+            "the `toResultAsSuccessOr` function" - {
+
+                "when a variable has the `Some` type" - {
+                    val original: Maybe<String> = create(Maybe.Some(ORIGINAL_VALUE))
+
+                    "then this function should return the `Success` type with the value from the original value" {
+                        val result: ResultK<String, Error> = original toResultAsSuccessOr Error.First.asFailure()
+
+                        result shouldBeSuccess ORIGINAL_VALUE
+                    }
+                }
+
+                "when a variable has the `None` type" - {
+                    val original: Maybe<String> = create(Maybe.None)
+
+                    "then this function should return the `Failure` type with the value from the function `onNone`" {
+                        val result: ResultK<String, Error> = original toResultAsSuccessOr Error.First.asFailure()
+
+                        result shouldBeFailure Error.First
+                    }
+                }
+            }
+
+            "the `toResultAsSuccessOr` function with lambda `onNone`" - {
+
+                "when a variable has the `Some` type" - {
+                    val original: Maybe<String> = create(Maybe.Some(ORIGINAL_VALUE))
+
+                    "then this function should return the `Success` type with the value from the original value" {
+                        val result: ResultK<String, Error> =
+                            original.toResultAsSuccessOr(onNone = { Error.First.asFailure() })
+
+                        result shouldBeSuccess ORIGINAL_VALUE
+                    }
+                }
+
+                "when a variable has the `None` type" - {
+                    val original: Maybe<String> = create(Maybe.None)
+
+                    "then this function should return the `Failure` type with the value from the function `onNone`" {
+                        val result: ResultK<String, Error> =
+                            original.toResultAsSuccessOr(onNone = { Error.First.asFailure() })
+
+                        result shouldBeFailure Error.First
+                    }
+                }
+            }
+
+            "the `toResultAsFailureOr` function" - {
+
+                "when a variable has the `Some` type" - {
+                    val original: Maybe<Error> = create(Maybe.Some(Error.First))
+
+                    "then this function should return the `Failure` type with the value from the original value" {
+                        val result: ResultK<String, Error> = original toResultAsFailureOr ORIGINAL_VALUE.asSuccess()
+
+                        result shouldBeFailure Error.First
+                    }
+                }
+
+                "when a variable has the `None` type" - {
+                    val original: Maybe<Error> = create(Maybe.None)
+
+                    "then this function should return the `Success` type with the value from the function `onNone`" {
+                        val result: ResultK<String, Error> = original toResultAsFailureOr ORIGINAL_VALUE.asSuccess()
+
+                        result shouldBeSuccess ORIGINAL_VALUE
+                    }
+                }
+            }
+
+            "the `toResultAsFailureOr` function with lambda `onNone`" - {
+
+                "when a variable has the `Some` type" - {
+                    val original: Maybe<Error> = create(Maybe.Some(Error.First))
+
+                    "then this function should return the `Failure` type with the value from the original value" {
+                        val result: ResultK<String, Error> =
+                            original.toResultAsFailureOr(onNone = { ORIGINAL_VALUE.asSuccess() })
+
+                        result shouldBeFailure Error.First
+                    }
+                }
+
+                "when a variable has the `None` type" - {
+                    val original: Maybe<Error> = create(Maybe.None)
+
+                    "then this function should return the `Success` type with the value from the function `onNone`" {
+                        val result: ResultK<String, Error> =
+                            original.toResultAsFailureOr(onNone = { ORIGINAL_VALUE.asSuccess() })
+
+                        result shouldBeSuccess ORIGINAL_VALUE
+                    }
+                }
+            }
+
+            "the `toResultAsErrorOr` function" - {
+
+                "when a variable has the `Some` type" - {
+                    val original: Maybe<Error> = create(Maybe.Some(Error.First))
+
+                    "then this function should return a failure of type `Fail.Error` containing the original value" {
+                        val result: ResultK<String, Fail.Error<Error>> =
+                            original toResultAsErrorOr ORIGINAL_VALUE.asSuccess()
+
+                        val failure = result.shouldContainFailureInstance()
+                        failure shouldBeError Error.First
+                    }
+                }
+
+                "when a variable has the `None` type" - {
+                    val original: Maybe<Error> = create(Maybe.None)
+
+                    "then this function should return the `Success` type with the value from the function `onNone`" {
+                        val result: ResultK<String, Fail.Error<Error>> =
+                            original toResultAsErrorOr ORIGINAL_VALUE.asSuccess()
+
+                        result shouldBeSuccess ORIGINAL_VALUE
+                    }
+                }
+            }
+
+            "the `toResultAsErrorOr` function with lambda `onNone`" - {
+
+                "when a variable has the `Some` type" - {
+                    val original: Maybe<Error> = create(Maybe.Some(Error.First))
+
+                    "then this function should return a failure of type `Fail.Error` containing the original value" {
+                        val result: ResultK<String, Fail.Error<Error>> =
+                            original.toResultAsErrorOr(onNone = { ORIGINAL_VALUE.asSuccess() })
+
+                        val failure = result.shouldContainFailureInstance()
+                        failure shouldBeError Error.First
+                    }
+                }
+
+                "when a variable has the `None` type" - {
+                    val original: Maybe<Error> = create(Maybe.None)
+
+                    "then this function should return the `Success` type with the value from the function `onNone`" {
+                        val result: ResultK<String, Fail.Error<Error>> =
+                            original.toResultAsErrorOr(onNone = { ORIGINAL_VALUE.asSuccess() })
+
+                        result shouldBeSuccess ORIGINAL_VALUE
+                    }
+                }
+            }
+
+            "the `toResultAsExceptionOr` function" - {
+
+                "when a variable has the `Some` type" - {
+                    val original: Maybe<Error> = create(Maybe.Some(Error.First))
+
+                    "then this function should return a failure of type `Fail.Exception` containing the original value" {
+                        val result: ResultK<String, Fail.Exception<Error>> =
+                            original toResultAsExceptionOr ORIGINAL_VALUE.asSuccess()
+
+                        val failure = result.shouldContainFailureInstance()
+                        failure shouldBeException Error.First
+                    }
+                }
+
+                "when a variable has the `None` type" - {
+                    val original: Maybe<Error> = create(Maybe.None)
+
+                    "then this function should return the `Success` type with the value from the default value" {
+                        val result: ResultK<String, Fail.Exception<Error>> =
+                            original toResultAsExceptionOr ORIGINAL_VALUE.asSuccess()
+
+                        result shouldBeSuccess ORIGINAL_VALUE
+                    }
+                }
+            }
+
+            "the `toResultAsExceptionOr` function with lambda `onNone`" - {
+
+                "when a variable has the `Some` type" - {
+                    val original: Maybe<Error> = create(Maybe.Some(Error.First))
+
+                    "then this function should return a failure of type `Fail.Exception` containing the original value" {
+                        val result: ResultK<String, Fail.Exception<Error>> =
+                            original.toResultAsExceptionOr(onNone = { ORIGINAL_VALUE.asSuccess() })
+
+                        val failure = result.shouldContainFailureInstance()
+                        failure shouldBeException Error.First
+                    }
+                }
+
+                "when a variable has the `None` type" - {
+                    val original: Maybe<Error> = create(Maybe.None)
+
+                    "then this function should return the `Success` type with the value from the function `onNone`" {
+                        val result: ResultK<String, Fail.Exception<Error>> =
+                            original.toResultAsExceptionOr(onNone = { ORIGINAL_VALUE.asSuccess() })
+
+                        result shouldBeSuccess ORIGINAL_VALUE
+                    }
+                }
+            }
         }
     }
 
@@ -475,4 +682,8 @@ internal class MaybeExtensionsTest : FreeSpec() {
     }
 
     private fun <ValueT : Any> create(value: Maybe<ValueT>): Maybe<ValueT> = value
+
+    private sealed class Error {
+        data object First : Error()
+    }
 }

@@ -19,6 +19,11 @@
 package io.github.airflux.commons.types.maybe
 
 import io.github.airflux.commons.types.fail.Fail
+import io.github.airflux.commons.types.fail.asError
+import io.github.airflux.commons.types.fail.asException
+import io.github.airflux.commons.types.resultk.ResultK
+import io.github.airflux.commons.types.resultk.asFailure
+import io.github.airflux.commons.types.resultk.asSuccess
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
 import kotlin.contracts.contract
@@ -176,3 +181,77 @@ public fun <ValueT : Any> Maybe<ValueT>.liftToError(): Maybe<Fail.Error<ValueT>>
 
 public fun <ValueT : Any> Maybe<ValueT>.liftToException(): Maybe<Fail.Exception<ValueT>> =
     map { Fail.exception(it) }
+
+@OptIn(ExperimentalContracts::class)
+public infix fun <ValueT : Any, Failure : Any> Maybe<ValueT>.toResultAsSuccessOr(
+    onNone: ResultK.Failure<Failure>
+): ResultK<ValueT, Failure> =
+    toResultAsSuccessOr { onNone }
+
+@OptIn(ExperimentalContracts::class)
+public inline infix fun <ValueT : Any, Failure : Any> Maybe<ValueT>.toResultAsSuccessOr(
+    onNone: () -> ResultK.Failure<Failure>
+): ResultK<ValueT, Failure> {
+    contract {
+        callsInPlace(onNone, AT_MOST_ONCE)
+    }
+    return fold(
+        onSome = { it.asSuccess() },
+        onNone = { onNone() }
+    )
+}
+
+@OptIn(ExperimentalContracts::class)
+public infix fun <ValueT, Failure : Any> Maybe<Failure>.toResultAsFailureOr(
+    onNone: ResultK.Success<ValueT>
+): ResultK<ValueT, Failure> =
+    toResultAsFailureOr { onNone }
+
+@OptIn(ExperimentalContracts::class)
+public inline infix fun <ValueT, Failure : Any> Maybe<Failure>.toResultAsFailureOr(
+    onNone: () -> ResultK.Success<ValueT>
+): ResultK<ValueT, Failure> {
+    contract {
+        callsInPlace(onNone, AT_MOST_ONCE)
+    }
+    return fold(
+        onSome = { it.asFailure() },
+        onNone = { onNone() }
+    )
+}
+
+public infix fun <ValueT, Failure : Any> Maybe<Failure>.toResultAsErrorOr(
+    onNone: ResultK.Success<ValueT>
+): ResultK<ValueT, Fail.Error<Failure>> =
+    toResultAsErrorOr { onNone }
+
+@OptIn(ExperimentalContracts::class)
+public inline infix fun <ValueT, Failure : Any> Maybe<Failure>.toResultAsErrorOr(
+    onNone: () -> ResultK.Success<ValueT>
+): ResultK<ValueT, Fail.Error<Failure>> {
+    contract {
+        callsInPlace(onNone, AT_MOST_ONCE)
+    }
+    return fold(
+        onSome = { it.asError().asFailure() },
+        onNone = { onNone() }
+    )
+}
+
+public infix fun <ValueT, Failure : Any> Maybe<Failure>.toResultAsExceptionOr(
+    onNone: ResultK.Success<ValueT>
+): ResultK<ValueT, Fail.Exception<Failure>> =
+    toResultAsExceptionOr { onNone }
+
+@OptIn(ExperimentalContracts::class)
+public inline infix fun <ValueT, Failure : Any> Maybe<Failure>.toResultAsExceptionOr(
+    onNone: () -> ResultK.Success<ValueT>
+): ResultK<ValueT, Fail.Exception<Failure>> {
+    contract {
+        callsInPlace(onNone, AT_MOST_ONCE)
+    }
+    return fold(
+        onSome = { it.asException().asFailure() },
+        onNone = { onNone() }
+    )
+}

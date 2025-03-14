@@ -220,6 +220,14 @@ public final class io/github/airflux/commons/types/maybe/MaybeExtensionsKt {
 	public static final fun onSome (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
 	public static final fun orElse (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/maybe/Maybe;
 	public static final fun orThrow (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+	public static final fun toResultAsErrorOr (Lio/github/airflux/commons/types/maybe/Maybe;Lio/github/airflux/commons/types/resultk/ResultK$Success;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun toResultAsErrorOr (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun toResultAsExceptionOr (Lio/github/airflux/commons/types/maybe/Maybe;Lio/github/airflux/commons/types/resultk/ResultK$Success;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun toResultAsExceptionOr (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun toResultAsFailureOr (Lio/github/airflux/commons/types/maybe/Maybe;Lio/github/airflux/commons/types/resultk/ResultK$Success;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun toResultAsFailureOr (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun toResultAsSuccessOr (Lio/github/airflux/commons/types/maybe/Maybe;Lio/github/airflux/commons/types/resultk/ResultK$Failure;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun toResultAsSuccessOr (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/resultk/ResultK;
 }
 
 public final class io/github/airflux/commons/types/maybe/MaybeFailureDSLKt {
