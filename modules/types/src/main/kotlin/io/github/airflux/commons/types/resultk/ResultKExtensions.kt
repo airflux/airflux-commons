@@ -150,11 +150,12 @@ public inline fun <ValueT, ResultT : Any, FailureT : Any> ResultK<ValueT?, Failu
         callsInPlace(transform, AT_MOST_ONCE)
     }
 
-    return if (this.isSuccess() && this.value != null)
+    return if (this.isFailure())
+        this
+    else if (this.value != null)
         transform(value)
     else
-        @Suppress("UNCHECKED_CAST")
-        this as ResultK<ResultT?, FailureT>
+        ResultK.Success.asNull
 }
 
 @OptIn(ExperimentalContracts::class)
