@@ -143,6 +143,38 @@ public inline fun <ValueT, FailureT : Any> ResultK<Boolean, FailureT>.flatMapBoo
 }
 
 @OptIn(ExperimentalContracts::class)
+public inline fun <ValueT, ResultT : Any, FailureT : Any> ResultK<ValueT?, FailureT>.flatMapNullable(
+    ifNull: () -> ResultK<ResultT, FailureT>,
+    ifNonNull: (ValueT) -> ResultK<ResultT, FailureT>
+): ResultK<ResultT, FailureT> {
+    contract {
+        callsInPlace(ifNull, AT_MOST_ONCE)
+        callsInPlace(ifNonNull, AT_MOST_ONCE)
+    }
+    return if (this.isFailure())
+        this
+    else {
+        val value = this.value
+        if (value != null)
+            ifNonNull(value)
+        else
+            ifNull()
+    }
+}
+
+@OptIn(ExperimentalContracts::class)
+public inline fun <ValueT, ResultT : Any, FailureT : Any> ResultK<ValueT?, FailureT>.flatMapNotNull(
+    ifNull: () -> ResultT,
+    ifNonNull: (ValueT) -> ResultK<ResultT, FailureT>
+): ResultK<ResultT, FailureT> {
+    contract {
+        callsInPlace(ifNull, AT_MOST_ONCE)
+        callsInPlace(ifNonNull, AT_MOST_ONCE)
+    }
+    return flatMapNullable(ifNull = { ifNull().asSuccess() }, ifNonNull = ifNonNull)
+}
+
+@OptIn(ExperimentalContracts::class)
 public inline fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.onSuccess(
     block: (ValueT) -> Unit
 ): ResultK<ValueT, FailureT> {

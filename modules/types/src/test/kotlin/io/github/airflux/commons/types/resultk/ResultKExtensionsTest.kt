@@ -305,6 +305,90 @@ internal class ResultKExtensionsTest : FreeSpec() {
                 }
             }
 
+            "the `flatMapNullable` function" - {
+
+                "when a variable has the `Success` type" - {
+
+                    "when a value is not null" - {
+                        val original: ResultK<Boolean?, Errors> = createResult(ResultK.Success.of(true))
+
+                        "then this function should return a result of calling the ifTrue lambda" {
+                            val result: ResultK<String, Errors> = original.flatMapNullable(
+                                ifNull = { ResultK.Success(ALTERNATIVE_VALUE) },
+                                ifNonNull = { ResultK.Success(ORIGINAL_VALUE) }
+                            )
+                            result shouldBeSuccess ORIGINAL_VALUE
+                        }
+                    }
+
+                    "when a value is null" - {
+                        val original: ResultK<Boolean?, Errors> = createResult(ResultK.Success(null))
+
+                        "then this function should return a result of calling the ifFalse lambda" {
+                            val result: ResultK<String, Errors> = original.flatMapNullable(
+                                ifNull = { ResultK.Success(ALTERNATIVE_VALUE) },
+                                ifNonNull = { ResultK.Success(ORIGINAL_VALUE) }
+                            )
+                            result shouldBeSuccess ALTERNATIVE_VALUE
+                        }
+                    }
+                }
+
+                "when a variable has the `Failure` type" - {
+                    val original: ResultK<Boolean, Errors> = createResult(ResultK.Failure(Errors.Empty))
+
+                    "then this function should return an original failure" {
+                        val result: ResultK<String, Errors> = original.flatMapNullable(
+                            ifNull = { ResultK.Success(ALTERNATIVE_VALUE) },
+                            ifNonNull = { ResultK.Success(ORIGINAL_VALUE) }
+                        )
+                        result shouldBeFailure Errors.Empty
+                    }
+                }
+            }
+
+            "the `flatMapNotNull` function" - {
+
+                "when a variable has the `Success` type" - {
+
+                    "when a value is not null" - {
+                        val original: ResultK<Boolean?, Errors> = createResult(ResultK.Success.of(true))
+
+                        "then this function should return a result of calling the ifTrue lambda" {
+                            val result: ResultK<String, Errors> = original.flatMapNotNull(
+                                ifNull = { ALTERNATIVE_VALUE },
+                                ifNonNull = { ResultK.Success(ORIGINAL_VALUE) }
+                            )
+                            result shouldBeSuccess ORIGINAL_VALUE
+                        }
+                    }
+
+                    "when a value is null" - {
+                        val original: ResultK<Boolean?, Errors> = createResult(ResultK.Success(null))
+
+                        "then this function should return a result of calling the ifFalse lambda" {
+                            val result: ResultK<String, Errors> = original.flatMapNotNull(
+                                ifNull = { ALTERNATIVE_VALUE },
+                                ifNonNull = { ResultK.Success(ORIGINAL_VALUE) }
+                            )
+                            result shouldBeSuccess ALTERNATIVE_VALUE
+                        }
+                    }
+                }
+
+                "when a variable has the `Failure` type" - {
+                    val original: ResultK<Boolean, Errors> = createResult(ResultK.Failure(Errors.Empty))
+
+                    "then this function should return an original failure" {
+                        val result: ResultK<String, Errors> = original.flatMapNotNull(
+                            ifNull = { ALTERNATIVE_VALUE },
+                            ifNonNull = { ResultK.Success(ORIGINAL_VALUE) }
+                        )
+                        result shouldBeFailure Errors.Empty
+                    }
+                }
+            }
+
             "the `onSuccess` function" - {
 
                 "when a variable has the `Success` type" - {
@@ -1103,6 +1187,7 @@ internal class ResultKExtensionsTest : FreeSpec() {
     companion object {
         private const val ORIGINAL_VALUE = "10"
         private const val ALTERNATIVE_VALUE = "20"
+        private const val RESULT_VALUE = "30"
     }
 
     private fun <ValueT, FailureT : Any> createResult(
