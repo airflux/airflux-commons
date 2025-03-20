@@ -18,6 +18,7 @@ package io.github.airflux.commons.types.resultk
 import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.fail.matcher.shouldBeError
 import io.github.airflux.commons.types.fail.matcher.shouldBeException
+import io.github.airflux.commons.types.maybe.Maybe
 import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
 import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
 import io.kotest.assertions.failure
@@ -676,9 +677,9 @@ internal class ResultKExtensionsTest : FreeSpec() {
                         createResult(ResultK.Success(mutableListOf<String>().apply { add(ORIGINAL_VALUE) }))
 
                     "when the block returns the `Success` type" - {
-                        val doIt: MutableList<String>.() -> ResultK<Unit, Errors> = {
+                        val doIt: MutableList<String>.() -> Maybe<Errors> = {
                             add(ALTERNATIVE_VALUE)
-                            ResultK.Success.asUnit
+                            Maybe.none()
                         }
 
                         "then this function should return the original value" {
@@ -689,8 +690,8 @@ internal class ResultKExtensionsTest : FreeSpec() {
                     }
 
                     "when the block returns the `Failure` type" - {
-                        val doIt: MutableList<String>.() -> ResultK<Unit, Errors> = {
-                            Errors.Empty.asFailure()
+                        val doIt: MutableList<String>.() -> Maybe<Errors> = {
+                            Maybe.some(Errors.Empty)
                         }
 
                         "then this function should return the failure value from the block" {
@@ -702,9 +703,9 @@ internal class ResultKExtensionsTest : FreeSpec() {
 
                 "when a variable has the `Failure` type" - {
                     val original: ResultK<MutableList<String>, Errors> = createResult(ResultK.Failure(Errors.Empty))
-                    val doIt: MutableList<String>.() -> ResultK<Unit, Errors> = {
+                    val doIt: MutableList<String>.() -> Maybe<Errors> = {
                         add(ALTERNATIVE_VALUE)
-                        ResultK.Success.asUnit
+                        Maybe.none()
                     }
 
                     "then this function should return an original do not invoke the [block]" {

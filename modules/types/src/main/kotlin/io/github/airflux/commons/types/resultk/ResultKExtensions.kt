@@ -20,6 +20,8 @@ package io.github.airflux.commons.types.resultk
 
 import io.github.airflux.commons.types.fail.Fail
 import io.github.airflux.commons.types.identity
+import io.github.airflux.commons.types.maybe.Maybe
+import io.github.airflux.commons.types.maybe.toResultAsFailureOr
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
@@ -291,15 +293,15 @@ public fun <T : Any> ResultK<T, T>.merge(): T = fold(onSuccess = ::identity, onF
 
 @OptIn(ExperimentalContracts::class)
 public inline fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.apply(
-    block: ValueT.() -> ResultK<Unit, FailureT>
+    block: ValueT.() -> Maybe<FailureT>
 ): ResultK<ValueT, FailureT> {
     contract {
         callsInPlace(block, AT_MOST_ONCE)
     }
-    return if (this.isSuccess()) {
-        val result = block(this.value)
-        if (result.isSuccess()) this else result
-    } else
+    return if (this.isSuccess())
+        block(this.value)
+            .toResultAsFailureOr { this }
+    else
         this
 }
 
