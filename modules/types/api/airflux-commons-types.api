@@ -317,7 +317,7 @@ public final class io/github/airflux/commons/types/resultk/ResultKExtensionsKt {
 	public static final fun filterOrElse (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun flatMap (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun flatMapBoolean (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/resultk/ResultK;
-	public static final fun flatMapNotNull (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun flatMapNotNull (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun flatMapNullable (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun fold (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public static final fun forEach (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)V

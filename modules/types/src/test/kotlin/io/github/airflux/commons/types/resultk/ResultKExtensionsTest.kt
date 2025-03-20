@@ -312,7 +312,7 @@ internal class ResultKExtensionsTest : FreeSpec() {
                     "when a value is not null" - {
                         val original: ResultK<Boolean?, Errors> = createResult(ResultK.Success.of(true))
 
-                        "then this function should return a result of calling the ifTrue lambda" {
+                        "then this function should return a result of calling the ifNonNull lambda" {
                             val result: ResultK<String, Errors> = original.flatMapNullable(
                                 ifNull = { ResultK.Success(ALTERNATIVE_VALUE) },
                                 ifNonNull = { ResultK.Success(ORIGINAL_VALUE) }
@@ -324,7 +324,7 @@ internal class ResultKExtensionsTest : FreeSpec() {
                     "when a value is null" - {
                         val original: ResultK<Boolean?, Errors> = createResult(ResultK.Success(null))
 
-                        "then this function should return a result of calling the ifFalse lambda" {
+                        "then this function should return a result of calling the ifNull lambda" {
                             val result: ResultK<String, Errors> = original.flatMapNullable(
                                 ifNull = { ResultK.Success(ALTERNATIVE_VALUE) },
                                 ifNonNull = { ResultK.Success(ORIGINAL_VALUE) }
@@ -354,11 +354,10 @@ internal class ResultKExtensionsTest : FreeSpec() {
                     "when a value is not null" - {
                         val original: ResultK<Boolean?, Errors> = createResult(ResultK.Success.of(true))
 
-                        "then this function should return a result of calling the ifTrue lambda" {
-                            val result: ResultK<String, Errors> = original.flatMapNotNull(
-                                ifNull = { ALTERNATIVE_VALUE },
-                                ifNonNull = { ResultK.Success(ORIGINAL_VALUE) }
-                            )
+                        "then this function should return a result of calling lambda" {
+                            val result: ResultK<String?, Errors> =
+                                original.flatMapNotNull { ResultK.Success(ORIGINAL_VALUE) }
+
                             result shouldBeSuccess ORIGINAL_VALUE
                         }
                     }
@@ -366,12 +365,11 @@ internal class ResultKExtensionsTest : FreeSpec() {
                     "when a value is null" - {
                         val original: ResultK<Boolean?, Errors> = createResult(ResultK.Success(null))
 
-                        "then this function should return a result of calling the ifFalse lambda" {
-                            val result: ResultK<String, Errors> = original.flatMapNotNull(
-                                ifNull = { ALTERNATIVE_VALUE },
-                                ifNonNull = { ResultK.Success(ORIGINAL_VALUE) }
-                            )
-                            result shouldBeSuccess ALTERNATIVE_VALUE
+                        "then this function should return the null value" {
+                            val result: ResultK<String?, Errors> =
+                                original.flatMapNotNull { ResultK.Success(ORIGINAL_VALUE) }
+
+                            result shouldBeSuccess null
                         }
                     }
                 }
@@ -380,10 +378,9 @@ internal class ResultKExtensionsTest : FreeSpec() {
                     val original: ResultK<Boolean, Errors> = createResult(ResultK.Failure(Errors.Empty))
 
                     "then this function should return an original failure" {
-                        val result: ResultK<String, Errors> = original.flatMapNotNull(
-                            ifNull = { ALTERNATIVE_VALUE },
-                            ifNonNull = { ResultK.Success(ORIGINAL_VALUE) }
-                        )
+                        val result: ResultK<String?, Errors> =
+                            original.flatMapNotNull { ResultK.Success(ORIGINAL_VALUE) }
+
                         result shouldBeFailure Errors.Empty
                     }
                 }
@@ -1187,7 +1184,6 @@ internal class ResultKExtensionsTest : FreeSpec() {
     companion object {
         private const val ORIGINAL_VALUE = "10"
         private const val ALTERNATIVE_VALUE = "20"
-        private const val RESULT_VALUE = "30"
     }
 
     private fun <ValueT, FailureT : Any> createResult(
