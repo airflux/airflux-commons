@@ -86,11 +86,17 @@ public final class io/github/airflux/commons/collections/list/NonEmptyListKt {
 }
 
 public abstract interface class io/github/airflux/commons/collections/list/StrictlyMappedList {
+	public static final field Companion Lio/github/airflux/commons/collections/list/StrictlyMappedList$Companion;
 	public abstract fun contains (Lio/github/airflux/commons/collections/list/StrictlyMappedList$Key;)Z
 	public abstract fun fold (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
 	public abstract fun get (Lio/github/airflux/commons/collections/list/StrictlyMappedList$Key;)Lio/github/airflux/commons/collections/list/StrictlyMappedList$Element;
 	public abstract fun isEmpty ()Z
 	public fun plus (Lio/github/airflux/commons/collections/list/StrictlyMappedList$Element;)Lio/github/airflux/commons/collections/list/StrictlyMappedList;
+}
+
+public final class io/github/airflux/commons/collections/list/StrictlyMappedList$Companion {
+	public final fun from (Ljava/lang/Iterable;)Lio/github/airflux/commons/collections/list/StrictlyMappedList;
+	public final fun from ([Lio/github/airflux/commons/collections/list/StrictlyMappedList$Element;)Lio/github/airflux/commons/collections/list/StrictlyMappedList;
 }
 
 public abstract interface class io/github/airflux/commons/collections/list/StrictlyMappedList$Element : io/github/airflux/commons/collections/list/StrictlyMappedList {
@@ -113,6 +119,7 @@ public final class io/github/airflux/commons/collections/list/StrictlyMappedList
 }
 
 public abstract interface class io/github/airflux/commons/collections/list/StrictlyMappedList$Key {
+	public abstract fun getName ()Ljava/lang/String;
 }
 
 public final class io/github/airflux/commons/collections/list/StrictlyMappedListKt {

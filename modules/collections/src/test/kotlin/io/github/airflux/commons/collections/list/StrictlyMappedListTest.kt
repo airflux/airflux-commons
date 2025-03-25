@@ -92,12 +92,12 @@ internal class StrictlyMappedListTest : FreeSpec() {
                     result shouldBe false
                 }
 
-                "then the `fold` function should return the list of names of all elements" {
+                "then the `fold` function should return a list of key names of all elements" {
                     val result = list.fold(mutableListOf<String>()) { acc, elem ->
-                        acc.apply { add(elem.toString()) }
+                        acc.apply { add(elem.key.name) }
                     }
 
-                    result shouldBe listOf(OrderBundle.NAME, UserBundle.NAME)
+                    result shouldBe listOf(OrderBundle.name, UserBundle.name)
                 }
             }
 
@@ -130,12 +130,12 @@ internal class StrictlyMappedListTest : FreeSpec() {
                     result shouldBe false
                 }
 
-                "then the `fold` function should return the name of the element" {
+                "then the `fold` function should return a list of key names of all elements" {
                     val result = list.fold(mutableListOf<String>()) { acc, elem ->
-                        acc.apply { add(elem.toString()) }
+                        acc.apply { add(elem.key.name) }
                     }
 
-                    result shouldBe listOf(UserBundle.NAME)
+                    result shouldBe listOf(UserBundle.name)
                 }
 
                 "when a new element is added to the collection" - {
@@ -168,12 +168,12 @@ internal class StrictlyMappedListTest : FreeSpec() {
                         result shouldBe false
                     }
 
-                    "then the `fold` function should return the list of names of all elements" {
+                    "then the `fold` function should return a list of key names of all elements" {
                         val result = newDataBundle.fold(mutableListOf<String>()) { acc, elem ->
-                            acc.apply { add(elem.toString()) }
+                            acc.apply { add(elem.key.name) }
                         }
 
-                        result shouldBe listOf(OrderBundle.NAME, UserBundle.NAME)
+                        result shouldBe listOf(OrderBundle.name, UserBundle.name)
                     }
                 }
             }
@@ -188,36 +188,63 @@ internal class StrictlyMappedListTest : FreeSpec() {
                     result.id shouldBe SECOND_USER_ID
                 }
             }
+
+            "when call the `from` function" - {
+                val list = StrictlyMappedList.from(UserBundle(FIRST_USER_ID), OrderBundle())
+
+                "then the `isEmpty` property should return false" {
+                    list.isEmpty shouldBe false
+                }
+
+                "then the `isNotEmpty` property should return true" {
+                    list.isNotEmpty shouldBe true
+                }
+
+                "then the `get` function should return the value for every element in the collection" {
+                    list[UserBundle].shouldNotBeNull()
+                    list[OrderBundle].shouldNotBeNull()
+                }
+
+                "then the `get` function should return null for any element not contained in the collection" {
+                    list[BillBundle].shouldBeNull()
+                }
+
+                "then the `contains` function should return true for every element in the collection" {
+                    val result = UserBundle in list
+                    result shouldBe true
+                }
+
+                "then the `contains` function should return false for any element not contained in the collection" {
+                    val result = BillBundle in list
+                    result shouldBe false
+                }
+
+                "then the `fold` function should return a list of key names of all elements" {
+                    val result = list.fold(mutableListOf<String>()) { acc, elem ->
+                        acc.apply { add(elem.key.name) }
+                    }
+
+                    result shouldBe listOf(OrderBundle.name, UserBundle.name)
+                }
+            }
         }
     }
 
     class UserBundle(val id: String) : AbstractStrictlyMappedListElement<UserBundle>(UserBundle) {
-        override fun toString(): String = NAME
-        override fun equals(other: Any?): Boolean = this === other || other is UserBundle
-        override fun hashCode(): Int = id.hashCode()
-
         companion object Key : StrictlyMappedList.Key<UserBundle> {
-            const val NAME = "UserBundle"
+            override val name: String = "UserBundle"
         }
     }
 
     class OrderBundle : AbstractStrictlyMappedListElement<OrderBundle>(OrderBundle) {
-        override fun toString(): String = NAME
-        override fun equals(other: Any?): Boolean = this === other || other is OrderBundle
-        override fun hashCode(): Int = OrderBundle.hashCode()
-
         companion object Key : StrictlyMappedList.Key<OrderBundle> {
-            const val NAME = "OrderBundle"
+            override val name: String = "OrderBundle"
         }
     }
 
     class BillBundle : AbstractStrictlyMappedListElement<BillBundle>(BillBundle) {
-        override fun toString(): String = NAME
-        override fun equals(other: Any?): Boolean = this === other || other is BillBundle
-        override fun hashCode(): Int = BillBundle.hashCode()
-
         companion object Key : StrictlyMappedList.Key<BillBundle> {
-            const val NAME = "BillBundle"
+            override val name: String = "BillBundle"
         }
     }
 }
