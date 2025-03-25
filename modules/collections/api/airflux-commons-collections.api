@@ -2,6 +2,11 @@ public final class io/github/airflux/commons/collections/extensions/ExtensionsKt
 	public static final fun mapToSet (Ljava/lang/Iterable;Lkotlin/jvm/functions/Function1;)Ljava/util/Set;
 }
 
+public abstract class io/github/airflux/commons/collections/list/AbstractStrictlyMappedListElement : io/github/airflux/commons/collections/list/StrictlyMappedList$Element {
+	public fun <init> (Lio/github/airflux/commons/collections/list/StrictlyMappedList$Key;)V
+	public fun getKey ()Lio/github/airflux/commons/collections/list/StrictlyMappedList$Key;
+}
+
 public final class io/github/airflux/commons/collections/list/NonEmptyList : java/util/List, kotlin/jvm/internal/markers/KMappedMarker {
 	public static final field Companion Lio/github/airflux/commons/collections/list/NonEmptyList$Companion;
 	public fun add (ILjava/lang/Object;)V
@@ -78,6 +83,40 @@ public final class io/github/airflux/commons/collections/list/NonEmptyListKt {
 	public static final fun plus-8MW8Lq4 (Ljava/util/List;Ljava/lang/Object;)Ljava/util/List;
 	public static final fun plus-dNto3vc (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
 	public static final fun toNonEmptyListOrNull (Ljava/util/List;)Ljava/util/List;
+}
+
+public abstract interface class io/github/airflux/commons/collections/list/StrictlyMappedList {
+	public abstract fun contains (Lio/github/airflux/commons/collections/list/StrictlyMappedList$Key;)Z
+	public abstract fun fold (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public abstract fun get (Lio/github/airflux/commons/collections/list/StrictlyMappedList$Key;)Lio/github/airflux/commons/collections/list/StrictlyMappedList$Element;
+	public abstract fun isEmpty ()Z
+	public fun plus (Lio/github/airflux/commons/collections/list/StrictlyMappedList$Element;)Lio/github/airflux/commons/collections/list/StrictlyMappedList;
+}
+
+public abstract interface class io/github/airflux/commons/collections/list/StrictlyMappedList$Element : io/github/airflux/commons/collections/list/StrictlyMappedList {
+	public fun contains (Lio/github/airflux/commons/collections/list/StrictlyMappedList$Key;)Z
+	public fun fold (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public fun get (Lio/github/airflux/commons/collections/list/StrictlyMappedList$Key;)Lio/github/airflux/commons/collections/list/StrictlyMappedList$Element;
+	public abstract fun getKey ()Lio/github/airflux/commons/collections/list/StrictlyMappedList$Key;
+	public fun isEmpty ()Z
+}
+
+public final class io/github/airflux/commons/collections/list/StrictlyMappedList$Empty : io/github/airflux/commons/collections/list/StrictlyMappedList {
+	public static final field INSTANCE Lio/github/airflux/commons/collections/list/StrictlyMappedList$Empty;
+	public fun contains (Lio/github/airflux/commons/collections/list/StrictlyMappedList$Key;)Z
+	public fun equals (Ljava/lang/Object;)Z
+	public fun fold (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public fun get (Lio/github/airflux/commons/collections/list/StrictlyMappedList$Key;)Lio/github/airflux/commons/collections/list/StrictlyMappedList$Element;
+	public fun hashCode ()I
+	public fun isEmpty ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/airflux/commons/collections/list/StrictlyMappedList$Key {
+}
+
+public final class io/github/airflux/commons/collections/list/StrictlyMappedListKt {
+	public static final fun isNotEmpty (Lio/github/airflux/commons/collections/list/StrictlyMappedList;)Z
 }
 
 public abstract class io/github/airflux/commons/collections/map/AbstractCaseInsensitiveMutableMap : java/util/Map, kotlin/jvm/internal/markers/KMutableMap {
