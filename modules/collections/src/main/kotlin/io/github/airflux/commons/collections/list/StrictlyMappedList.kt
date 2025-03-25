@@ -89,18 +89,53 @@ package io.github.airflux.commons.collections.list
  */
 public sealed interface StrictlyMappedList {
 
+    /**
+     * Indicates whether the list is empty.
+     *
+     * This property is true if the list contains no elements, otherwise false.
+     */
     public val isEmpty: Boolean
 
+    /**
+     * Retrieves the last element from the mapped list that matches the specified key.
+     *
+     * @param key the key associated with the desired element
+     * @return the element associated with the specified key, or null if no such element exists
+     */
     public operator fun <ElementT : Element> get(key: Key<ElementT>): ElementT?
 
+    /**
+     * Checks whether the given key exists within the list.
+     *
+     * @param key The key associated with the element to search for in the list.
+     * @return True if the element corresponding to the given key exists in the list, false otherwise.
+     */
     public operator fun <ElementT : Element> contains(key: Key<ElementT>): Boolean
 
+    /**
+     * Combines the current [StrictlyMappedList] with the given element, returning a new instance
+     * containing the element as the head and the current list as the tail.
+     *
+     * @param element The element to be added to the list.
+     * @return A new [StrictlyMappedList] that includes the specified element.
+     */
     public operator fun <ElementT : Element> plus(element: ElementT): StrictlyMappedList =
         Combined(head = element, tail = this)
 
+    /**
+     * Applies a folding operation over the elements of the list, starting with the given [initial] value.
+     *
+     * @param initial The initial value to start the folding operation.
+     * @param operation A function that combines the accumulated value and the current element.
+     * @return The result of applying the folding operation to all elements in the list.
+     */
     public fun <ResultT> fold(initial: ResultT, operation: (ResultT, Element) -> ResultT): ResultT
 
     public interface Key<ElementT : Element> {
+
+        /**
+         * Provides a string identifier for the key.
+         */
         public val name: String
     }
 
@@ -186,5 +221,10 @@ public sealed interface StrictlyMappedList {
     }
 }
 
+/**
+ * Indicates whether the list is not empty.
+ *
+ * This property is true if the list contains one or more elements, otherwise false.
+ */
 public val StrictlyMappedList.isNotEmpty: Boolean
     get() = !isEmpty
