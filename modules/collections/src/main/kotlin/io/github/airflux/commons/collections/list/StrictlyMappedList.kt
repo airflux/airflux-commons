@@ -17,6 +17,11 @@
 package io.github.airflux.commons.collections.list
 
 /**
+ *
+ * Represents a data structure for managing elements that are associated with specific keys.
+ * The list is strictly mapped, ensuring well-defined operations and a type-safe interaction
+ * between keys and their corresponding elements.
+ *
  * Example:
  * <!--- INCLUDE
  * import io.github.airflux.commons.collections.list.AbstractStrictlyMappedListElement
