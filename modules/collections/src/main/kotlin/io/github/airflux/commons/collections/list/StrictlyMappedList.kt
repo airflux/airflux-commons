@@ -61,7 +61,7 @@ package io.github.airflux.commons.collections.list
  *             )
  *     }
  *
- *     class Column(val get: Int) : AbstractStrictlyMappedListElement<Column>(Column) {
+ *     private class Column(val get: Int) : AbstractStrictlyMappedListElement<Column>(Column) {
  *
  *         override fun toString(): String = get.toString()
  *
@@ -70,20 +70,21 @@ package io.github.airflux.commons.collections.list
  *         }
  *     }
  *
- *     class ExceptionMessage(val get: Exception) : AbstractStrictlyMappedListElement<Column>(Column) {
+ *     private class ExceptionMessage(val get: Exception) :
+ *         AbstractStrictlyMappedListElement<ExceptionMessage>(ExceptionMessage) {
  *
  *         override fun toString(): String = get.message ?: "No message."
  *
- *         companion object Key : StrictlyMappedList.Key<Column> {
+ *         companion object Key : StrictlyMappedList.Key<ExceptionMessage> {
  *             override val name: String = "exception-message"
  *         }
  *     }
  *
- *     class StackTrace(val get: Exception) : AbstractStrictlyMappedListElement<Column>(Column) {
+ *     private class StackTrace(val get: Exception) : AbstractStrictlyMappedListElement<StackTrace>(StackTrace) {
  *
  *         override fun toString(): String = get.stackTraceToString()
  *
- *         companion object Key : StrictlyMappedList.Key<Column> {
+ *         companion object Key : StrictlyMappedList.Key<StackTrace> {
  *             override val name: String = "stack-trace"
  *         }
  *     }
