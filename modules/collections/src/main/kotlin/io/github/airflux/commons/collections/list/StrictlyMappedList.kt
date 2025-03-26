@@ -61,7 +61,7 @@ package io.github.airflux.commons.collections.list
  *             )
  *     }
  *
- *     private class Column(val get: Int) : AbstractStrictlyMappedListElement<Column>(Column) {
+ *     class Column(val get: Int) : AbstractStrictlyMappedListElement<Column>(Column) {
  *
  *         override fun toString(): String = get.toString()
  *
@@ -70,7 +70,7 @@ package io.github.airflux.commons.collections.list
  *         }
  *     }
  *
- *     private class ExceptionMessage(val get: Exception) :
+ *     class ExceptionMessage(val get: Exception) :
  *         AbstractStrictlyMappedListElement<ExceptionMessage>(ExceptionMessage) {
  *
  *         override fun toString(): String = get.message ?: "No message."
@@ -80,7 +80,7 @@ package io.github.airflux.commons.collections.list
  *         }
  *     }
  *
- *     private class StackTrace(val get: Exception) : AbstractStrictlyMappedListElement<StackTrace>(StackTrace) {
+ *     class StackTrace(val get: Exception) : AbstractStrictlyMappedListElement<StackTrace>(StackTrace) {
  *
  *         override fun toString(): String = get.stackTraceToString()
  *
