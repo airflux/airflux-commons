@@ -15,6 +15,6 @@ dependencies {
     implementation(project(":airflux-commons-text"))
 
     testImplementation(libs.bundles.kotest)
+    testImplementation(libs.knit.test)
     testImplementation(project(":airflux-commons-kotest-assertions"))
 }
-

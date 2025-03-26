@@ -23,9 +23,11 @@ package io.github.airflux.commons.collections.list
  * between keys and their corresponding elements.
  *
  * Example:
+ * <!--- TEST_NAME StrictlyMappedList01Test -->
  * <!--- INCLUDE
  * import io.github.airflux.commons.collections.list.AbstractStrictlyMappedListElement
  * import io.github.airflux.commons.collections.list.StrictlyMappedList
+ * import io.kotest.matchers.maps.shouldContain
  * -->
  * ```kotlin
  * @JvmInline
@@ -34,6 +36,14 @@ package io.github.airflux.commons.collections.list
  * ) {
  *
  *     operator fun <E : StrictlyMappedList.Element> get(key: StrictlyMappedList.Key<E>): E? = get[key]
+ *
+ *     fun toMap(): Map<String, String> =
+ *         get.fold(mutableMapOf()) { acc, item ->
+ *             acc.apply {
+ *                 val key = item.key.name
+ *                 if (key !in acc) this[key] = item.toString()
+ *             }
+ *         }
  *
  *     companion object {
  *
@@ -44,20 +54,19 @@ package io.github.airflux.commons.collections.list
  *     }
  * }
  *
- *
  * internal sealed interface Errors {
  *     val code: String
  *     val description: String
  *     val details: Details get() = Details()
  *
- *     class InconsistentData(column: Int, exception: Exception) : Errors {
+ *     class InconsistentData(column: Int, expectedType: String, actualType: String) : Errors {
  *         override val code: String = "Err-1"
  *         override val description: String = "Inconsistent data."
  *         override val details: Details =
  *             Details.from(
  *                 Column(column),
- *                 ExceptionMessage(exception),
- *                 StackTrace(exception)
+ *                 ExpectedType(expectedType),
+ *                 ActualType(actualType)
  *             )
  *     }
  *
@@ -70,28 +79,39 @@ package io.github.airflux.commons.collections.list
  *         }
  *     }
  *
- *     class ExceptionMessage(val get: Exception) :
- *         AbstractStrictlyMappedListElement<ExceptionMessage>(ExceptionMessage) {
+ *     class ExpectedType(val get: String) :
+ *         AbstractStrictlyMappedListElement<ExpectedType>(ExpectedType) {
  *
- *         override fun toString(): String = get.message ?: "No message."
+ *         override fun toString(): String = get
  *
- *         companion object Key : StrictlyMappedList.Key<ExceptionMessage> {
- *             override val name: String = "exception-message"
+ *         companion object Key : StrictlyMappedList.Key<ExpectedType> {
+ *             override val name: String = "expected-type"
  *         }
  *     }
  *
- *     class StackTrace(val get: Exception) : AbstractStrictlyMappedListElement<StackTrace>(StackTrace) {
+ *     class ActualType(val get: String) :
+ *         AbstractStrictlyMappedListElement<ActualType>(ActualType) {
  *
- *         override fun toString(): String = get.stackTraceToString()
+ *         override fun toString(): String = get
  *
- *         companion object Key : StrictlyMappedList.Key<StackTrace> {
- *             override val name: String = "stack-trace"
+ *         companion object Key : StrictlyMappedList.Key<ActualType> {
+ *             override val name: String = "actual-type"
  *         }
  *     }
  * }
  *
+ * internal fun main() {
+ *     val error = Errors.InconsistentData(column = 1, expectedType = "String", actualType = "Int")
+ *     val map = error.details.toMap()
+ *
+ *     map shouldContain ("column-index" to "1")
+ *     map shouldContain ("expected-type" to "String")
+ *     map shouldContain ("actual-type" to "Int")
+ * }
  * ```
  * <!--- KNIT example-strictly-mapped-list-01.kt -->
+ * <!--- TEST
+ * -->
  */
 public sealed interface StrictlyMappedList {
 
