@@ -43,34 +43,35 @@ internal sealed interface Errors {
                 ExpectedType(expectedType),
                 ActualType(actualType)
             )
-    }
 
-    class Column(val get: Int) : AbstractStrictlyMappedListElement<Column>(Column) {
+        class Column(val value: Int) :
+            AbstractStrictlyMappedListElement<Column>(Column) {
 
-        override fun toString(): String = get.toString()
+            override fun toString(): String = value.toString()
 
-        companion object Key : StrictlyMappedList.Key<Column> {
-            override val name: String = "column-index"
+            companion object Key : StrictlyMappedList.Key<Column> {
+                override val name: String = "column-index"
+            }
         }
-    }
 
-    class ExpectedType(val get: String) :
-        AbstractStrictlyMappedListElement<ExpectedType>(ExpectedType) {
+        class ExpectedType(val value: String) :
+            AbstractStrictlyMappedListElement<ExpectedType>(ExpectedType) {
 
-        override fun toString(): String = get
+            override fun toString(): String = value
 
-        companion object Key : StrictlyMappedList.Key<ExpectedType> {
-            override val name: String = "expected-type"
+            companion object Key : StrictlyMappedList.Key<ExpectedType> {
+                override val name: String = "expected-type"
+            }
         }
-    }
 
-    class ActualType(val get: String) :
-        AbstractStrictlyMappedListElement<ActualType>(ActualType) {
+        class ActualType(val value: String) :
+            AbstractStrictlyMappedListElement<ActualType>(ActualType) {
 
-        override fun toString(): String = get
+            override fun toString(): String = value
 
-        companion object Key : StrictlyMappedList.Key<ActualType> {
-            override val name: String = "actual-type"
+            companion object Key : StrictlyMappedList.Key<ActualType> {
+                override val name: String = "actual-type"
+            }
         }
     }
 }
