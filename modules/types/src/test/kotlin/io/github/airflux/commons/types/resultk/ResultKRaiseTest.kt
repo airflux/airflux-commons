@@ -224,16 +224,50 @@ internal class ResultKRaiseTest : FreeSpec() {
                         }
                     }
                 }
+
+                "the `raise` function with transformer" - {
+
+                    "when the result contains a value" - {
+                        val raise = ResultK.Raise<Error>()
+                        val result: Maybe<String> = ERROR_MESSAGE.asSome()
+
+                        "then should raise an exception" {
+                            val exception = shouldThrow<RaiseException> {
+                                with(raise) {
+                                    result.raise { Error.Second(it) }
+                                }
+                            }
+
+                            exception.raise shouldBe raise
+                            exception.failure shouldBe Error.Second(ERROR_MESSAGE)
+                        }
+                    }
+
+                    "when the result does not contain a value" - {
+                        val raise = ResultK.Raise<Error>()
+                        val result: Maybe<String> = Maybe.None
+
+                        "then should not raise an exception" {
+                            shouldNotThrow<RaiseException> {
+                                with(raise) {
+                                    result.raise { Error.Second(it) }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
     internal sealed class Error {
         data object First : Error()
+        data class Second(val message: String) : Error()
     }
 
     private companion object {
         private const val FIRST_VALUE = 1
+        private const val ERROR_MESSAGE = "error"
     }
 
     private fun createValue(value: Int?): Int? = value

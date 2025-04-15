@@ -35,4 +35,8 @@ internal interface DefaultRaise<in FailureT : Any> : Raise<FailureT> {
     fun Maybe<FailureT>.raise() {
         if (isSome()) raise(value)
     }
+
+    fun <ValueT : Any> Maybe<ValueT>.raise(transform: (ValueT) -> FailureT) {
+        if (isSome()) raise(transform(value))
+    }
 }
