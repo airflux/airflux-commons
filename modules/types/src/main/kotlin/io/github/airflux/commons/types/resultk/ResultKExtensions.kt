@@ -107,6 +107,9 @@ public inline infix fun <ValueT, SuccessR, FailureT : Any> ResultK<ValueT, Failu
     return if (isSuccess()) transform(value) else this
 }
 
+public fun <ValueT, FailureT : Any> ResultK<ResultK<ValueT, FailureT>, FailureT>.flatten(): ResultK<ValueT, FailureT> =
+    if (isFailure()) this else value
+
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <ValueT, SuccessR, FailureT : Any> ResultK<ValueT, FailureT>.andThen(
     block: (ValueT) -> ResultK<SuccessR, FailureT>

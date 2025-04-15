@@ -221,6 +221,44 @@ internal class ResultKExtensionsTest : FreeSpec() {
                 }
             }
 
+            "the `flatten` function" - {
+
+                "when a variable has the `Success` type" - {
+
+                    "when nested value has the `Success` type" - {
+                        val original: ResultK<ResultK<String, Errors.Blank>, Errors.Empty> =
+                            createResult(ResultK.Success(ResultK.Success(ORIGINAL_VALUE)))
+
+                        "then this function should return this nested value" {
+                            val result: ResultK<String, Errors> = original.flatten()
+                            result shouldBeSuccess ORIGINAL_VALUE
+                        }
+                    }
+
+                    "when nested value has the `Failure` type" - {
+                        val original: ResultK<ResultK<String, Errors.Blank>, Errors.Empty> =
+                            createResult(ResultK.Success(ResultK.Failure(Errors.Blank)))
+
+                        "then this function should return this nested value" {
+                            val result: ResultK<String, Errors> = original.flatten()
+
+                            result shouldBeFailure Errors.Blank
+                        }
+                    }
+                }
+
+                "when a variable has the `Failure` type" - {
+                    val original: ResultK<ResultK<String, Errors.Blank>, Errors.Empty> =
+                        createResult(ResultK.Failure(Errors.Empty))
+
+                    "then this function should return the value of the `Failure` type" {
+                        val result: ResultK<String, Errors> = original.flatten()
+
+                        result shouldBeFailure Errors.Empty
+                    }
+                }
+            }
+
             "the `andThen` function" - {
 
                 "when a variable has the `Success` type" - {
