@@ -754,6 +754,49 @@ internal class ResultKExtensionsTest : FreeSpec() {
                 }
             }
 
+            "the `mapAll` function" - {
+
+                "when a collection is empty" - {
+                    val original: ResultK<List<String>, Errors> = createResult(ResultK.Success(listOf()))
+
+                    "then this function should return the value of the asEmptyList property" {
+                        val result = original.mapAll {
+                            it.toInt().asSuccess()
+                        }
+                        result shouldBeSuccess emptyList()
+                    }
+                }
+
+                "when a collection is not empty" - {
+                    val original: ResultK<List<String>, Errors> =
+                        createResult(ResultK.Success(listOf(FIRST_STRING_VALUE, SECOND_STRING_VALUE)))
+
+                    "when a transform function returns items only the `Success` type" - {
+                        val result = original.mapAll {
+                            it.toInt().asSuccess()
+                        }
+
+                        "then result should contain list with all transformed values" {
+                            result.shouldContainSuccessInstance()
+                                .shouldContainExactly(listOf(FIRST_INT_VALUE, SECOND_INT_VALUE))
+                        }
+                    }
+
+                    "when a transform function returns any item of the `Failure` type" - {
+                        val result = original.mapAll {
+                            if (it == FIRST_STRING_VALUE)
+                                it.toInt().asSuccess()
+                            else
+                                ResultK.Failure(Errors.Empty)
+                        }
+
+                        "then result should contain the failure value" {
+                            result shouldBeFailure Errors.Empty
+                        }
+                    }
+                }
+            }
+
             "the `sequence` function" - {
 
                 "when a collection is empty" - {
