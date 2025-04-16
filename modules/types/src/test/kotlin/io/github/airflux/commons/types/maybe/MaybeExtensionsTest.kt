@@ -141,6 +141,41 @@ internal class MaybeExtensionsTest : FreeSpec() {
                 }
             }
 
+            "the `flatten` function" - {
+
+                "when a variable has the `Some` type" - {
+
+                    "when nested value has the `Some` type" - {
+                        val original: Maybe<Maybe<String>> = create(Maybe.Some(Maybe.Some(ORIGINAL_VALUE)))
+
+                        "then this function should return this nested value" {
+                            val result: Maybe<String> = original.flatten()
+                            result shouldBeSome ORIGINAL_VALUE
+                        }
+                    }
+
+                    "when nested value has the `None` type" - {
+                        val original: Maybe<Maybe<String>> = create(Maybe.Some(Maybe.None))
+
+                        "then this function should return this nested value" {
+                            val result: Maybe<String> = original.flatten()
+
+                            result.shouldBeNone()
+                        }
+                    }
+                }
+
+                "when a variable has the `None` type" - {
+                    val original: Maybe<Maybe<String>> = create(Maybe.None)
+
+                    "then this function should return the value of the `None` type" {
+                        val result: Maybe<String> = original.flatten()
+
+                        result.shouldBeNone()
+                    }
+                }
+            }
+
             "the `map` function" - {
 
                 "when a variable has the `Some` type" - {

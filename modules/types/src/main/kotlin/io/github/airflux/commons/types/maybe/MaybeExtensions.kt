@@ -67,6 +67,8 @@ public inline fun <ValueT : Any, ResultT> Maybe<ValueT>.fold(
     return if (isSome()) onSome(value) else onNone()
 }
 
+public fun <ValueT : Any> Maybe<Maybe<ValueT>>.flatten(): Maybe<ValueT> = if (isNone()) this else value
+
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <ValueT : Any, ResultT : Any> Maybe<ValueT>.map(
     transform: (ValueT) -> ResultT
