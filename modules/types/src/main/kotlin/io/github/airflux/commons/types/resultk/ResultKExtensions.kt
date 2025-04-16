@@ -315,15 +315,7 @@ public inline infix fun <ValueT, ResultT, FailureT : Any> ResultK<Iterable<Value
     contract {
         callsInPlace(transform, UNKNOWN)
     }
-    return map {
-        buildList {
-            for (item in it) {
-                val result = transform(item)
-                if (result.isFailure()) return result
-                add(result.value)
-            }
-        }
-    }
+    return flatMap { it.traverse(transform) }
 }
 
 public fun <ValueT, FailureT : Any> Iterable<ResultK<ValueT, FailureT>>.sequence(): ResultK<List<ValueT>, FailureT> =
