@@ -23,8 +23,8 @@ import io.github.airflux.commons.types.identity
 import io.github.airflux.commons.types.maybe.Maybe
 import io.github.airflux.commons.types.maybe.toResultAsFailureOr
 import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
+import kotlin.contracts.InvocationKind.UNKNOWN
 import kotlin.contracts.contract
 import kotlin.experimental.ExperimentalTypeInference
 
@@ -308,6 +308,24 @@ public inline fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.apply(
         this
 }
 
+@OptIn(ExperimentalContracts::class)
+public inline infix fun <ValueT, ResultT, FailureT : Any> ResultK<Iterable<ValueT>, FailureT>.mapAll(
+    transform: (ValueT) -> ResultK<ResultT, FailureT>
+): ResultK<List<ResultT>, FailureT> {
+    contract {
+        callsInPlace(transform, UNKNOWN)
+    }
+    return map {
+        buildList {
+            for (item in it) {
+                val result = transform(item)
+                if (result.isFailure()) return result
+                add(result.value)
+            }
+        }
+    }
+}
+
 public fun <ValueT, FailureT : Any> Iterable<ResultK<ValueT, FailureT>>.sequence(): ResultK<List<ValueT>, FailureT> =
     traverse(::identity)
 
@@ -317,7 +335,7 @@ public inline fun <ValueT, SuccessR, FailureT : Any> Iterable<ValueT>.traverse(
     transform: (ValueT) -> ResultK<SuccessR, FailureT>
 ): ResultK<List<SuccessR>, FailureT> {
     contract {
-        callsInPlace(transform, InvocationKind.UNKNOWN)
+        callsInPlace(transform, UNKNOWN)
     }
     val items = buildList {
         val iter = this@traverse.iterator()
@@ -336,7 +354,7 @@ public inline fun <ValueT, SuccessR, FailureT : Any, M : MutableList<SuccessR>> 
     transform: (ValueT) -> ResultK<SuccessR, FailureT>
 ): ResultK<M, FailureT> {
     contract {
-        callsInPlace(transform, InvocationKind.UNKNOWN)
+        callsInPlace(transform, UNKNOWN)
     }
 
     for (item in this@traverseTo) {
@@ -353,7 +371,7 @@ public inline fun <ValueT, FailureT : Any, K, V, M : MutableMap<K, V>> Iterable<
     transform: (ValueT) -> ResultK<Pair<K, V>, FailureT>
 ): ResultK<M, FailureT> {
     contract {
-        callsInPlace(transform, InvocationKind.UNKNOWN)
+        callsInPlace(transform, UNKNOWN)
     }
     return traverseTo(destination, { it.first }, { it.second }, transform)
 }
@@ -365,8 +383,8 @@ public inline fun <ValueT, SuccessR, FailureT : Any, K, M : MutableMap<K, Succes
     transform: (ValueT) -> ResultK<SuccessR, FailureT>
 ): ResultK<M, FailureT> {
     contract {
-        callsInPlace(keySelector, InvocationKind.UNKNOWN)
-        callsInPlace(transform, InvocationKind.UNKNOWN)
+        callsInPlace(keySelector, UNKNOWN)
+        callsInPlace(transform, UNKNOWN)
     }
     return traverseTo(destination, keySelector, ::identity, transform)
 }
@@ -379,9 +397,9 @@ public inline fun <ValueT, SuccessR, FailureT : Any, K, V, M : MutableMap<K, V>>
     transform: (ValueT) -> ResultK<SuccessR, FailureT>
 ): ResultK<M, FailureT> {
     contract {
-        callsInPlace(keySelector, InvocationKind.UNKNOWN)
-        callsInPlace(valueTransform, InvocationKind.UNKNOWN)
-        callsInPlace(transform, InvocationKind.UNKNOWN)
+        callsInPlace(keySelector, UNKNOWN)
+        callsInPlace(valueTransform, UNKNOWN)
+        callsInPlace(transform, UNKNOWN)
     }
 
     for (item in this@traverseTo) {

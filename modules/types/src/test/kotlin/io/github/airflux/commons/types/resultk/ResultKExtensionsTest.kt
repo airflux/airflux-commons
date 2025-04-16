@@ -21,6 +21,7 @@ import io.github.airflux.commons.types.fail.matcher.shouldBeException
 import io.github.airflux.commons.types.maybe.Maybe
 import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
 import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
+import io.github.airflux.commons.types.resultk.matcher.shouldContainSuccessInstance
 import io.kotest.assertions.failure
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
@@ -1223,6 +1224,11 @@ internal class ResultKExtensionsTest : FreeSpec() {
     companion object {
         private const val ORIGINAL_VALUE = "10"
         private const val ALTERNATIVE_VALUE = "20"
+        private const val FIRST_INT_VALUE = 10
+        private const val SECOND_INT_VALUE = 20
+
+        private const val FIRST_STRING_VALUE = FIRST_INT_VALUE.toString()
+        private const val SECOND_STRING_VALUE = SECOND_INT_VALUE.toString()
     }
 
     private fun <ValueT, FailureT : Any> createResult(
