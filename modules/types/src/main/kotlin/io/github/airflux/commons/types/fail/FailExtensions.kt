@@ -18,6 +18,7 @@
 
 package io.github.airflux.commons.types.fail
 
+import io.github.airflux.commons.types.identity
 import io.github.airflux.commons.types.resultk.BiFailureResultK
 import io.github.airflux.commons.types.resultk.asFailure
 import kotlin.contracts.ExperimentalContracts
@@ -210,3 +211,6 @@ public inline infix fun <ErrorT : Any, ExceptionT : Any> Fail<ErrorT, ExceptionT
 
 public fun <ErrorT : Any, ExceptionT : Any> Fail<ErrorT, ExceptionT>.toBiFailureResult():
     BiFailureResultK<Nothing, ErrorT, ExceptionT> = this.asFailure()
+
+public fun <FailureT : Any> Fail<FailureT, FailureT>.merge(): FailureT =
+    fold(onError = ::identity, onException = ::identity)

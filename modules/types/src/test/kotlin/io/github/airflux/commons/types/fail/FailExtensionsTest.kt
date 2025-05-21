@@ -498,6 +498,27 @@ internal class FailExtensionsTest : FreeSpec() {
                     }
                 }
             }
+
+            "the `merge` function" - {
+
+                "when a variable has the `Error` type" - {
+                    val original: Fail<String, String> = createFail(Fail.error(ORIGINAL_VALUE))
+
+                    "then this function should return a value" {
+                        val result = original.merge()
+                        result shouldBe ORIGINAL_VALUE
+                    }
+                }
+
+                "when a variable has the `Exception` type" - {
+                    val original: Fail<String, String> = createFail(Fail.exception(ALTERNATIVE_VALUE))
+
+                    "then this function should return the alternative value" {
+                        val result = original.merge()
+                        result shouldBe ALTERNATIVE_VALUE
+                    }
+                }
+            }
         }
 
         "The `asError` function should return the `Error` type with the passed value" {
