@@ -208,6 +208,7 @@ public final class io/github/airflux/commons/types/maybe/MaybeExtensionsKt {
 	public static final fun flatMap (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
 	public static final fun flatten (Lio/github/airflux/commons/types/maybe/Maybe;)Lio/github/airflux/commons/types/maybe/Maybe;
 	public static final fun fold (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+	public static final fun fold (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
 	public static final fun forEach (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)V
 	public static final fun getOrElse (Lio/github/airflux/commons/types/maybe/Maybe;Ljava/lang/Object;)Ljava/lang/Object;
 	public static final fun getOrElse (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;

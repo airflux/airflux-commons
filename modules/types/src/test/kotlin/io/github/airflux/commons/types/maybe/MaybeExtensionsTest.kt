@@ -17,10 +17,13 @@ package io.github.airflux.commons.types.maybe
 
 import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.fail.Fail
+import io.github.airflux.commons.types.fail.asError
+import io.github.airflux.commons.types.fail.asException
 import io.github.airflux.commons.types.fail.matcher.shouldBeError
 import io.github.airflux.commons.types.fail.matcher.shouldBeException
 import io.github.airflux.commons.types.maybe.matcher.shouldBeNone
 import io.github.airflux.commons.types.maybe.matcher.shouldBeSome
+import io.github.airflux.commons.types.resultk.BiFailureResultKExtensionsTest.Errors
 import io.github.airflux.commons.types.resultk.ResultK
 import io.github.airflux.commons.types.resultk.asFailure
 import io.github.airflux.commons.types.resultk.asSuccess
@@ -126,7 +129,7 @@ internal class MaybeExtensionsTest : FreeSpec() {
                     val original: Maybe<String> = create(Maybe.Some(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
-                        val result = original.fold(onNone = { ALTERNATIVE_VALUE }, onSome = { it })
+                        val result = original.fold(onNone = { FIRST_ALTERNATIVE_VALUE }, onSome = { it })
                         result shouldBe ORIGINAL_VALUE
                     }
                 }
@@ -135,8 +138,53 @@ internal class MaybeExtensionsTest : FreeSpec() {
                     val original: Maybe<String> = create(Maybe.None)
 
                     "then this function should return the alternative value" {
-                        val result = original.fold(onNone = { ALTERNATIVE_VALUE }, onSome = { it })
-                        result shouldBe ALTERNATIVE_VALUE
+                        val result = original.fold(onNone = { FIRST_ALTERNATIVE_VALUE }, onSome = { it })
+                        result shouldBe FIRST_ALTERNATIVE_VALUE
+                    }
+                }
+            }
+
+            "the `fold` function for the Fail type" - {
+
+                "when a variable has the `None` type" - {
+                    val original: Maybe<Fail<Errors.First, Errors.Second>> = create(Maybe.none())
+
+                    "then this function should return a value" {
+                        val result: String = original.fold(
+                            onNone = { ORIGINAL_VALUE },
+                            onError = { FIRST_ALTERNATIVE_VALUE },
+                            onException = { SECOND_ALTERNATIVE_VALUE }
+                        )
+                        result shouldBe ORIGINAL_VALUE
+                    }
+                }
+
+                "when a variable has the `Some` type" - {
+
+                    "when a failure is the `Error` type" - {
+                        val original = create(Errors.First.asError().asSome())
+
+                        "then this function should return the first alternative value" {
+                            val result: String = original.fold(
+                                onNone = { ORIGINAL_VALUE },
+                                onError = { FIRST_ALTERNATIVE_VALUE },
+                                onException = { SECOND_ALTERNATIVE_VALUE }
+                            )
+                            result shouldBe FIRST_ALTERNATIVE_VALUE
+                        }
+                    }
+
+                    "when a failure is the `Exception` type" - {
+                        val original = create(Errors.Second.asException().asSome())
+
+                        "then this function should return the second alternative value" {
+                            val result: String = original.fold(
+                                onNone = { ORIGINAL_VALUE },
+                                onError = { FIRST_ALTERNATIVE_VALUE },
+                                onException = { SECOND_ALTERNATIVE_VALUE }
+                            )
+                            result shouldBe SECOND_ALTERNATIVE_VALUE
+                        }
                     }
                 }
             }
@@ -314,7 +362,7 @@ internal class MaybeExtensionsTest : FreeSpec() {
                     val original: Maybe<String> = create(Maybe.Some(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
-                        val result = original.getOrElse(ALTERNATIVE_VALUE)
+                        val result = original.getOrElse(FIRST_ALTERNATIVE_VALUE)
                         result shouldBe ORIGINAL_VALUE
                     }
                 }
@@ -323,8 +371,8 @@ internal class MaybeExtensionsTest : FreeSpec() {
                     val original: Maybe<String> = create(Maybe.None)
 
                     "then this function should return the defaultValue value" {
-                        val result = original.getOrElse(ALTERNATIVE_VALUE)
-                        result shouldBe ALTERNATIVE_VALUE
+                        val result = original.getOrElse(FIRST_ALTERNATIVE_VALUE)
+                        result shouldBe FIRST_ALTERNATIVE_VALUE
                     }
                 }
             }
@@ -335,7 +383,7 @@ internal class MaybeExtensionsTest : FreeSpec() {
                     val original: Maybe<String> = create(Maybe.Some(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
-                        val result = original.getOrElse { ALTERNATIVE_VALUE }
+                        val result = original.getOrElse { FIRST_ALTERNATIVE_VALUE }
                         result shouldBe ORIGINAL_VALUE
                     }
                 }
@@ -344,8 +392,8 @@ internal class MaybeExtensionsTest : FreeSpec() {
                     val original: Maybe<String> = create(Maybe.None)
 
                     "then this function should return a value from a handler" {
-                        val result = original.getOrElse { ALTERNATIVE_VALUE }
-                        result shouldBe ALTERNATIVE_VALUE
+                        val result = original.getOrElse { FIRST_ALTERNATIVE_VALUE }
+                        result shouldBe FIRST_ALTERNATIVE_VALUE
                     }
                 }
             }
@@ -356,7 +404,7 @@ internal class MaybeExtensionsTest : FreeSpec() {
                     val original: Maybe<String> = create(Maybe.Some(ORIGINAL_VALUE))
 
                     "then this function should return a value" {
-                        val elseResult: Maybe<String> = create(Maybe.Some(ALTERNATIVE_VALUE))
+                        val elseResult: Maybe<String> = create(Maybe.Some(FIRST_ALTERNATIVE_VALUE))
                         val result = original.orElse { elseResult }
                         result shouldBe original
                     }
@@ -366,7 +414,7 @@ internal class MaybeExtensionsTest : FreeSpec() {
                     val original: Maybe<String> = create(Maybe.None)
 
                     "then this function should return the defaultValue value" {
-                        val elseResult: Maybe<String> = create(Maybe.Some(ALTERNATIVE_VALUE))
+                        val elseResult: Maybe<String> = create(Maybe.Some(FIRST_ALTERNATIVE_VALUE))
                         val result = original.orElse { elseResult }
                         result shouldBe elseResult
                     }
@@ -713,7 +761,8 @@ internal class MaybeExtensionsTest : FreeSpec() {
 
     companion object {
         private const val ORIGINAL_VALUE = "10"
-        private const val ALTERNATIVE_VALUE = "20"
+        private const val FIRST_ALTERNATIVE_VALUE = "20"
+        private const val SECOND_ALTERNATIVE_VALUE = "30"
     }
 
     private fun <ValueT : Any> create(value: Maybe<ValueT>): Maybe<ValueT> = value

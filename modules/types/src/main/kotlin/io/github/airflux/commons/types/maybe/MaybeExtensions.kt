@@ -21,6 +21,7 @@ package io.github.airflux.commons.types.maybe
 import io.github.airflux.commons.types.fail.Fail
 import io.github.airflux.commons.types.fail.asError
 import io.github.airflux.commons.types.fail.asException
+import io.github.airflux.commons.types.fail.fold
 import io.github.airflux.commons.types.resultk.ResultK
 import io.github.airflux.commons.types.resultk.asFailure
 import io.github.airflux.commons.types.resultk.asSuccess
@@ -65,6 +66,31 @@ public inline fun <ValueT : Any, ResultT> Maybe<ValueT>.fold(
     }
 
     return if (isSome()) onSome(value) else onNone()
+}
+
+@OptIn(ExperimentalContracts::class)
+public inline fun <ErrorT, ExceptionT, ResultT> Maybe<Fail<ErrorT, ExceptionT>>.fold(
+    onError: (ErrorT) -> ResultT,
+    onException: (ExceptionT) -> ResultT,
+    onNone: () -> ResultT
+): ResultT
+    where ErrorT : Any,
+          ExceptionT : Any {
+    contract {
+        callsInPlace(onError, AT_MOST_ONCE)
+        callsInPlace(onException, AT_MOST_ONCE)
+        callsInPlace(onNone, AT_MOST_ONCE)
+    }
+
+    return fold(
+        onSome = { failure ->
+            failure.fold(
+                onError = { error -> onError(error) },
+                onException = { exception -> onException(exception) }
+            )
+        },
+        onNone = { onNone() }
+    )
 }
 
 public fun <ValueT : Any> Maybe<Maybe<ValueT>>.flatten(): Maybe<ValueT> = if (isNone()) this else value
