@@ -84,6 +84,21 @@ public inline fun <ErrorT : Any, ExceptionT : Any, FailureT> Fail<ErrorT, Except
 }
 
 @OptIn(ExperimentalContracts::class)
+public inline fun <ErrorT : Any, ErrorR : Any, ExceptionT : Any, ExceptionR : Any> Fail<ErrorT, ExceptionT>.map2(
+    onError: (ErrorT) -> ErrorR,
+    onException: (ExceptionT) -> ExceptionR
+): Fail<ErrorR, ExceptionR> {
+    contract {
+        callsInPlace(onError, AT_MOST_ONCE)
+        callsInPlace(onException, AT_MOST_ONCE)
+    }
+    return if (isError())
+        onError(value).asError()
+    else
+        onException(value).asException()
+}
+
+@OptIn(ExperimentalContracts::class)
 public inline infix fun <ErrorT : Any, ErrorR : Any, ExceptionT : Any> Fail<ErrorT, ExceptionT>.mapError(
     transform: (ErrorT) -> ErrorR
 ): Fail<ErrorR, ExceptionT> {

@@ -193,6 +193,34 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
             }
 
+            "the `map2` function" - {
+
+                "when a variable has the `Error` type" - {
+                    val original: Fail<String, String> = createFail(Fail.error(ORIGINAL_VALUE))
+
+                    "then this function should return a result of applying the transform function to the value" {
+                        val result = original.map2(
+                            onError = { it.toInt() },
+                            onException = { it.toInt() }
+                        )
+                        result shouldBeError ORIGINAL_VALUE.toInt()
+                    }
+                }
+
+                "when a variable has the `Exception` type" - {
+                    val original: Fail<String, String> = createFail(Fail.exception(ALTERNATIVE_VALUE))
+
+                    "then this function should return an original do not apply the transform function to a value" {
+                        val result = original.map2(
+                            onError = { it.toInt() },
+                            onException = { it.toInt() }
+                        )
+
+                        result shouldBeException ALTERNATIVE_VALUE.toInt()
+                    }
+                }
+            }
+
             "the `mapException` function" - {
 
                 "when a variable has the `Error` type" - {
