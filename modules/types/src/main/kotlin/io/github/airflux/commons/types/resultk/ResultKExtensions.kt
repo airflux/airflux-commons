@@ -294,6 +294,12 @@ public inline infix fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.forEa
 
 public fun <T : Any> ResultK<T, T>.merge(): T = fold(onSuccess = ::identity, onFailure = ::identity)
 
+public inline fun <ValueT, FailureT : Any, ResultT> ResultK<ValueT, FailureT>.merge(
+    onSuccess: (ValueT) -> ResultT,
+    onFailure: (FailureT) -> ResultT,
+): ResultT =
+    fold(onSuccess = onSuccess, onFailure = onFailure)
+
 @OptIn(ExperimentalContracts::class)
 public inline fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.apply(
     block: ValueT.() -> Maybe<FailureT>

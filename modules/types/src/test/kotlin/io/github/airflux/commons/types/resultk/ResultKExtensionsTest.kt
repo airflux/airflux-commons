@@ -709,6 +709,33 @@ internal class ResultKExtensionsTest : FreeSpec() {
                 }
             }
 
+            "the `merge` function with a transformation function" - {
+
+                "when a variable has the `Success` type" - {
+                    val original: ResultK<String, String> = createResult(ResultK.Success(ORIGINAL_VALUE))
+
+                    "then this function should return the transformed success value" {
+                        val result = original.merge(
+                            onSuccess = { it.toInt() },
+                            onFailure = { it.toInt() }
+                        )
+                        result shouldBe ORIGINAL_VALUE.toInt()
+                    }
+                }
+
+                "when a variable has the `Failure` type" - {
+                    val original: ResultK<String, String> = createResult(ResultK.Failure(ALTERNATIVE_VALUE))
+
+                    "then this function should return the transformed failure value" {
+                        val result = original.merge(
+                            onSuccess = { it.toInt() },
+                            onFailure = { it.toInt() }
+                        )
+                        result shouldBe ALTERNATIVE_VALUE.toInt()
+                    }
+                }
+            }
+
             "the `apply` function" - {
 
                 "when a variable has the `Success` type" - {

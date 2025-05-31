@@ -553,7 +553,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 "when a variable has the `Error` type" - {
                     val original: Fail<String, String> = createFail(Fail.error(ORIGINAL_VALUE))
 
-                    "then this function should return a value" {
+                    "then this function should return the transformed success value" {
                         val result = original.merge(
                             onError = { it.toInt() },
                             onException = { it.toInt() }
@@ -565,7 +565,7 @@ internal class FailExtensionsTest : FreeSpec() {
                 "when a variable has the `Exception` type" - {
                     val original: Fail<String, String> = createFail(Fail.exception(ALTERNATIVE_VALUE))
 
-                    "then this function should return the alternative value" {
+                    "then this function should return the transformed failure value" {
                         val result = original.merge(
                             onError = { it.toInt() },
                             onException = { it.toInt() }

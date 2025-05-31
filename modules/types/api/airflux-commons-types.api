@@ -344,6 +344,7 @@ public final class io/github/airflux/commons/types/resultk/ResultKExtensionsKt {
 	public static final fun mapToError (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun mapToException (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun merge (Lio/github/airflux/commons/types/resultk/ResultK;)Ljava/lang/Object;
+	public static final fun merge (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public static final fun onFailure (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun onSuccess (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun orElse (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/resultk/ResultK;
