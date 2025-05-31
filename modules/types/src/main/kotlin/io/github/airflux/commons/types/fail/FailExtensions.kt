@@ -229,3 +229,9 @@ public fun <ErrorT : Any, ExceptionT : Any> Fail<ErrorT, ExceptionT>.toBiFailure
 
 public fun <FailureT : Any> Fail<FailureT, FailureT>.merge(): FailureT =
     fold(onError = ::identity, onException = ::identity)
+
+public inline fun <ErrorT : Any, FailureT : Any, ResultT> Fail<ErrorT, FailureT>.merge(
+    onError: (ErrorT) -> ResultT,
+    onException: (FailureT) -> ResultT,
+): ResultT =
+    fold(onError = onError, onException = onException)

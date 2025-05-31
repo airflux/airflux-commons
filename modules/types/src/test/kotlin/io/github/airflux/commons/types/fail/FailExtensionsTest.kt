@@ -547,6 +547,33 @@ internal class FailExtensionsTest : FreeSpec() {
                     }
                 }
             }
+
+            "the `merge` function with a transform function" - {
+
+                "when a variable has the `Error` type" - {
+                    val original: Fail<String, String> = createFail(Fail.error(ORIGINAL_VALUE))
+
+                    "then this function should return a value" {
+                        val result = original.merge(
+                            onError = { it.toInt() },
+                            onException = { it.toInt() }
+                        )
+                        result shouldBe ORIGINAL_VALUE.toInt()
+                    }
+                }
+
+                "when a variable has the `Exception` type" - {
+                    val original: Fail<String, String> = createFail(Fail.exception(ALTERNATIVE_VALUE))
+
+                    "then this function should return the alternative value" {
+                        val result = original.merge(
+                            onError = { it.toInt() },
+                            onException = { it.toInt() }
+                        )
+                        result shouldBe ALTERNATIVE_VALUE.toInt()
+                    }
+                }
+            }
         }
 
         "The `asError` function should return the `Error` type with the passed value" {

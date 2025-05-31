@@ -160,6 +160,7 @@ public final class io/github/airflux/commons/types/fail/FailExtensionsKt {
 	public static final fun mapError (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
 	public static final fun mapException (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
 	public static final fun merge (Lio/github/airflux/commons/types/fail/Fail;)Ljava/lang/Object;
+	public static final fun merge (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public static final fun onError (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
 	public static final fun onException (Lio/github/airflux/commons/types/fail/Fail;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/fail/Fail;
 	public static final fun toBiFailureResult (Lio/github/airflux/commons/types/fail/Fail;)Lio/github/airflux/commons/types/resultk/ResultK;
