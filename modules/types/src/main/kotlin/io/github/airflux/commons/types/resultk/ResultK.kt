@@ -27,6 +27,7 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 public typealias Success<ValueT> = ResultK.Success<ValueT>
+
 public typealias Failure<FailureT> = ResultK.Failure<FailureT>
 
 public sealed interface ResultK<out ValueT, out FailureT : Any> {
@@ -69,8 +70,6 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
          * 2. If the type of value is Unit, it returns the value of the [asUnit] property.
          * 3. If the value is a boolean, it returns the value of the [ResultK.Success.asTrue] or
          * [ResultK.Success.asFalse] property depending on the value.
-         * 4. If the value is a list, it returns [asEmptyList] if the list is empty, or creates a new [Success] with
-         * the list.
          * 5. Otherwise, it creates a new [Success] with the given value.
          *
          * @param value the value to be wrapped in a [Success].
@@ -82,13 +81,16 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
                 value == null -> asNull
                 value is Unit -> asUnit
                 value is Boolean -> of(value)
-                value is List<*> && value.isEmpty() -> asEmptyList
                 else -> Success(value)
             }
 
             @Suppress("UNCHECKED_CAST")
             return result as Success<ValueT>
         }
+
+        @JvmStatic
+        public fun <T> success(value: List<T>): Success<List<T>> =
+            if (value.isEmpty()) asEmptyList else Success(value)
 
         @JvmStatic
         public fun <FailureT : Any> failure(cause: FailureT): Failure<FailureT> = Failure(cause)

@@ -30,9 +30,13 @@ import kotlin.experimental.ExperimentalTypeInference
 
 public fun <ValueT> ValueT.asSuccess(): ResultK.Success<ValueT> = success(this)
 
+public fun <ValueT> List<ValueT>.asSuccess(): ResultK.Success<List<ValueT>> = success(this)
+
 public fun <FailureT : Any> FailureT.asFailure(): ResultK.Failure<FailureT> = failure(this)
 
 public fun <ValueT> success(value: ValueT): ResultK.Success<ValueT> = ResultK.success(value)
+
+public fun <ValueT> success(value: List<ValueT>): ResultK.Success<List<ValueT>> = ResultK.success(value)
 
 public fun <FailureT : Any> failure(cause: FailureT): ResultK.Failure<FailureT> = ResultK.failure(cause)
 
@@ -360,7 +364,7 @@ public inline fun <ValueT, SuccessR, FailureT : Any, M : MutableList<SuccessR>> 
         if (result.isFailure()) return result
         destination.add(result.value)
     }
-    return destination.asSuccess()
+    return ResultK.Success(destination)
 }
 
 @OptIn(ExperimentalContracts::class)
