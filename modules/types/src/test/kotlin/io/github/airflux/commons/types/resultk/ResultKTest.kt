@@ -18,8 +18,10 @@ package io.github.airflux.commons.types.resultk
 import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.resultk.matcher.shouldBeFailure
 import io.github.airflux.commons.types.resultk.matcher.shouldBeSuccess
+import io.github.airflux.commons.types.resultk.matcher.shouldContainSuccessInstance
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
 @OptIn(AirfluxTypesExperimental::class)
@@ -31,63 +33,128 @@ internal class ResultKTest : FreeSpec() {
 
             "the `success` function" - {
 
-                "when a parameter has the `Unit` type" - {
-                    val result: ResultK<Unit, String> = ResultK.success(Unit)
+                "when a parameter type is nullable" - {
 
-                    "then this function should return the value of the asUnit property of the `Success` type" {
-                        result shouldBeSameInstanceAs Success.asUnit
+                    "when a parameter is the `Unit` type" - {
+
+                        "when a parameter value is `null`" - {
+                            val result: ResultK<Unit?, String> = ResultK.success(null)
+
+                            "then this function should return the value of the asUnit property of the `Success` type" {
+                                result shouldBeSameInstanceAs Success.asNull
+                            }
+                        }
+
+                        "when a parameter value is not `null`" - {
+                            val result: ResultK<Unit?, String> = ResultK.success(Unit)
+
+                            "then this function should return the value of the asUnit property of the `Success` type" {
+                                result shouldBeSameInstanceAs Success.asUnit
+                            }
+                        }
+                    }
+
+                    "when a parameter is the `Boolean` type" - {
+
+                        "when a parameter value is `null`" - {
+                            val result: ResultK<Boolean?, String> = ResultK.success(null)
+
+                            "then this function should return the value of the asTrue property of the `Success` type" {
+                                result shouldBeSameInstanceAs Success.asNull
+                            }
+                        }
+
+                        "when a parameter value is not `null`" - {
+
+                            "when a parameter value has the `true` value" - {
+                                val result: ResultK<Boolean?, String> = ResultK.success(true)
+
+                                "then this function should return the value of the asTrue property of the `Success` type" {
+                                    result shouldBeSameInstanceAs Success.asTrue
+                                }
+                            }
+
+                            "when a parameter value has the `false` value" - {
+                                val result: ResultK<Boolean?, String> = ResultK.success(false)
+
+                                "then this function should return the value of the asFalse property of the `Success` type" {
+                                    result shouldBeSameInstanceAs Success.asFalse
+                                }
+                            }
+                        }
+                    }
+
+                    "when a parameter has another type" - {
+
+                        "when a parameter value is `null`" - {
+                            val result: ResultK<String?, String> = ResultK.success(null)
+
+                            "then this function should return the value of the asNull property of the `Success` type" {
+                                result shouldBeSameInstanceAs Success.asNull
+                            }
+                        }
+
+                        "when a parameter value is not `null`" - {
+                            val result: ResultK<String?, String> = ResultK.success(FIRST_VALUE)
+
+                            "then this function should return the passed value of the `Success` type" {
+                                result shouldBeSuccess FIRST_VALUE
+                            }
+                        }
                     }
                 }
 
-                "when a parameter has the `Boolean` type" - {
+                "when a parameter type is non-nullable" - {
 
-                    "when a parameter value has the `true` value" - {
-                        val result: ResultK<Boolean, String> = ResultK.success(true)
+                    "when a parameter is the `Unit` type" - {
+                        val result: ResultK<Unit, String> = ResultK.success(Unit)
 
-                        "then this function should return the value of the asTrue property of the `Success` type" {
-                            result shouldBeSameInstanceAs Success.asTrue
+                        "then this function should return the value of the asUnit property of the `Success` type" {
+                            result shouldBeSameInstanceAs Success.asUnit
                         }
                     }
 
-                    "when a parameter value has the `false` value" - {
-                        val result: ResultK<Boolean, String> = ResultK.success(false)
+                    "when a parameter is the `Boolean` type" - {
 
-                        "then this function should return the value of the asFalse property of the `Success` type" {
-                            result shouldBeSameInstanceAs Success.asFalse
+                        "when a parameter value has the `true` value" - {
+                            val result: ResultK<Boolean, String> = ResultK.success(true)
+
+                            "then this function should return the value of the asTrue property of the `Success` type" {
+                                result shouldBeSameInstanceAs Success.asTrue
+                            }
                         }
-                    }
-                }
 
-                "when a parameter has the `List` type" - {
+                        "when a parameter value has the `false` value" - {
+                            val result: ResultK<Boolean, String> = ResultK.success(false)
 
-                    "when a parameter value has the empty list" - {
-                        val result: ResultK<List<Nothing>, String> = ResultK.success(emptyList())
-
-                        "then this function should return the value of the asEmptyList property of the `Success` type" {
-                            result shouldBeSameInstanceAs Success.asEmptyList
-                        }
-                    }
-
-                    "when a parameter value has a non-empty list" - {
-                        val result: ResultK<List<String>, String> = ResultK.success(listOf(FIRST_VALUE, SECOND_VALUE))
-
-                        "then this function should return the passed value of the `Success` type" {
-                            result shouldBeSuccess listOf(FIRST_VALUE, SECOND_VALUE)
-                        }
-                    }
-                }
-
-                "when a parameter has another type" - {
-
-                    "when a parameter value has the `null` value" - {
-                        val result: ResultK<String?, String> = ResultK.success(null)
-
-                        "then this function should return the value of the asNull property of the `Success` type" {
-                            result shouldBeSameInstanceAs Success.asNull
+                            "then this function should return the value of the asFalse property of the `Success` type" {
+                                result shouldBeSameInstanceAs Success.asFalse
+                            }
                         }
                     }
 
-                    "when a parameter value has the non-null value" - {
+                    "when a parameter has the `List` type" - {
+
+                        "when a parameter value has the empty list" - {
+                            val result: ResultK<List<String>, String> = ResultK.success(emptyList())
+
+                            "then this function should return the value of the asEmptyList property of the `Success` type" {
+                                result shouldBeSameInstanceAs Success.asEmptyList
+                            }
+                        }
+
+                        "when a parameter value has a non-empty list" - {
+                            val result: ResultK<List<String>, String> =
+                                ResultK.success(listOf(FIRST_VALUE, SECOND_VALUE))
+
+                            "then this function should return the passed value of the `Success` type" {
+                                result.shouldContainSuccessInstance()
+                                    .shouldContainExactly(FIRST_VALUE, SECOND_VALUE)
+                            }
+                        }
+                    }
+
+                    "when a parameter has another type" - {
                         val result: ResultK<String, String> = ResultK.success(FIRST_VALUE)
 
                         "then this function should return the passed value of the `Success` type" {

@@ -77,10 +77,10 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
          */
         @JvmStatic
         public fun <ValueT> success(value: ValueT): Success<ValueT> {
-            val result = when {
-                value == null -> asNull
-                value is Unit -> asUnit
-                value is Boolean -> of(value)
+            val result = when (value) {
+                null -> asNull
+                is Unit -> asUnit
+                is Boolean -> of(value)
                 else -> Success(value)
             }
 
@@ -90,7 +90,7 @@ public sealed interface ResultK<out ValueT, out FailureT : Any> {
 
         @JvmStatic
         public fun <T> success(value: List<T>): Success<List<T>> =
-            if (value.isEmpty()) asEmptyList else Success(value)
+            if (value.isNotEmpty()) Success(value) else asEmptyList
 
         @JvmStatic
         public fun <FailureT : Any> failure(cause: FailureT): Failure<FailureT> = Failure(cause)
