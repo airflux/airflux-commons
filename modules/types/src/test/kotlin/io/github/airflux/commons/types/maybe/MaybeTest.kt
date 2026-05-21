@@ -29,22 +29,68 @@ internal class MaybeTest : FreeSpec() {
 
         "The `Maybe` type" - {
 
-            "the `some` function" - {
+            "the `maybe` function with a value" - {
 
-                "when a parameter is a nullable type" - {
-                    val result: Maybe<String> = null.asSome()
+                "when a value returns a nullable type" - {
+                    val result: Maybe<String> = maybe(null)
 
                     "then this function should return the the `None` type" {
                         result.shouldBeNone()
                     }
                 }
 
-                "when a parameter is a non-nullable type" - {
-                    val result: Maybe<String> = VALUE.asSome()
+                "when a value returns a non-nullable type" - {
+                    val result: Maybe<String> = maybe(VALUE)
 
                     "then this function should return the the `Some` type with the value" {
                         result shouldBeSome VALUE
                     }
+                }
+            }
+
+            "the `maybe` function with a lambda" - {
+
+                "when a lambda returns a nullable type" - {
+                    val result: Maybe<String> = maybe { null }
+
+                    "then this function should return the the `None` type" {
+                        result.shouldBeNone()
+                    }
+                }
+
+                "when a lambda returns a non-nullable type" - {
+                    val result: Maybe<String> = maybe { VALUE }
+
+                    "then this function should return the the `Some` type with the value" {
+                        result shouldBeSome VALUE
+                    }
+                }
+            }
+
+            "the `maybeWith` function" - {
+
+                "when a block returns a nullable type" - {
+                    val result: Maybe<String> = maybeWith { null }
+
+                    "then this function should return the the `None` type" {
+                        result.shouldBeNone()
+                    }
+                }
+
+                "when a block returns a non-nullable type" - {
+                    val result: Maybe<String> = maybeWith { Maybe.some(VALUE) }
+
+                    "then this function should return the the `Some` type with the value" {
+                        result shouldBeSome VALUE
+                    }
+                }
+            }
+
+            "the `some` function" - {
+                val result: Maybe<String> = VALUE.asSome()
+
+                "then this function should return the the `Some` type with the value" {
+                    result shouldBeSome VALUE
                 }
             }
 

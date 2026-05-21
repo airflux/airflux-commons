@@ -102,6 +102,18 @@ public inline infix fun <ValueT, SuccessR, FailureT : Any> ResultK<ValueT, Failu
 }
 
 @OptIn(ExperimentalContracts::class)
+public inline fun <ValueT, FailureT : Any, ValueR, FailureR : Any> ResultK<ValueT, FailureT>.map2(
+    onSuccess: (ValueT) -> ValueR,
+    onFailure: (FailureT) -> FailureR,
+): ResultK<ValueR, FailureR> {
+    contract {
+        callsInPlace(onSuccess, AT_MOST_ONCE)
+        callsInPlace(onFailure, AT_MOST_ONCE)
+    }
+    return if (isSuccess()) onSuccess(value).asSuccess() else onFailure(cause).asFailure()
+}
+
+@OptIn(ExperimentalContracts::class)
 public inline infix fun <ValueT, SuccessR, FailureT : Any> ResultK<ValueT, FailureT>.flatMap(
     transform: (ValueT) -> ResultK<SuccessR, FailureT>
 ): ResultK<SuccessR, FailureT> {
@@ -109,6 +121,18 @@ public inline infix fun <ValueT, SuccessR, FailureT : Any> ResultK<ValueT, Failu
         callsInPlace(transform, AT_MOST_ONCE)
     }
     return if (isSuccess()) transform(value) else this
+}
+
+@OptIn(ExperimentalContracts::class)
+public inline fun <ValueT, FailureT : Any, ValueR, FailureR : Any> ResultK<ValueT, FailureT>.flatMap2(
+    onSuccess: (ValueT) -> ResultK.Success<ValueR>,
+    onFailure: (FailureT) -> ResultK.Failure<FailureR>,
+): ResultK<ValueR, FailureR> {
+    contract {
+        callsInPlace(onSuccess, AT_MOST_ONCE)
+        callsInPlace(onFailure, AT_MOST_ONCE)
+    }
+    return if (isSuccess()) onSuccess(value) else onFailure(cause)
 }
 
 public fun <ValueT, FailureT : Any> ResultK<ResultK<ValueT, FailureT>, FailureT>.flatten(): ResultK<ValueT, FailureT> =

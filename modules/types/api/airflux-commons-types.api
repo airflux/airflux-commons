@@ -241,6 +241,9 @@ public final class io/github/airflux/commons/types/maybe/MaybeFailureDSLKt {
 
 public final class io/github/airflux/commons/types/maybe/MaybeKt {
 	public static final fun asSome (Ljava/lang/Object;)Lio/github/airflux/commons/types/maybe/Maybe;
+	public static final fun maybe (Ljava/lang/Object;)Lio/github/airflux/commons/types/maybe/Maybe;
+	public static final fun maybe (Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/maybe/Maybe;
+	public static final fun maybeWith (Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/maybe/Maybe;
 	public static final fun none ()Lio/github/airflux/commons/types/maybe/Maybe$None;
 	public static final fun some (Ljava/lang/Object;)Lio/github/airflux/commons/types/maybe/Maybe;
 }
@@ -324,6 +327,7 @@ public final class io/github/airflux/commons/types/resultk/ResultKExtensionsKt {
 	public static final fun filterNotNull (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun filterOrElse (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun flatMap (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun flatMap2 (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun flatMapBoolean (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun flatMapNotNull (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun flatMapNullable (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
@@ -342,6 +346,7 @@ public final class io/github/airflux/commons/types/resultk/ResultKExtensionsKt {
 	public static final fun liftToError (Lio/github/airflux/commons/types/resultk/ResultK;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun liftToException (Lio/github/airflux/commons/types/resultk/ResultK;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun map (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
+	public static final fun map2 (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun mapAll (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun mapFailure (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;
 	public static final fun mapToError (Lio/github/airflux/commons/types/resultk/ResultK;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/resultk/ResultK;

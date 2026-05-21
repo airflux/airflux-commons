@@ -44,7 +44,7 @@ public sealed interface Maybe<out ValueT : Any> {
         public fun none(): None = None
 
         @JvmStatic
-        public fun <ValueT> some(value: ValueT): Maybe<ValueT & Any> = if (value == null) None else Some(value)
+        public fun <ValueT : Any> some(value: ValueT): Maybe<ValueT> = Some(value)
 
         @OptIn(ExperimentalContracts::class)
         @JvmStatic
@@ -83,8 +83,14 @@ public sealed interface Maybe<out ValueT : Any> {
     }
 }
 
-public fun <ValueT> ValueT.asSome(): Maybe<ValueT & Any> = some(this)
+public fun <ValueT : Any> maybe(value: ValueT?): Maybe<ValueT> = if (value != null) some(value) else none()
 
-public fun <ValueT> some(value: ValueT): Maybe<ValueT & Any> = Maybe.some(value)
+public inline fun <ValueT : Any> maybe(block: () -> ValueT?): Maybe<ValueT> = maybe(block())
+
+public inline fun <ValueT : Any> maybeWith(block: () -> Maybe<ValueT>?): Maybe<ValueT> = block() ?: none()
+
+public fun <ValueT : Any> ValueT.asSome(): Maybe<ValueT> = some(this)
+
+public fun <ValueT : Any> some(value: ValueT): Maybe<ValueT> = Maybe.some(value)
 
 public fun none(): None = Maybe.none()
