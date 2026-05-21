@@ -1328,7 +1328,6 @@ internal class ResultKExtensionsTest : FreeSpec() {
                 }
             }
 
-
             "the `asSuccess` function should return the `Success` type with the passed value" {
                 val result: ResultK<String, Errors.Empty> = createResult(ORIGINAL_VALUE.asSuccess())
                 result shouldBeSuccess ORIGINAL_VALUE
