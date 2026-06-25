@@ -44,7 +44,7 @@ internal class MaybeExtensionsTest : FreeSpec() {
 
     init {
 
-        "The extension functions of the `ResultK` type" - {
+        "The extension functions of the `Maybe` type" - {
 
             "the `isSome` function" - {
 
