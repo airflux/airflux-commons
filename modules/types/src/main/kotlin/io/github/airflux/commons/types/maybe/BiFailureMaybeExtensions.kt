@@ -19,6 +19,7 @@ package io.github.airflux.commons.types.maybe
 import io.github.airflux.commons.types.fail.fold
 import io.github.airflux.commons.types.fail.isError
 import io.github.airflux.commons.types.fail.isException
+import io.github.airflux.commons.types.fail.map2
 import io.github.airflux.commons.types.fail.mapError
 import io.github.airflux.commons.types.fail.mapException
 import kotlin.contracts.ExperimentalContracts
@@ -48,6 +49,27 @@ public inline fun <ErrorT, ExceptionT, ValueR> BiFailureMaybe<ErrorT, ExceptionT
             )
         }
     )
+}
+
+@OptIn(ExperimentalContracts::class)
+public inline fun <ErrorT, ErrorR, ExceptionT, ExceptionR> BiFailureMaybe<ErrorT, ExceptionT>.mapFail(
+    onError: (ErrorT) -> ErrorR,
+    onException: (ExceptionT) -> ExceptionR
+): BiFailureMaybe<ErrorR, ExceptionR>
+    where ErrorT : Any,
+          ErrorR : Any,
+          ExceptionT : Any,
+          ExceptionR : Any {
+    contract {
+        callsInPlace(onError, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(onException, InvocationKind.AT_MOST_ONCE)
+    }
+    return this.map {
+        it.map2(
+            onError = { value -> onError(value) },
+            onException = { value -> onException(value) }
+        )
+    }
 }
 
 @OptIn(ExperimentalContracts::class)

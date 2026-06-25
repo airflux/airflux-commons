@@ -79,6 +79,45 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                 }
             }
 
+            "the `mapFail` function" - {
+
+                "when a variable has the `None` type" - {
+                    val original: BiFailureMaybe<Errors, Exceptions> = createNone()
+
+                    "then this function should return an original" {
+                        val result = original.mapError { Errors.Second }
+                        result shouldBeSameInstanceAs original
+                    }
+                }
+
+                "when a variable has the `Some` type" - {
+
+                    "when a failure is the `Error` type" - {
+                        val original: BiFailureMaybe<Errors, Exceptions> = createError(Errors.First)
+
+                        "then this function should return a result of applying the transform function to an error" {
+                            val result = original.mapFail(
+                                onError = { Errors.Second },
+                                onException = { Exceptions.Second },
+                            )
+                            result shouldBeError Errors.Second
+                        }
+                    }
+
+                    "when a failure is the `Exception` type" - {
+                        val original: BiFailureMaybe<Errors, Exceptions> = createException(Exceptions.First)
+
+                        "then this function should return an original" {
+                            val result = original.mapFail(
+                                onError = { Errors.Second },
+                                onException = { Exceptions.Second },
+                            )
+                            result shouldBeException Exceptions.Second
+                        }
+                    }
+                }
+            }
+
             "the `mapError` function" - {
 
                 "when a variable has the `None` type" - {
@@ -102,8 +141,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                     }
 
                     "when a failure is the `Exception` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> =
-                            createException(Exceptions.First)
+                        val original: BiFailureMaybe<Errors, Exceptions> = createException(Exceptions.First)
 
                         "then this function should return an original" {
                             val result = original.mapError { Errors.Second }
@@ -127,8 +165,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                 "when a variable has the `Some` type" - {
 
                     "when a failure is the `Error` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> =
-                            createError(Errors.First)
+                        val original: BiFailureMaybe<Errors, Exceptions> = createError(Errors.First)
 
                         "then this function should return an original" {
                             val result = original.mapException { Exceptions.Second }
@@ -273,11 +310,13 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
     internal sealed interface Errors {
         data object First : Errors
         data object Second : Errors
+        data object Third : Exceptions
     }
 
     internal sealed interface Exceptions {
         data object First : Exceptions
         data object Second : Exceptions
+        data object Third : Exceptions
     }
 
     companion object {
