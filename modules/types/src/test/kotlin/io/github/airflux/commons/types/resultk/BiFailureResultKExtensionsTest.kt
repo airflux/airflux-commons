@@ -82,6 +82,48 @@ internal class BiFailureResultKExtensionsTest : FreeSpec() {
                 }
             }
 
+            "the `mapFail` function" - {
+
+                "when a variable has the `Success` type" - {
+                    val original: BiFailureResultK<String, Errors, Exceptions> =
+                        createSuccessResult(ORIGINAL_VALUE)
+
+                    "then this function should return an original" {
+                        val result = original.mapError { Errors.Second }
+                        result shouldBeSuccess ORIGINAL_VALUE
+                    }
+                }
+
+                "when a variable has the `Failure` type" - {
+
+                    "when a failure is the `Error` type" - {
+                        val original: BiFailureResultK<String, Errors, Exceptions> =
+                            createErrorResult(Errors.First)
+
+                        "then this function should return a result of applying the transform function to an error" {
+                            val result = original.mapFail(
+                                onError = { Errors.Second },
+                                onException = { Exceptions.Second }
+                            )
+                            result shouldBeError Errors.Second
+                        }
+                    }
+
+                    "when a failure is the `Exception` type" - {
+                        val original: BiFailureResultK<String, Errors, Exceptions> =
+                            createExceptionResult(Exceptions.First)
+
+                        "then this function should return an original" {
+                            val result = original.mapFail(
+                                onError = { Errors.Second },
+                                onException = { Exceptions.Second }
+                            )
+                            result shouldBeException Exceptions.Second
+                        }
+                    }
+                }
+            }
+
             "the `mapError` function" - {
 
                 "when a variable has the `Success` type" - {
