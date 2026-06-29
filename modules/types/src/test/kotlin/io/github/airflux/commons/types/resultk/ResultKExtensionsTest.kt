@@ -1284,13 +1284,13 @@ internal class ResultKExtensionsTest : FreeSpec() {
                 }
             }
 
-            "the `mapToError` function" - {
+            "the `mapFailureToError` function" - {
 
                 "when a variable has the `Success` type" - {
                     val original: ResultK<String, Errors> = createResult(ResultK.Success(ORIGINAL_VALUE))
 
                     "then this function should return original value" {
-                        val result = original.mapToError { Errors.Blank }
+                        val result = original.mapFailureToError { Errors.Blank }
                         result.shouldBeSameInstanceAs(original)
                     }
                 }
@@ -1299,20 +1299,20 @@ internal class ResultKExtensionsTest : FreeSpec() {
                     val original: ResultK<String, Errors> = createResult(ResultK.Failure(Errors.Empty))
 
                     "then this function should return the `Failure` type with a mapped value of the `Fail.Error` type" {
-                        val result = original.mapToError { Errors.Blank }
+                        val result = original.mapFailureToError { Errors.Blank }
                         result.shouldBeFailure()
                         result.cause shouldBeError Errors.Blank
                     }
                 }
             }
 
-            "the `mapToException` function" - {
+            "the `mapFailureToException` function" - {
 
                 "when a variable has the `Success` type" - {
                     val original: ResultK<String, Errors> = createResult(ResultK.Success(ORIGINAL_VALUE))
 
                     "then this function should return original value" {
-                        val result = original.mapToException { Errors.Blank }
+                        val result = original.mapFailureToException { Errors.Blank }
                         result.shouldBeSameInstanceAs(original)
                     }
                 }
@@ -1321,7 +1321,7 @@ internal class ResultKExtensionsTest : FreeSpec() {
                     val original: ResultK<String, Errors> = createResult(ResultK.Failure(Errors.Empty))
 
                     "then this function should return the `Failure` type with a mapped value of the `Fail.Exception` type" {
-                        val result = original.mapToException { Errors.Blank }
+                        val result = original.mapFailureToException { Errors.Blank }
                         result.shouldBeFailure()
                         result.cause shouldBeException Errors.Blank
                     }

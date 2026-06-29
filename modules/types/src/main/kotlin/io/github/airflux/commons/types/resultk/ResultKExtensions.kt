@@ -469,18 +469,18 @@ public inline fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.filterOrEls
 
 public fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.liftToError():
     ResultK<ValueT, Fail.Error<FailureT>> =
-    mapToError { it }
+    mapFailureToError { it }
 
 public fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.liftToException():
     ResultK<ValueT, Fail.Exception<FailureT>> =
-    mapToException { it }
+    mapFailureToException { it }
 
-public inline infix fun <ValueT, FailureT : Any, ErrorT : Any> ResultK<ValueT, FailureT>.mapToError(
+public inline infix fun <ValueT, FailureT : Any, ErrorT : Any> ResultK<ValueT, FailureT>.mapFailureToError(
     transform: (FailureT) -> ErrorT
 ): ResultK<ValueT, Fail.Error<ErrorT>> =
     if (isSuccess()) this else Fail.error(transform(cause)).asFailure()
 
-public inline infix fun <ValueT, FailureT : Any, ExceptionT : Any> ResultK<ValueT, FailureT>.mapToException(
+public inline infix fun <ValueT, FailureT : Any, ExceptionT : Any> ResultK<ValueT, FailureT>.mapFailureToException(
     transform: (FailureT) -> ExceptionT
 ): ResultK<ValueT, Fail.Exception<ExceptionT>> =
     if (isSuccess()) this else Fail.exception(transform(cause)).asFailure()
