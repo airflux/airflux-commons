@@ -89,7 +89,10 @@ internal class BiFailureResultKExtensionsTest : FreeSpec() {
                         createSuccessResult(ORIGINAL_VALUE)
 
                     "then this function should return an original" {
-                        val result = original.mapError { Errors.Second }
+                        val result = original.mapFailure(
+                            onError = { Errors.Second },
+                            onException = { Exceptions.Second }
+                        )
                         result shouldBeSuccess ORIGINAL_VALUE
                     }
                 }
