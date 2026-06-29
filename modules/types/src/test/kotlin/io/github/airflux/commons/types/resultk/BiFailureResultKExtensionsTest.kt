@@ -82,7 +82,7 @@ internal class BiFailureResultKExtensionsTest : FreeSpec() {
                 }
             }
 
-            "the `mapFail` function" - {
+            "the `mapFailure` function for Fail type" - {
 
                 "when a variable has the `Success` type" - {
                     val original: BiFailureResultK<String, Errors, Exceptions> =
@@ -101,7 +101,7 @@ internal class BiFailureResultKExtensionsTest : FreeSpec() {
                             createErrorResult(Errors.First)
 
                         "then this function should return a result of applying the transform function to an error" {
-                            val result = original.mapFail(
+                            val result = original.mapFailure(
                                 onError = { Errors.Second },
                                 onException = { Exceptions.Second }
                             )
@@ -114,7 +114,7 @@ internal class BiFailureResultKExtensionsTest : FreeSpec() {
                             createExceptionResult(Exceptions.First)
 
                         "then this function should return an original" {
-                            val result = original.mapFail(
+                            val result = original.mapFailure(
                                 onError = { Errors.Second },
                                 onException = { Exceptions.Second }
                             )

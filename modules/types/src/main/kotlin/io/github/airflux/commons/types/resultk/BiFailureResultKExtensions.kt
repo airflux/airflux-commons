@@ -52,7 +52,7 @@ public inline fun <ValueT, ErrorT, ExceptionT, ResultT> BiFailureResultK<ValueT,
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ValueT, ErrorT, ErrorR, ExceptionT, ExceptionR> BiFailureResultK<ValueT, ErrorT, ExceptionT>.mapFail(
+public inline fun <ValueT, ErrorT, ErrorR, ExceptionT, ExceptionR> BiFailureResultK<ValueT, ErrorT, ExceptionT>.mapFailure(
     onError: (ErrorT) -> ErrorR,
     onException: (ExceptionT) -> ExceptionR
 ): BiFailureResultK<ValueT, ErrorR, ExceptionR>
