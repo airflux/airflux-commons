@@ -504,13 +504,13 @@ internal class FailExtensionsTest : FreeSpec() {
                 }
             }
 
-            "the `toBiFailureResult` function" - {
+            "the `toResultAsFailure` function" - {
 
                 "when a variable has the `Error` type" - {
                     val original: Fail<String, String> = createFail(Fail.error(ORIGINAL_VALUE))
 
                     "then this function should return the `ResultK.Failure` type with value of the `Error` type" {
-                        val result = original.toBiFailureResult()
+                        val result = original.toResultAsFailure()
                         result.shouldBeFailure()
                         result.cause shouldBeError ORIGINAL_VALUE
                     }
@@ -520,7 +520,7 @@ internal class FailExtensionsTest : FreeSpec() {
                     val original: Fail<String, String> = createFail(Fail.exception(ORIGINAL_VALUE))
 
                     "then this function should return the `ResultK.Failure` type with value of the `Exception` type" {
-                        val result = original.toBiFailureResult()
+                        val result = original.toResultAsFailure()
                         result.shouldBeFailure()
                         result.cause shouldBeException ORIGINAL_VALUE
                     }

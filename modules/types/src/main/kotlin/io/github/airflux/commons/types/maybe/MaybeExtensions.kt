@@ -57,8 +57,8 @@ public fun <ValueT : Any> Maybe<ValueT>.isNone(): Boolean {
 
 @OptIn(ExperimentalContracts::class)
 public inline fun <ValueT : Any, ResultT> Maybe<ValueT>.fold(
-    onSome: (ValueT) -> ResultT,
-    onNone: () -> ResultT
+    onNone: () -> ResultT,
+    onSome: (ValueT) -> ResultT
 ): ResultT {
     contract {
         callsInPlace(onNone, AT_MOST_ONCE)
@@ -223,10 +223,7 @@ public inline infix fun <ValueT : Any, Failure : Any> Maybe<ValueT>.toResultAsSu
     contract {
         callsInPlace(onNone, AT_MOST_ONCE)
     }
-    return fold(
-        onSome = { it.asSuccess() },
-        onNone = { onNone() }
-    )
+    return fold(onNone) { it.asSuccess() }
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -242,10 +239,7 @@ public inline infix fun <ValueT, Failure : Any> Maybe<Failure>.toResultAsFailure
     contract {
         callsInPlace(onNone, AT_MOST_ONCE)
     }
-    return fold(
-        onSome = { it.asFailure() },
-        onNone = { onNone() }
-    )
+    return fold(onNone) { it.asFailure() }
 }
 
 public infix fun <ValueT, Failure : Any> Maybe<Failure>.toResultAsErrorOr(
@@ -260,10 +254,7 @@ public inline infix fun <ValueT, Failure : Any> Maybe<Failure>.toResultAsErrorOr
     contract {
         callsInPlace(onNone, AT_MOST_ONCE)
     }
-    return fold(
-        onSome = { it.asError().asFailure() },
-        onNone = { onNone() }
-    )
+    return fold(onNone) { it.asError().asFailure() }
 }
 
 public infix fun <ValueT, Failure : Any> Maybe<Failure>.toResultAsExceptionOr(
@@ -278,8 +269,6 @@ public inline infix fun <ValueT, Failure : Any> Maybe<Failure>.toResultAsExcepti
     contract {
         callsInPlace(onNone, AT_MOST_ONCE)
     }
-    return fold(
-        onSome = { it.asException().asFailure() },
-        onNone = { onNone() }
-    )
+
+    return fold(onNone) { it.asException().asFailure() }
 }
