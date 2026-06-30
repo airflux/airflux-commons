@@ -85,7 +85,10 @@ internal class MaybeBiFailureExtensionsTest : FreeSpec() {
                     val original: MaybeBiFailure<Errors, Exceptions> = createNone()
 
                     "then this function should return an original" {
-                        val result = original.mapError { Errors.Second }
+                        val result = original.mapFail(
+                            onError = { Errors.Second },
+                            onException = { Exceptions.Second },
+                        )
                         result shouldBeSameInstanceAs original
                     }
                 }

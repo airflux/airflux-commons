@@ -249,33 +249,6 @@ internal class ResultKExtensionsTest : FreeSpec() {
                 }
             }
 
-            "the `flatMap2` function" - {
-                "when a variable has the `Success` type" - {
-                    val original: ResultK<String, Errors> = createResult(ResultK.Success(ORIGINAL_VALUE))
-
-                    "then this function should return a result of applying the transform function to the value" {
-                        val result = original.flatMap2(
-                            onSuccess = { it.toInt().asSuccess() },
-                            onFailure = { Errors.Blank.asFailure() }
-                        )
-                        result shouldBeSuccess ORIGINAL_VALUE.toInt()
-                    }
-                }
-
-                "when a variable has the `Failure` type" - {
-                    val original: ResultK<String, Errors> = createResult(ResultK.Failure(Errors.Empty))
-
-                    "then this function should return an original do not apply the transform function to a value" {
-                        val result = original.flatMap2(
-                            onSuccess = { it.toInt().asSuccess() },
-                            onFailure = { Errors.Blank.asFailure() }
-                        )
-
-                        result shouldBeFailure Errors.Blank
-                    }
-                }
-            }
-
             "the `flatten` function" - {
 
                 "when a variable has the `Success` type" - {
