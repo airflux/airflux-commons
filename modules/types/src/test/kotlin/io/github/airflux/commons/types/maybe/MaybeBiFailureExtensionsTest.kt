@@ -79,13 +79,13 @@ internal class MaybeBiFailureExtensionsTest : FreeSpec() {
                 }
             }
 
-            "the `mapFail` function" - {
+            "the `map` function" - {
 
                 "when a variable has the `None` type" - {
                     val original: MaybeBiFailure<Errors, Exceptions> = createNone()
 
                     "then this function should return an original" {
-                        val result = original.mapFail(
+                        val result = original.map(
                             onError = { Errors.Second },
                             onException = { Exceptions.Second },
                         )
@@ -99,7 +99,7 @@ internal class MaybeBiFailureExtensionsTest : FreeSpec() {
                         val original: MaybeBiFailure<Errors, Exceptions> = createError(Errors.First)
 
                         "then this function should return a result of applying the transform function to an error" {
-                            val result = original.mapFail(
+                            val result = original.map(
                                 onError = { Errors.Second },
                                 onException = { Exceptions.Second },
                             )
@@ -111,7 +111,7 @@ internal class MaybeBiFailureExtensionsTest : FreeSpec() {
                         val original: MaybeBiFailure<Errors, Exceptions> = createException(Exceptions.First)
 
                         "then this function should return an original" {
-                            val result = original.mapFail(
+                            val result = original.map(
                                 onError = { Errors.Second },
                                 onException = { Exceptions.Second },
                             )

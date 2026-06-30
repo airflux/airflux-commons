@@ -52,7 +52,7 @@ public inline fun <ErrorT, ExceptionT, ValueR> MaybeBiFailure<ErrorT, ExceptionT
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ErrorT, ErrorR, ExceptionT, ExceptionR> MaybeBiFailure<ErrorT, ExceptionT>.mapFail(
+public inline fun <ErrorT, ErrorR, ExceptionT, ExceptionR> MaybeBiFailure<ErrorT, ExceptionT>.map(
     onError: (ErrorT) -> ErrorR,
     onException: (ExceptionT) -> ExceptionR
 ): MaybeBiFailure<ErrorR, ExceptionR>
