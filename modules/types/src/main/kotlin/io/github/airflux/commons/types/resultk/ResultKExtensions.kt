@@ -79,10 +79,10 @@ public inline fun <ValueT, FailureT : Any> ResultK<ValueT, FailureT>.isFailure(
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ValueT, SuccessR, FailureT : Any> ResultK<ValueT, FailureT>.fold(
-    onSuccess: (ValueT) -> SuccessR,
-    onFailure: (FailureT) -> SuccessR
-): SuccessR {
+public inline fun <ValueT, FailureT : Any, ValueR> ResultK<ValueT, FailureT>.fold(
+    onSuccess: (ValueT) -> ValueR,
+    onFailure: (FailureT) -> ValueR
+): ValueR {
     contract {
         callsInPlace(onFailure, AT_MOST_ONCE)
         callsInPlace(onSuccess, AT_MOST_ONCE)
