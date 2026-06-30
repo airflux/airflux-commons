@@ -17,5 +17,13 @@
 package io.github.airflux.commons.types.maybe
 
 import io.github.airflux.commons.types.fail.Fail
+import io.github.airflux.commons.types.fail.asError
+import io.github.airflux.commons.types.fail.asException
 
 public typealias MaybeBiFailure<ErrorT, ExceptionT> = Maybe<Fail<ErrorT, ExceptionT>>
+
+public fun <ErrorT : Any> maybeError(value: ErrorT?): Maybe<Fail.Error<ErrorT>> =
+    if (value != null) some(value.asError()) else none()
+
+public fun <ExceptionT : Any> maybeException(value: ExceptionT?): Maybe<Fail.Exception<ExceptionT>> =
+    if (value != null) some(value.asException()) else none()

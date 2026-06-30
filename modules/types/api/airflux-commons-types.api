@@ -214,6 +214,11 @@ public final class io/github/airflux/commons/types/maybe/MaybeBiFailureExtension
 	public static final fun recover (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
 }
 
+public final class io/github/airflux/commons/types/maybe/MaybeBiFailureKt {
+	public static final fun maybeError (Ljava/lang/Object;)Lio/github/airflux/commons/types/maybe/Maybe;
+	public static final fun maybeException (Ljava/lang/Object;)Lio/github/airflux/commons/types/maybe/Maybe;
+}
+
 public final class io/github/airflux/commons/types/maybe/MaybeExtensionsKt {
 	public static final fun andThen (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
 	public static final fun filter (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
