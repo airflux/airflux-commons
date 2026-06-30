@@ -18,4 +18,4 @@ package io.github.airflux.commons.types.maybe
 
 import io.github.airflux.commons.types.fail.Fail
 
-public typealias BiFailureMaybe<ErrorT, ExceptionT> = Maybe<Fail<ErrorT, ExceptionT>>
+public typealias MaybeBiFailure<ErrorT, ExceptionT> = Maybe<Fail<ErrorT, ExceptionT>>

@@ -166,16 +166,6 @@ public final class io/github/airflux/commons/types/fail/FailExtensionsKt {
 	public static final fun toResultAsFailure (Lio/github/airflux/commons/types/fail/Fail;)Lio/github/airflux/commons/types/resultk/ResultK$Failure;
 }
 
-public final class io/github/airflux/commons/types/maybe/BiFailureMaybeExtensionsKt {
-	public static final fun fold (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public static final fun mapError (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
-	public static final fun mapException (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
-	public static final fun mapFail (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
-	public static final fun onError (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
-	public static final fun onException (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
-	public static final fun recover (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
-}
-
 public abstract interface class io/github/airflux/commons/types/maybe/Maybe {
 	public static final field Companion Lio/github/airflux/commons/types/maybe/Maybe$Companion;
 	public static fun catch (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/commons/types/maybe/Maybe;
@@ -212,6 +202,16 @@ public final class io/github/airflux/commons/types/maybe/Maybe$Some : io/github/
 	public final fun getValue ()Ljava/lang/Object;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/commons/types/maybe/MaybeBiFailureExtensionsKt {
+	public static final fun fold (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun mapError (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
+	public static final fun mapException (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
+	public static final fun mapFail (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
+	public static final fun onError (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
+	public static final fun onException (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
+	public static final fun recover (Lio/github/airflux/commons/types/maybe/Maybe;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/commons/types/maybe/Maybe;
 }
 
 public final class io/github/airflux/commons/types/maybe/MaybeExtensionsKt {

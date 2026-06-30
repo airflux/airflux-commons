@@ -18,8 +18,8 @@ package io.github.airflux.commons.types.maybe.matcher
 
 import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.fail.Fail
-import io.github.airflux.commons.types.maybe.BiFailureMaybe
 import io.github.airflux.commons.types.maybe.Maybe
+import io.github.airflux.commons.types.maybe.MaybeBiFailure
 import io.kotest.matchers.ComparableMatcherResult
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.should
@@ -29,7 +29,7 @@ import kotlin.reflect.KClass
 
 @AirfluxTypesExperimental
 @OptIn(ExperimentalContracts::class)
-public inline fun <reified ErrorT, reified FailT, reified FailureT> BiFailureMaybe<ErrorT, *>.shouldBeError()
+public inline fun <reified ErrorT, reified FailT, reified FailureT> MaybeBiFailure<ErrorT, *>.shouldBeError()
     where ErrorT : Any,
           FailT : Fail.Error<ErrorT>,
           FailureT : Maybe.Some<FailT> {
@@ -43,13 +43,13 @@ public inline fun <reified ErrorT, reified FailT, reified FailureT> BiFailureMay
 }
 
 @AirfluxTypesExperimental
-public infix fun <ErrorT> BiFailureMaybe<ErrorT, *>.shouldBeError(expected: ErrorT)
+public infix fun <ErrorT> MaybeBiFailure<ErrorT, *>.shouldBeError(expected: ErrorT)
     where ErrorT : Any {
     this should BiFailureMaybeValueMatcher(Maybe.Some(Fail.error(expected)))
 }
 
 @AirfluxTypesExperimental
-public inline fun <reified ErrorT> BiFailureMaybe<ErrorT, *>.shouldContainErrorInstance(): ErrorT
+public inline fun <reified ErrorT> MaybeBiFailure<ErrorT, *>.shouldContainErrorInstance(): ErrorT
     where ErrorT : Any {
     this.shouldBeError<ErrorT, Fail.Error<ErrorT>, Maybe.Some<Fail.Error<ErrorT>>>()
     return this.value.value
@@ -58,7 +58,7 @@ public inline fun <reified ErrorT> BiFailureMaybe<ErrorT, *>.shouldContainErrorI
 @AirfluxTypesExperimental
 @OptIn(ExperimentalContracts::class)
 public inline fun <reified ExceptionT, reified FailT, reified FailureT>
-    BiFailureMaybe<*, ExceptionT>.shouldBeException()
+    MaybeBiFailure<*, ExceptionT>.shouldBeException()
     where ExceptionT : Any,
           FailT : Fail.Exception<ExceptionT>,
           FailureT : Maybe.Some<FailT> {
@@ -72,13 +72,13 @@ public inline fun <reified ExceptionT, reified FailT, reified FailureT>
 }
 
 @AirfluxTypesExperimental
-public infix fun <ExceptionT> BiFailureMaybe<*, ExceptionT>.shouldBeException(expected: ExceptionT)
+public infix fun <ExceptionT> MaybeBiFailure<*, ExceptionT>.shouldBeException(expected: ExceptionT)
     where ExceptionT : Any {
     this should BiFailureMaybeValueMatcher(Maybe.Some(Fail.exception(expected)))
 }
 
 @AirfluxTypesExperimental
-public inline fun <reified ExceptionT> BiFailureMaybe<*, ExceptionT>.shouldContainExceptionInstance(): ExceptionT
+public inline fun <reified ExceptionT> MaybeBiFailure<*, ExceptionT>.shouldContainExceptionInstance(): ExceptionT
     where ExceptionT : Any {
     this.shouldBeException<ExceptionT, Fail.Exception<ExceptionT>, Maybe.Some<Fail.Exception<ExceptionT>>>()
     return this.value.value
@@ -86,10 +86,10 @@ public inline fun <reified ExceptionT> BiFailureMaybe<*, ExceptionT>.shouldConta
 
 @PublishedApi
 internal class BiFailureMaybeValueMatcher<ErrorT : Any, ExceptionT : Any>(
-    private val expected: BiFailureMaybe<ErrorT, ExceptionT>
-) : Matcher<BiFailureMaybe<ErrorT, ExceptionT>> {
+    private val expected: MaybeBiFailure<ErrorT, ExceptionT>
+) : Matcher<MaybeBiFailure<ErrorT, ExceptionT>> {
 
-    override fun test(value: BiFailureMaybe<ErrorT, ExceptionT>) = comparableMatcherResult(
+    override fun test(value: MaybeBiFailure<ErrorT, ExceptionT>) = comparableMatcherResult(
         passed = expected == value,
         actual = value.toString(),
         expected = expected.toString()
@@ -100,9 +100,9 @@ internal class BiFailureMaybeValueMatcher<ErrorT : Any, ExceptionT : Any>(
 internal class BiFailureMaybeTypeMatcher<ErrorT : Any, ExceptionT : Any, FailT : Fail<ErrorT, ExceptionT>>(
     private val expectedType: KClass<FailT>,
     private val expectedTypeName: String
-) : Matcher<BiFailureMaybe<ErrorT, ExceptionT>> {
+) : Matcher<MaybeBiFailure<ErrorT, ExceptionT>> {
 
-    override fun test(value: BiFailureMaybe<ErrorT, ExceptionT>) = comparableMatcherResult(
+    override fun test(value: MaybeBiFailure<ErrorT, ExceptionT>) = comparableMatcherResult(
         passed = value is Maybe.Some<*> && expectedType.isInstance(value.value),
         actual = value.toString(),
         expected = expectedTypeName

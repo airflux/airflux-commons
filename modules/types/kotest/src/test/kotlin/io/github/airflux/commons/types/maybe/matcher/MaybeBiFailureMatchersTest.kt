@@ -20,19 +20,19 @@ import io.github.airflux.commons.assertionCorrect
 import io.github.airflux.commons.assertionIncorrect
 import io.github.airflux.commons.types.AirfluxTypesExperimental
 import io.github.airflux.commons.types.fail.Fail
-import io.github.airflux.commons.types.maybe.BiFailureMaybe
 import io.github.airflux.commons.types.maybe.Maybe
+import io.github.airflux.commons.types.maybe.MaybeBiFailure
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
 @OptIn(AirfluxTypesExperimental::class)
-internal class BiFailureMaybeMatchersTest : FreeSpec() {
+internal class MaybeBiFailureMatchersTest : FreeSpec() {
 
     init {
-        "The Kotest matchers for the BiFailureMaybe type" - {
+        "The Kotest matchers for the MaybeBiFailure type" - {
 
             "when a result is the None" - {
-                val result: BiFailureMaybe<Errors, Exceptions> = Maybe.none()
+                val result: MaybeBiFailure<Errors, Exceptions> = Maybe.none()
 
                 "then the Error expectation assertion should be incorrect" {
                     assertionIncorrect("expected:<$EXPECTED_ERROR_TYPE> but was:<$result>") {
@@ -67,7 +67,7 @@ internal class BiFailureMaybeMatchersTest : FreeSpec() {
 
                 "when the failure is the Error type" - {
                     val error = Fail.error(Errors)
-                    val result: BiFailureMaybe<Errors, Exceptions> = Maybe.some(error)
+                    val result: MaybeBiFailure<Errors, Exceptions> = Maybe.some(error)
 
                     "then the Error expectation assertion should be correct" {
                         assertionCorrect {
@@ -101,7 +101,7 @@ internal class BiFailureMaybeMatchersTest : FreeSpec() {
 
                 "when the failure is the Exception type" - {
                     val exception = Fail.exception(Exceptions)
-                    val result: BiFailureMaybe<Errors, Exceptions> = Maybe.some(exception)
+                    val result: MaybeBiFailure<Errors, Exceptions> = Maybe.some(exception)
 
                     "then the Exception expectation assertion should be correct" {
                         assertionCorrect {

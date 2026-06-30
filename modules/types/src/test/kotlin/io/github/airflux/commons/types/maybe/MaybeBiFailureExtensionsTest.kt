@@ -28,16 +28,16 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
 @OptIn(AirfluxTypesExperimental::class)
-internal class BiFailureMaybeExtensionsTest : FreeSpec() {
+internal class MaybeBiFailureExtensionsTest : FreeSpec() {
 
     init {
 
-        "The extension functions of the `BiFailureMaybe` type" - {
+        "The extension functions of the `MaybeBiFailure` type" - {
 
             "the `fold` function" - {
 
                 "when a variable has the `None` type" - {
-                    val original: BiFailureMaybe<Errors, Exceptions> = createNone()
+                    val original: MaybeBiFailure<Errors, Exceptions> = createNone()
 
                     "then this function should return a result of invoking the onNone block" {
                         val result = original.fold(
@@ -52,7 +52,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                 "when a variable has the `Some` type" - {
 
                     "when a failure is the `Error` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> = createError(Errors.First)
+                        val original: MaybeBiFailure<Errors, Exceptions> = createError(Errors.First)
 
                         "then this function should return a result of invoking the onError block" {
                             val result = original.fold(
@@ -65,7 +65,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                     }
 
                     "when a failure is the `Exception` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> = createException(Exceptions.First)
+                        val original: MaybeBiFailure<Errors, Exceptions> = createException(Exceptions.First)
 
                         "then this function should return a result of invoking the onException block" {
                             val result = original.fold(
@@ -82,7 +82,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
             "the `mapFail` function" - {
 
                 "when a variable has the `None` type" - {
-                    val original: BiFailureMaybe<Errors, Exceptions> = createNone()
+                    val original: MaybeBiFailure<Errors, Exceptions> = createNone()
 
                     "then this function should return an original" {
                         val result = original.mapError { Errors.Second }
@@ -93,7 +93,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                 "when a variable has the `Some` type" - {
 
                     "when a failure is the `Error` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> = createError(Errors.First)
+                        val original: MaybeBiFailure<Errors, Exceptions> = createError(Errors.First)
 
                         "then this function should return a result of applying the transform function to an error" {
                             val result = original.mapFail(
@@ -105,7 +105,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                     }
 
                     "when a failure is the `Exception` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> = createException(Exceptions.First)
+                        val original: MaybeBiFailure<Errors, Exceptions> = createException(Exceptions.First)
 
                         "then this function should return an original" {
                             val result = original.mapFail(
@@ -121,7 +121,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
             "the `mapError` function" - {
 
                 "when a variable has the `None` type" - {
-                    val original: BiFailureMaybe<Errors, Exceptions> = createNone()
+                    val original: MaybeBiFailure<Errors, Exceptions> = createNone()
 
                     "then this function should return an original" {
                         val result = original.mapError { Errors.Second }
@@ -132,7 +132,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                 "when a variable has the `Some` type" - {
 
                     "when a failure is the `Error` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> = createError(Errors.First)
+                        val original: MaybeBiFailure<Errors, Exceptions> = createError(Errors.First)
 
                         "then this function should return a result of applying the transform function to an error" {
                             val result = original.mapError { Errors.Second }
@@ -141,7 +141,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                     }
 
                     "when a failure is the `Exception` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> = createException(Exceptions.First)
+                        val original: MaybeBiFailure<Errors, Exceptions> = createException(Exceptions.First)
 
                         "then this function should return an original" {
                             val result = original.mapError { Errors.Second }
@@ -154,7 +154,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
             "the `mapException` function" - {
 
                 "when a variable has the `None` type" - {
-                    val original: BiFailureMaybe<Errors, Exceptions> = createNone()
+                    val original: MaybeBiFailure<Errors, Exceptions> = createNone()
 
                     "then this function should return an original" {
                         val result = original.mapException { Exceptions.Second }
@@ -165,7 +165,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                 "when a variable has the `Some` type" - {
 
                     "when a failure is the `Error` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> = createError(Errors.First)
+                        val original: MaybeBiFailure<Errors, Exceptions> = createError(Errors.First)
 
                         "then this function should return an original" {
                             val result = original.mapException { Exceptions.Second }
@@ -174,7 +174,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                     }
 
                     "when a failure is the `Exception` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> =
+                        val original: MaybeBiFailure<Errors, Exceptions> =
                             createException(Exceptions.First)
 
                         "then this function should return a result of applying the transform function to an error" {
@@ -188,7 +188,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
             "the `onError` function" - {
 
                 "when a variable has the `None` type" - {
-                    val original: BiFailureMaybe<Errors, Exceptions> = createNone()
+                    val original: MaybeBiFailure<Errors, Exceptions> = createNone()
 
                     "then this function should not anything do" {
                         shouldNotThrow<IllegalStateException> {
@@ -200,7 +200,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                 "when a variable has the `Some` type" - {
 
                     "when a failure is the `Error` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> =
+                        val original: MaybeBiFailure<Errors, Exceptions> =
                             createError(Errors.First)
 
                         "then a code block should execute" {
@@ -211,7 +211,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                     }
 
                     "when a failure is the `Exception` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> =
+                        val original: MaybeBiFailure<Errors, Exceptions> =
                             createException(Exceptions.First)
 
                         "then this function should not anything do" {
@@ -226,7 +226,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
             "the `onException` function" - {
 
                 "when a variable has the `None` type" - {
-                    val original: BiFailureMaybe<Errors, Exceptions> = createNone()
+                    val original: MaybeBiFailure<Errors, Exceptions> = createNone()
 
                     "then this function should not anything do" {
                         shouldNotThrow<IllegalStateException> {
@@ -238,7 +238,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                 "when a variable has the `Some` type" - {
 
                     "when a failure is the `Error` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> =
+                        val original: MaybeBiFailure<Errors, Exceptions> =
                             createError(Errors.First)
 
                         "then this function should not anything do" {
@@ -249,7 +249,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                     }
 
                     "when a failure is the `Exception` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> =
+                        val original: MaybeBiFailure<Errors, Exceptions> =
                             createException(Exceptions.First)
 
                         "then a code block should execute" {
@@ -264,7 +264,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
             "the `recover` function" - {
 
                 "when a variable has the `None` type" - {
-                    val original: BiFailureMaybe<Errors, Exceptions> = createNone()
+                    val original: MaybeBiFailure<Errors, Exceptions> = createNone()
 
                     "then this function should return an original value" {
                         val result = original.recover(
@@ -278,7 +278,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                 "when a variable has the `Some` type" - {
 
                     "when a failure is the `Error` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> =
+                        val original: MaybeBiFailure<Errors, Exceptions> =
                             createError(Errors.First)
 
                         "then this function should return the result of invoking the onError block" {
@@ -291,7 +291,7 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
                     }
 
                     "when a failure is the `Exception` type" - {
-                        val original: BiFailureMaybe<Errors, Exceptions> =
+                        val original: MaybeBiFailure<Errors, Exceptions> =
                             createException(Exceptions.First)
 
                         "then this function should return the result of invoking the onException block" {
@@ -325,11 +325,11 @@ internal class BiFailureMaybeExtensionsTest : FreeSpec() {
         private const val SECOND_ALTERNATIVE_VALUE = "30"
     }
 
-    private fun createNone(): BiFailureMaybe<Nothing, Nothing> = Maybe.none()
+    private fun createNone(): MaybeBiFailure<Nothing, Nothing> = Maybe.none()
 
-    private fun <ErrorT : Any> createError(value: ErrorT): BiFailureMaybe<ErrorT, Nothing> =
+    private fun <ErrorT : Any> createError(value: ErrorT): MaybeBiFailure<ErrorT, Nothing> =
         Maybe.some(Fail.error(value))
 
-    private fun <ExceptionT : Any> createException(value: ExceptionT): BiFailureMaybe<Nothing, ExceptionT> =
+    private fun <ExceptionT : Any> createException(value: ExceptionT): MaybeBiFailure<Nothing, ExceptionT> =
         Maybe.some(Fail.exception(value))
 }

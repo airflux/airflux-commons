@@ -27,7 +27,7 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ErrorT, ExceptionT, ValueR> BiFailureMaybe<ErrorT, ExceptionT>.fold(
+public inline fun <ErrorT, ExceptionT, ValueR> MaybeBiFailure<ErrorT, ExceptionT>.fold(
     onNone: () -> ValueR,
     onError: (ErrorT) -> ValueR,
     onException: (ExceptionT) -> ValueR
@@ -52,10 +52,10 @@ public inline fun <ErrorT, ExceptionT, ValueR> BiFailureMaybe<ErrorT, ExceptionT
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ErrorT, ErrorR, ExceptionT, ExceptionR> BiFailureMaybe<ErrorT, ExceptionT>.mapFail(
+public inline fun <ErrorT, ErrorR, ExceptionT, ExceptionR> MaybeBiFailure<ErrorT, ExceptionT>.mapFail(
     onError: (ErrorT) -> ErrorR,
     onException: (ExceptionT) -> ExceptionR
-): BiFailureMaybe<ErrorR, ExceptionR>
+): MaybeBiFailure<ErrorR, ExceptionR>
     where ErrorT : Any,
           ErrorR : Any,
           ExceptionT : Any,
@@ -73,9 +73,9 @@ public inline fun <ErrorT, ErrorR, ExceptionT, ExceptionR> BiFailureMaybe<ErrorT
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <ErrorT, ErrorR, ExceptionT> BiFailureMaybe<ErrorT, ExceptionT>.mapError(
+public inline infix fun <ErrorT, ErrorR, ExceptionT> MaybeBiFailure<ErrorT, ExceptionT>.mapError(
     transform: (ErrorT) -> ErrorR
-): BiFailureMaybe<ErrorR, ExceptionT>
+): MaybeBiFailure<ErrorR, ExceptionT>
     where ErrorT : Any,
           ErrorR : Any,
           ExceptionT : Any {
@@ -86,9 +86,9 @@ public inline infix fun <ErrorT, ErrorR, ExceptionT> BiFailureMaybe<ErrorT, Exce
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <ErrorT, ExceptionT, ExceptionR> BiFailureMaybe<ErrorT, ExceptionT>.mapException(
+public inline infix fun <ErrorT, ExceptionT, ExceptionR> MaybeBiFailure<ErrorT, ExceptionT>.mapException(
     transform: (ExceptionT) -> ExceptionR
-): BiFailureMaybe<ErrorT, ExceptionR>
+): MaybeBiFailure<ErrorT, ExceptionR>
     where ErrorT : Any,
           ExceptionT : Any,
           ExceptionR : Any {
@@ -100,9 +100,9 @@ public inline infix fun <ErrorT, ExceptionT, ExceptionR> BiFailureMaybe<ErrorT, 
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ErrorT, ExceptionT> BiFailureMaybe<ErrorT, ExceptionT>.onError(
+public inline fun <ErrorT, ExceptionT> MaybeBiFailure<ErrorT, ExceptionT>.onError(
     block: (ErrorT) -> Unit
-): BiFailureMaybe<ErrorT, ExceptionT>
+): MaybeBiFailure<ErrorT, ExceptionT>
     where ErrorT : Any,
           ExceptionT : Any {
     contract {
@@ -112,9 +112,9 @@ public inline fun <ErrorT, ExceptionT> BiFailureMaybe<ErrorT, ExceptionT>.onErro
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ErrorT, ExceptionT> BiFailureMaybe<ErrorT, ExceptionT>.onException(
+public inline fun <ErrorT, ExceptionT> MaybeBiFailure<ErrorT, ExceptionT>.onException(
     block: (ExceptionT) -> Unit
-): BiFailureMaybe<ErrorT, ExceptionT>
+): MaybeBiFailure<ErrorT, ExceptionT>
     where ErrorT : Any,
           ExceptionT : Any {
     contract {
@@ -124,7 +124,7 @@ public inline fun <ErrorT, ExceptionT> BiFailureMaybe<ErrorT, ExceptionT>.onExce
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <ErrorT, ExceptionT, ValueR> BiFailureMaybe<ErrorT, ExceptionT>.recover(
+public inline fun <ErrorT, ExceptionT, ValueR> MaybeBiFailure<ErrorT, ExceptionT>.recover(
     onError: (ErrorT) -> ValueR,
     onException: (ExceptionT) -> ValueR,
 ): Maybe<ValueR>
